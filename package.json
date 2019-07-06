@@ -1,0 +1,51 @@
+{
+  "name": "stencil-vizzle",
+  "version": "0.0.1",
+  "description": "D3.js-based visualization web components",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
+  "types": "dist/types/index.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/stencil-vizzle/stencil-vizzle.js",
+  "files": [
+    "dist/",
+    "loader/"
+  ],
+  "scripts": {
+    "build": "stencil build --docs",
+    "lint:stencil": "tslint --project tsconfig.json",
+    "start": "stencil build --dev --watch --serve",
+    "test": "stencil test --spec --e2e",
+    "test:unit": "stencil test --spec",
+    "test:unit:watch": "stencil test --spec --watchAll",
+    "test.watch": "stencil test --spec --e2e --watchAll"
+  },
+  "devDependencies": {
+    "@stencil/core": "^1.0.7",
+    "@stencil/sass": "^1.0.0",
+    "@types/jest": "24.0.15",
+    "@types/puppeteer": "1.12.4",
+    "jest": "24.8.0",
+    "jest-cli": "24.8.0",
+    "puppeteer": "1.14.0",
+    "tslint": "^5.17.0",
+    "tslint-ionic-rules": "0.0.21",
+    "tslint-stencil": "^1.0.1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "d3": "^5.9.2",
+    "d3-array": "^2.2.0",
+    "d3-axis": "^1.0.12",
+    "d3-collection": "^1.0.7",
+    "d3-scale": "^3.0.0",
+    "d3-scale-chromatic": "^1.3.3",
+    "d3-selection": "^1.4.0",
+    "d3-shape": "^1.3.5",
+    "d3-transition": "^1.2.0",
+    "lodash": "^4.17.11"
+  }
+}

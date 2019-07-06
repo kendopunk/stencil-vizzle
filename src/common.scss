@@ -1,0 +1,47 @@
+/**
+ * src/common.scss
+ * Common SASS
+ */
+div.tooltip {
+  position: absolute;
+  border: solid 1pc #ceccd0;
+  background-color: #faf8f9;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+  color: #344653;
+  font-size: 12px;
+  text-align: left;
+  padding: 10px;
+  border-radius: 4px;
+  pointer-events: none;
+  line-height: 18px;
+  max-width: 125px;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #999;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-family: sans-serif;
+  fill: #555;
+  pointer-events: none;
+}
+
+.axis text.hidden {
+  visibility: hidden;
+}
+
+text.x-axis-label, text.y-axis-label {
+  font-size: 14px;
+  font-family: sans-serif;
+  fill: #555;
+  pointer-events: none;
+}
+
+text.legend-text {
+  font-size: 12px;
+  cursor: pointer;
+}
