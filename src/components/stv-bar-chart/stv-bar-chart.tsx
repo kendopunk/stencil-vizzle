@@ -57,9 +57,9 @@ export class StvBarChart {
   ordinalScale: any
   svg: Selection<Element, any, HTMLElement, any>
   tooltipDiv: Selection<Element, any, HTMLElement, any>
-  xAxis: any
+  xAxis: Selection<Element, any, HTMLElement, any>
   xLabelPadding: number = 30
-  yAxis: any
+  yAxis: Selection<Element, any, HTMLElement, any>
   yLabelPadding: number = 30
 
   @Element() private chartElement: HTMLElement
@@ -82,6 +82,7 @@ export class StvBarChart {
   @Prop() hideXTickValues: boolean = false
   @Prop() hideYAxis: boolean = false
   @Prop() hideYTickValues: boolean = false
+  @Prop({reflectToAttr: true}) id: string = ''
   @Prop() legend: boolean = false
   @Prop() legendWidth: number = 125
   @Prop() linearMetric: string = 'value'
@@ -143,10 +144,6 @@ export class StvBarChart {
     this.componentLoaded.emit({
       component: 'stv-bar-chart'
     })
-
-    // if (this.isValidChartData()) {
-    //   this.draw()
-    // }
   }
 
   componentWillUpdate(): void {
@@ -176,7 +173,9 @@ export class StvBarChart {
    */
   callHorizontalAxes(): void {
 
+    //
     // X = linear
+    //
     this.gXAxis.style('font-size', `${this.axisFontSize}px`)
       .attr('transform', () => {
         if (this.chartData.length === 0) {
@@ -193,7 +192,9 @@ export class StvBarChart {
       })
       .call(this.xAxis)
 
+    //
     // Y = ordinal
+    //
     this.gYAxis.style('font-size', `${this.axisFontSize}px`)
       .attr('transform', () => {
         if (this.chartData.length === 0) {
@@ -817,20 +818,3 @@ export class StvBarChart {
     )
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
