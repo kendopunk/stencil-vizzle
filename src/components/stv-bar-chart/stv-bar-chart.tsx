@@ -217,7 +217,10 @@ export class StvBarChart {
    * Call the axis generators for vertical orientation
    */
   callVerticalAxes(): void {
+    
+    //
     // X = ordinal
+    //
     this.gXAxis.style('font-size', `${this.axisFontSize}px`)
       .attr('transform', () => {
         if (this.chartData.length === 0) {
@@ -234,7 +237,9 @@ export class StvBarChart {
       })
       .call(this.xAxis)
 
+    //
     // Y = linear
+    //
     this.gYAxis.style('font-size', `${this.axisFontSize}px`)
       .attr('transform', () => {
         if (this.chartData.length === 0) {
