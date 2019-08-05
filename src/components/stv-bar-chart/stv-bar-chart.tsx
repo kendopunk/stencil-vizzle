@@ -1,6 +1,10 @@
 /**
  * src/components/stv-bar-chart/stv-bar-chart.tsx
  */
+
+
+
+/*
 import {
   Component,
   Prop,
@@ -17,7 +21,7 @@ import {
   schemeCategory10,
   schemeAccent,
   schemePaired,
-  schemeSet1
+  schemeSet1,
   schemeSet2,
   schemeSet3
 } from 'd3-scale-chromatic'
@@ -167,10 +171,7 @@ export class StvBarChart {
   // CLASS METHODS
   ////////////////////////////////////////
 
-  /**
-   * @function
-   * Call the axis generators for horizontal orientation
-   */
+
   callHorizontalAxes(): void {
 
     //
@@ -212,10 +213,7 @@ export class StvBarChart {
       .call(this.yAxis)
   }
 
-  /**
-   * @function
-   * Call the axis generators for vertical orientation
-   */
+
   callVerticalAxes(): void {
     
     //
@@ -257,10 +255,7 @@ export class StvBarChart {
       .call(this.yAxis)
   }
 
-  /**
-   * @function
-   * Wrapper for draw()
-   */
+
   draw(): void {
     this.setColorScale()
     if (this.orientation === 'horizontal') {
@@ -277,10 +272,6 @@ export class StvBarChart {
     this.handleLegend()
   }
 
-  /**
-   * @function
-   * Render labels for X/Y axes.  Not tied to linear or ordinal scales
-   */
   handleAxisLabels(): void {
     const t100 = transition().duration(100)
 
@@ -339,12 +330,7 @@ export class StvBarChart {
     }
   }
 
-  /**
-   * @function
-   * Render grid lines, depending on orientation
-   * Scales must be set before this method is invoked and should be called BEFORE
-   * drawing bars (z-index)
-   */
+
   handleGridLines(): void {
     const t = transition().duration(500)
 
@@ -399,10 +385,7 @@ export class StvBarChart {
     }
   }
 
-  /**
-   * @function
-   * Render bars, horizontal orientation
-   */
+
   handleHorizontalBars(): void {
     const t25 = transition().duration(25)
     const t250 = transition().duration(250)
@@ -475,10 +458,7 @@ export class StvBarChart {
       .style('opacity', 0.75)
   }
 
-  /**
-   * @function
-   * Optional legend
-   */
+
   handleLegend(): void {
     const t100 = transition().duration(100)
     const lineIncrement = 25
@@ -571,10 +551,7 @@ export class StvBarChart {
     }
   }
 
-  /**
-   * @function
-   * Render bars, vertical (default) orientation
-   */
+
   handleVerticalBars(): void {
     const t25 = transition().duration(25)
     const t250 = transition().duration(250)
@@ -644,42 +621,27 @@ export class StvBarChart {
        .style('opacity', 0.75)
   }
 
-  /**
-   * @function
-   * Determine valid chart data
-   */
+
   isValidChartData(): boolean {
     return isArray(this.chartData)
   }
 
-  /**
-   * @function
-   *  Valid X-axis label
-   */
+
   isValidXLabel(): boolean {
     return this.xLabel && this.xLabel.length > 0 && !this.hideXAxis
   }
 
-  /**
-   * @function
-   * Valid Y-axis label
-   */
+
   isValidYLabel(): boolean {
     return this.yLabel && this.yLabel.length > 0 && !this.hideYAxis
   }
 
-  /**
-   * @function
-   * Adjusting width for legend / no legend
-   */
+
   legendAdjustment(): number {
     return this.legend ? this.legendWidth : 0
   }
 
-  /**
-   * @function
-   * Initializing the color scale
-   */
+
   setColorScale(): void {
     if (this.colorSchemes[this.colorScheme]) {
       this.colorScale.range(this.colorSchemes[this.colorScheme])
@@ -688,12 +650,7 @@ export class StvBarChart {
     }
   }
 
-  /**
-   * @function
-   * Calculate scales and axis generators for horizontal orientation
-   * X-axis: linear
-   * Y-axis: ordinal
-   */
+
   setHorizontalScale(): void {
     //
     // max linear value
@@ -744,12 +701,7 @@ export class StvBarChart {
       .tickValues(this.hideYTickValues ? [] : null)
   }
 
-  /**
-   * @function
-   * Vertical (default) scales and axis generators
-   * X: ordinal
-   * Y: linear
-   */
+
   setVerticalScales(): void {
     //
     // X: ordinal
@@ -823,3 +775,4 @@ export class StvBarChart {
     )
   }
 }
+*/

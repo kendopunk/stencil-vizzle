@@ -1,6 +1,9 @@
 /**
  * src/components/stv-stacked-bar-chart/stv-stacked-bar-chart.tsx
  */
+
+
+/*
 import {
   Component,
   Prop,
@@ -172,10 +175,7 @@ export class StvStackedBarChart {
   // CLASS METHODS
   ////////////////////////////////////////
 
-  /**
-   * @function
-   * Call axis generators for horizontal orientation
-   */
+
   callHorizontalAxes(): void {
     //
     // X = linear
@@ -216,10 +216,7 @@ export class StvStackedBarChart {
       .call(this.yAxis)
   }
 
-  /**
-   * @function
-   * Call axis generators for vertical (default) orientation
-   */
+
   callVerticalAxes(): void {
     //
     // X = ordinal
@@ -260,10 +257,7 @@ export class StvStackedBarChart {
       .call(this.yAxis)
   }
 
-  /**
-   * @function
-   * Drawing wrapper function
-   */
+
   draw(): void {
     this.setColorScale()
     if (this.orientation === 'horizontal') {
@@ -280,30 +274,21 @@ export class StvStackedBarChart {
     this.handleLegend()
   }
 
-  /**
-   * @function
-   * Get unique ordinal keys from chartData
-   */
+
   getOrdinalKeys(): Array<string> {
     return uniq(this.chartData.map((m) => {
       return m[this.ordinalMetric]
     })).sort()
   }
 
-  /**
-   * @function
-   * Get unique series keys from chartData
-   */
+
   getSeriesKeys(): Array<string> {
     return uniq(this.chartData.map((m) => {
       return m[this.seriesMetric]
     })).sort()
   }
 
-  /**
-   * @function
-   * Optional X- and Y-axis labels
-   */
+
   handleAxisLabels(): void {
     const t100 = transition().duration(100)
 
@@ -358,3 +343,4 @@ export class StvStackedBarChart {
     )
   }
 }
+*/

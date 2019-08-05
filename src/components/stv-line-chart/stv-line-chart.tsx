@@ -1,9 +1,10 @@
 /**
  * src/components/stv-line-chart/stv-line-chart.tsx
- * component class
+ * Line Chart component class
  */
 import {
   Component,
+  h,
   Prop,
   Element,
   Event,
@@ -11,7 +12,7 @@ import {
   Listen
 } from '@stencil/core'
 import isArray from 'lodash/isArray'
-import { event } from 'd3'
+import { max, min } from 'd3'
 import { axisBottom, axisLeft } from 'd3-axis'
 import { scaleLinear, scaleOrdinal } from 'd3-scale'
 import {
@@ -24,9 +25,16 @@ import {
 } from 'd3-scale-chromatic'
 import { Selection, select } from 'd3-selection'
 import { line } from 'd3-shape'
-import { transition } from 'd3-transition'
 
-import IfcStvLineChart from '../../interfaces/IfcStvLineChart'
+// interface
+import { IfcStvLineChart } from '../../interfaces/IfcStvLineChart'
+
+// utilities
+import {
+  t50,
+  t100,
+  t250
+} from '../../utils/transition_definitions'
 import TickFormat from '../../utils/tickformat'
 
 @Component({
@@ -36,7 +44,6 @@ import TickFormat from '../../utils/tickformat'
 })
 
 export class StvLineChart {
-
   colorScale: any
   colorSchemes: any = {
     category10: schemeCategory10,
@@ -48,12 +55,16 @@ export class StvLineChart {
     black: ['#000000'],
     gray: ['#888888']
   }
+  defaultLineOpacity: number = 0.7
+
+  // <g> elements
   gCanvas: Selection<Element, any, HTMLElement, any>
   gGrid: Selection<Element, any, HTMLElement, any>
   gLegend: Selection<Element, any, HTMLElement, any>
   gXAxis: Selection<Element, any, HTMLElement, any>
   gYAxis: Selection<Element, any, HTMLElement, any>
-  maxTooltipWidth: number = 125
+  // end </g>
+
   svg: Selection<Element, any, HTMLElement, any>
   tooltipDiv: Selection<Element, any, HTMLElement, any>
   xAxis: any
@@ -69,7 +80,8 @@ export class StvLineChart {
 
   @Element() private chartElement: HTMLElement
 
-  @Prop() axisFontSize: number = 9
+  @Prop() axisLabelFontSize: number = 12
+  @Prop() axisTickFontSize: number = 10
   @Prop({
     reflectToAttr: true,
     mutable: true
@@ -78,13 +90,15 @@ export class StvLineChart {
     reflectToAttr: true,
     mutable: true
   }) canvasWidth: number = 500
-  @Prop() chartData: IfcStvLineChart[] = [],
+  @Prop() chartData: IfcStvLineChart[] = []
+  @Prop() chartId: string = ''
   @Prop() colorScheme: string = 'category10'
   @Prop() hideXAxis: boolean = false
   @Prop() hideXTicks: boolean = false
   @Prop() hideYAxis: boolean = false
   @Prop() hideYTicks: boolean = false
   @Prop() legend: boolean = false
+  @Prop() legendFontSize: number = 12
   @Prop() legendWidth: number = 125
   @Prop({reflectToAttr: true}) marginBottom: number = 25
   @Prop({reflectToAttr: true}) marginLeft: number = 25
@@ -94,58 +108,67 @@ export class StvLineChart {
   @Prop() strokeWidth: number = 1
   @Prop() tooltips: boolean = false
   @Prop() vertices: boolean = false
-  @Prop() xLabel: string
+  @Prop() xLabel: string = ''
   @Prop() xMetric: string = 'x'
   @Prop() xTickFormat: string = 'raw'
   @Prop() xTickSize: number = 2
-  @Prop() yLabel: string
+  @Prop() yLabel: string = ''
   @Prop() yMetric: string = 'y'
   @Prop() yTickFormat: string = 'raw'
   @Prop() yTickSize: number = 2
 
   @Event({
-    eventName: 'stv-line-chart-loaded'
+    eventName: 'stv-line-chart-loaded',
+    bubbles: true,
+    composed: true
   }) componentLoaded: EventEmitter
 
   ////////////////////////////////////////
   // LIFECYCLE
   ////////////////////////////////////////
   componentDidLoad(): void {
-    this.svg = select(this.chartElement.shadowRoot.querySelector('svg.line-chart'))
-    this.gCanvas = this.svg.append('svg:g').attr('class', 'canvas')
-    this.gGrid = this.gCanvas.append('svg.g').attr('class', 'grid')
-    this.gLegend = this.svg.append('svg:g').attr('class', 'legend')
+    this.svg = select(this.chartElement.shadowRoot.querySelector('svg.stv-line-chart'))
+    this.gCanvas = this.svg.append('svg:g')
+      .attr('class', 'canvas')
+    this.gGrid = this.gCanvas.append('svg:g')
+      .attr('class', 'grid')
+    this.gLegend = this.svg.append('svg:g')
+      .attr('class', 'legend')
     this.gXAxis = this.gCanvas.append('svg:g')
       .attr('class', 'axis')
       .style('opacity', 0)
-      .style('font-size', `${this.axisFontSize}px`)
-    this.gXAxis = this.gCanvas.append('svg:g')
+      .style('font-size', `${this.axisTickFontSize}px`)
+    this.gYAxis = this.gCanvas.append('svg:g')
       .attr('class', 'axis')
       .style('opacity', 0)
-      .style('font-size', `${this.axisFontSize}px`)
+      .style('font-size', `${this.axisTickFontSize}px`)
     this.tooltipDiv = select(this.chartElement.shadowRoot.querySelector('#tooltip'))
       .attr('class', 'tooltip')
       .style('opacity', 0)
 
-    // responsive
+    /**
+     * responsive configuration
+     */
     if (this.responsive) {
-      this.canvasWidth = this.chartElement.parentElement.getBoundingClientRect().width
       this.canvasHeight = this.chartElement.parentElement.getBoundingClientRect().height
+      this.canvasWidth = this.chartElement.parentElement.getBoundingClientRect().width
     }
 
+    /**
+     * color scale, if color not bound in data
+     */
     this.colorScale = scaleOrdinal()
 
+    /**
+     * emit component loaded event
+     */
     this.componentLoaded.emit({
       component: 'stv-line-chart',
-      id: this.id
+      chartId: this.chartId
     })
-
-    if (this.isValidChartData()) {
-      this.draw()
-    }
   }
 
-  componentWillUpdate(): void {
+  componentDidUpdate(): void {
     if (this.isValidChartData()) {
       this.draw()
     }
@@ -158,7 +181,6 @@ export class StvLineChart {
   handleWindowResize() {
     if (this.responsive && this.isValidChartData()) {
       this.canvasWidth = this.chartElement.parentElement.getBoundingClientRect().width
-      // this.canvasHeight = this.chartElement.parentElement.getBoundingClientRect().height
       this.draw()
     }
   }
@@ -166,14 +188,13 @@ export class StvLineChart {
   ////////////////////////////////////////
   // CLASS METHODS
   ////////////////////////////////////////
-
   /**
    * @function
-   * Call the generators for the axes
+   * Call the X/Y axis generator functions
    */
   callAxes(): void {
     this.gXAxis
-      .style('font-size', `${this.axisFontSize}px`)
+      .style('font-size', `${this.axisTickFontSize}px`)
       .attr('transform', () => {
         if (this.xZeroDomain()) {
           return 'translate(0, 0)'
@@ -187,7 +208,7 @@ export class StvLineChart {
       .call(this.xAxis)
 
     this.gYAxis
-      .style('font-size', `${this.axisFontSize}px`)
+      .style('font-size', `${this.axisTickFontSize}px`)
       .attr('transform', () => {
         if (this.yZeroDomain()) {
           return 'translate(0, 0)'
@@ -202,7 +223,7 @@ export class StvLineChart {
 
   /**
    * @function
-   * Wrapper method for the various render methods
+   * Drawing wrapper function
    */
   draw(): void {
     this.setScales()
@@ -210,25 +231,26 @@ export class StvLineChart {
     this.setColorScale()
     this.handlePaths()
     this.handleAxisLabels()
-    this.handleVertices()
+    // this.handleVertices()
     this.handleLegend()
   }
 
   /**
    * @function
-   * Handle X/Y axis labels
+   * X/Y axis labels (if configured)
    */
   handleAxisLabels(): void {
-    const t = transition().duration(100)
-
+    //////////////////////////////
     // X
+    //////////////////////////////
     if (this.isValidXLabel()) {
       this.gCanvas.selectAll('text.x-axis-label').remove()
 
-      this.gCanvas.selectAll('text')
+      this.gCanvas.append('text')
         .attr('class', 'x-axis-label')
         .style('text-anchor', 'middle')
         .text(this.xLabel)
+        .style('font-size', `${this.axisLabelFontSize}`)
         .attr('transform', () => {
           const x = this.marginLeft +
             this.yLabelAdjustment() +
@@ -240,16 +262,21 @@ export class StvLineChart {
         })
     } else {
       this.gCanvas.selectAll('text.x-axis-label')
-        .transition(t)
+        .transition(t100)
         .style('opacity', 0)
         .remove()
     }
-
+    
+    //////////////////////////////
     // Y
+    //////////////////////////////
     if (this.isValidYLabel()) {
+      this.gCanvas.selectAll('text.y-axis-label').remove()
+
       this.gCanvas.append('text')
         .attr('class', 'y-axis-label')
         .style('text-anchor', 'middle')
+        .style('font-size', `${this.axisLabelFontSize}`)
         .text(this.yLabel)
         .attr('transform', () => {
           const x = this.xLabelPadding/2
@@ -261,7 +288,7 @@ export class StvLineChart {
         })
     } else {
       this.gCanvas.selectAll('text.y-axis-label')
-        .transition(t)
+        .transition(t100)
         .style('opacity', 0)
         .remove()
     }
@@ -269,10 +296,9 @@ export class StvLineChart {
 
   /**
    * @function
-   * Optional legend
+   * Show/hide the legend
    */
   handleLegend(): void {
-    const t100 = transition().duration(100)
     const lineIncrement = 25
 
     // transform "gLegend" grouping
@@ -283,9 +309,7 @@ export class StvLineChart {
       return `translate(${x}, ${y})`
     })
 
-    // legend prop is in play
     if (this.legend) {
-      
       //////////////////////////////
       // legend lines
       //////////////////////////////
@@ -296,12 +320,13 @@ export class StvLineChart {
 
       lineSel.enter()
         .append('line')
+        .attr('class', 'legend-line')
         .attr('x', 0)
         .attr('x2', 10)
-        .style('opacity', 0.7)
+        .style('opacity', 0)
         .style('stroke-width', 3)
         .merge(lineSel)
-        .transition(t100)
+        .transition(t50)
         .attr('y1', (_d, i) => {
           return i * lineIncrement
         })
@@ -311,6 +336,8 @@ export class StvLineChart {
         .style('stroke', (d, i) => {
           return d.color || this.colorScale(i)
         })
+        .transition(t50)
+        .style('opacity', this.defaultLineOpacity)
 
       //////////////////////////////
       // legend text
@@ -324,50 +351,62 @@ export class StvLineChart {
         .append('text')
         .attr('class', 'legend-text')
         .style('fill', '#555')
+        .style('font-size', `${this.legendFontSize}px`)
         .on('mouseover', (_d, i) => {
+          // highlight matches
           this.gCanvas.selectAll('path.main')
             .filter((_e, j) => {
               return i === j
             })
             .style('opacity', 1)
             .style('stroke-width', this.strokeWidth + 2)
+
+          // deemphasize non-matches
+          this.gCanvas.selectAll('path.main')
+            .filter((_e, j) => {
+              return i !== j
+            })
+            .style('opacity', 0.25)
         })
         .on('mouseout', (_d, i) => {
           this.gCanvas.selectAll('path.main')
             .filter((_e, j) => {
               return i === j
             })
-            .style('opacity', 0.7)
+            .style('opacity', this.defaultLineOpacity)
             .style('stroke-width', this.strokeWidth)
+
+          this.gCanvas.selectAll('path.main')
+            .filter((_e, j) => {
+              return i !== j
+            })
+            .style('opacity', this.defaultLineOpacity)
         })
         .merge(textSel)
         .text((d) => {
           return d.label || ''
         })
-        .transition(t100)
+        .transition(t50)
         .attr('x', 15)
         .attr('y', (_d, i) => {
           return i * lineIncrement + 4
         })
     } else {
       this.gLegend.selectAll('line.legend-line')
-        .style('opacity', 0)
+        //.style('opacity', 0)
         .remove()
 
       this.gLegend.selectAll('text.legend-text')
-        .style('opacity', 0)
+        //.style('opacity', 0)
         .remove()
     }
   }
 
   /**
    * @function
-   * Call the path generator
+   * Draw the line series
    */
   handlePaths(): void {
-    const t1 = transition().duration(250)
-
-    // @TODO: Interpolator options ?
     const lineFn = line()
       .x((d) => {
         return this.xScale(d[this.xMetric])
@@ -385,13 +424,13 @@ export class StvLineChart {
       .append('path')
       .attr('class', 'main')
       .style('fill', 'none')
-      .style('opacity', 0.7)
+      .style('opacity', this.defaultLineOpacity)
       .merge(pathSelection)
       .style('stroke', (d, i) => {
         return d.color || this.colorScale(i)
       })
       .style('stroke-width', this.strokeWidth)
-      .transition(t1)
+      .transition(t250)
       .attr('d', (d) => {
         return lineFn(d.data)
       })
@@ -399,8 +438,164 @@ export class StvLineChart {
 
   /**
    * @function
-   * Circular vertices
+   * @return bool
    */
+  isValidChartData(): boolean {
+    return isArray(this.chartData)
+      && this.chartData.length > 0
+      && this.chartData[0].data[0].hasOwnProperty(this.xMetric)
+      && this.chartData[0].data[0].hasOwnProperty(this.yMetric)
+  }
+
+  isValidXLabel(): boolean {
+    return this.xLabel && this.xLabel.length > 0 && !this.hideXAxis
+  }
+
+  isValidYLabel(): boolean {
+    return this.yLabel && this.yLabel.length > 0 && !this.hideYAxis
+  }
+
+  /**
+   * @function
+   * Setting color scale options
+   */
+  setColorScale(): void {
+    if (this.colorSchemes[this.colorScheme]) {
+      this.colorScale.range(this.colorSchemes[this.colorScheme])
+    } else {
+      this.colorScale.range(schemeCategory10)
+    }
+  }
+
+  /**
+   * @function
+   * Calculate X/Y scales
+   */
+  setScales(): void {
+
+    const xMetricValues = this.chartData.map((m) => {
+      return m.data.map((m2) => {
+        return m2[this.xMetric]
+      })
+    }).flat()
+
+    const yMetricValues = this.chartData.map((m) => {
+      return m.data.map((m2) => {
+        return m2[this.yMetric]
+      })
+    }).flat()
+
+    //////////////////////////////
+    // min/max X and Y values
+    //////////////////////////////
+    this.xMin = min(xMetricValues, (d) => { return d })
+    this.xMax = max(xMetricValues, (d) => { return d })
+    this.yMin = min(yMetricValues, (d) => { return d })
+    this.yMax = max(yMetricValues, (d) => { return d })
+
+    //////////////////////////////
+    // X scale
+    //////////////////////////////
+    let rightMarginOrLegend = this.legend ? this.legendWidth + 25 : this.marginRight
+
+    this.xScale = scaleLinear()
+      .domain([this.xMin, this.xMax])
+      .range([
+        this.marginLeft + this.yLabelAdjustment(),
+        this.canvasWidth - rightMarginOrLegend
+      ])
+
+    this.xAxis = axisBottom()
+      .scale(this.xScale)
+      .tickSize(this.xTickSize)
+      .tickFormat((d) => {
+        return TickFormat(d, this.xTickFormat)
+      })
+
+    if (this.hideXTicks) {
+      this.xAxis.tickValues([])
+    }
+
+    //////////////////////////////
+    // Y axis
+    //////////////////////////////
+    this.yScale = scaleLinear()
+      .domain([this.yMin, this.yMax])
+      .range([
+        this.canvasHeight - this.marginBottom - this.xLabelAdjustment(),
+        this.marginTop
+      ])
+
+    this.yAxis = axisLeft()
+      .scale(this.yScale)
+      .tickSize(this.yTickSize)
+      .tickFormat((d) => {
+        return TickFormat(d, this.yTickFormat)
+      })
+
+    if (this.hideYTicks) {
+      this.yAxis.tickValues([])
+    }
+  }
+
+  /**
+   * @function
+   * Adjust for possible X-axis label
+   */
+  xLabelAdjustment(): number {
+    return this.isValidXLabel() ? this.xLabelPadding : 0
+  }
+
+  /**
+   * @function
+   * Determine invalid X domain
+   */
+  xZeroDomain(): boolean {
+    return this.xScale.domain()[0] === this.xScale.domain()[1]
+      || Math.abs(this.xScale.domain()[0]) === Infinity
+      || Math.abs(this.xScale.domain()[1]) === Infinity
+  }
+
+  /**
+   * @function
+   * Adjust for possible Y-axis label
+   */
+  yLabelAdjustment(): number {
+    return this.isValidYLabel() ? this.yLabelPadding : 0
+  }
+
+  /**
+   * @function
+   * Determine invalid Y domain
+   */
+  yZeroDomain(): boolean {
+    return this.yScale.domain()[0] === this.yScale.domain()[1] ||
+      Math.abs(this.yScale.domain()[0]) === Infinity ||
+      Math.abs(this.yScale.domain()[1]) === Infinity
+  }
+
+  render() {
+    return (
+      <div>
+        <div id="tooltip"></div>
+        <svg version="1.1"
+          baseProfile="full"
+          width={this.canvasWidth}
+          height={this.canvasHeight}
+          class="stv-line-chart"
+          xmlns="http://www.w3.org/2000/svg">
+        </svg>
+      </div>
+    )
+  }
+}
+
+
+/*
+
+
+  
+
   handleVertices(): void {
     const t100 = transition().duration(100)
     const t300 = transition().duration(300)
@@ -481,127 +676,4 @@ export class StvLineChart {
       .transition(t300)
       .style('opacity', 1)
   }
-
-  /**
-   * @function
-   * Determine chartData validity
-   */
-  isValidChartData(): boolean {
-    return isArray(this.chartData) &&
-      this.chartData.length > 0 &&
-      isArray(this.chartData[0].data)
-  }
-
-  isValidXLabel(): boolean {
-    return this.xLabel && this.xLabel.length > 0 && !this.hideXAxis
-  }
-
-  isValidYLabel(): boolean {
-    return this.yLabel && this.yLabel.length > 0 && !this.hideYAxis
-  }
-
-  /**
-   * @function
-   * Set X/Y scales and axis generators
-   */
-  setScales(): void {
-    this.xMin = Math.min(...this.chartData.map((m) => {
-      return m.data.map((m2) => {
-        return m2[this.xMetric]
-      })
-    }).flat())
-
-    this.xMax = Math.max(...this.chartData.map((m) => {
-      return m.data.map((m2) => {
-        return m2[this.xMetric]
-      })
-    }).flat())
-
-    this.yMin = Math.min(...this.chartData.map((m) => {
-      return m.data.map((m2) => {
-        return m2[this.yMetric]
-      })
-    }).flat())
-
-    this.yMax = Math.max(...this.chartData.map((m) => {
-      return m.data.map((m2) => {
-        return m2[this.yMetric]
-      })
-    }).flat())
-
-    // X
-    let rightMarginOrLegend = this.legend ? this.legendWidth + 25 : this.marginRight
-
-    this.xScale = scaleLinear()
-      .domain([this.xMin, this.xMax])
-      .range([
-        this.marginLeft + this.yLabelAdjustment(),
-        this.canvasWidth - rightMarginOrLegend
-      ])
-
-    this.xAxis = axisBottom()
-      .scale(this.xScale)
-      .tickSize(this.xTickSize)
-      .tickFormat((d) => {
-        return TickFormat(d, this.xTickFormat)
-      })
-
-    if (this.hideXTickValues) {
-      this.xAxis.tickValues([])
-    }
-
-    // Y
-    this.yScale = scaleLinear()
-      .domain([this.yMin, this.yMax])
-      .range([
-        this.canvasHeight - this.marginBottom - this.xLabelAdjustment(),
-        this.marginTop
-      ])
-
-    this.yAxis = axisLeft()
-      .scale(this.yScale)
-      .tickSize(this.yTickSize)
-      .tickFormat((d) => {
-        return TickFormat(d, this.yTickFormat)
-      })
-
-    if (this.hideYTickValues) {
-      this.yAxis.tickValues([])
-    }
-  }
-
-  xLabelAdjustment(): number {
-    return this.isValidXLabel() ? this.xLabelPadding : 0
-  }
-
-  xZeroDomain(): boolean {
-    return this.xScale.domain()[0] === this.xScale.domain()[1] ||
-      Math.abs(this.xScale.domain()[0]) === Infinity ||
-      Math.abs(this.xScale.domain()[1]) === Infinity
-  }
-
-  yLabelAdjustment(): number {
-    return this.isValidYLabel() ? this.yLabelPadding : 0
-  }
-
-  yZeroDomain(): boolean {
-    return this.yScale.domain()[0] === this.yScale.domain()[1] ||
-      Math.abs(this.yScale.domain()[0]) === Infinity ||
-      Math.abs(this.yScale.domain()[1]) === Infinity
-  }
-  
-  render() {
-    return (
-      <div>
-        <div id="tooltip"></div>
-        <svg version="1.1"
-          baseProfile="full"
-          width={this.canvasWidth}
-          height={this.canvasHeight}
-          class="line-chart"
-          xmlns="http://www.w3.org/2000/svg">
-        </svg>
-      </div>
-    )
-  }
-}
+*/

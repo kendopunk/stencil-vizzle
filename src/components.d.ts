@@ -6,43 +6,95 @@
 
 
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
-
+import {
+  IfcStvLineChart,
+} from './interfaces/IfcStvLineChart';
 
 export namespace Components {
-  interface MyComponent {
-    /**
-    * The first name
-    */
-    'first': string;
-    /**
-    * The last name
-    */
-    'last': string;
-    /**
-    * The middle name
-    */
-    'middle': string;
+  interface StvLineChart {
+    'axisLabelFontSize': number;
+    'axisTickFontSize': number;
+    'canvasHeight': number;
+    'canvasWidth': number;
+    'chartData': IfcStvLineChart[];
+    'chartId': string;
+    'colorScheme': string;
+    'hideXAxis': boolean;
+    'hideXTicks': boolean;
+    'hideYAxis': boolean;
+    'hideYTicks': boolean;
+    'legend': boolean;
+    'legendFontSize': number;
+    'legendWidth': number;
+    'marginBottom': number;
+    'marginLeft': number;
+    'marginRight': number;
+    'marginTop': number;
+    'responsive': boolean;
+    'strokeWidth': number;
+    'tooltips': boolean;
+    'vertices': boolean;
+    'xLabel': string;
+    'xMetric': string;
+    'xTickFormat': string;
+    'xTickSize': number;
+    'yLabel': string;
+    'yMetric': string;
+    'yTickFormat': string;
+    'yTickSize': number;
+  }
+}
+
+declare global {
+
+
+  interface HTMLStvLineChartElement extends Components.StvLineChart, HTMLStencilElement {}
+  var HTMLStvLineChartElement: {
+    prototype: HTMLStvLineChartElement;
+    new (): HTMLStvLineChartElement;
+  };
+  interface HTMLElementTagNameMap {
+    'stv-line-chart': HTMLStvLineChartElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface MyComponent extends JSXBase.HTMLAttributes {
-    /**
-    * The first name
-    */
-    'first'?: string;
-    /**
-    * The last name
-    */
-    'last'?: string;
-    /**
-    * The middle name
-    */
-    'middle'?: string;
+  interface StvLineChart extends JSXBase.HTMLAttributes<HTMLStvLineChartElement> {
+    'axisLabelFontSize'?: number;
+    'axisTickFontSize'?: number;
+    'canvasHeight'?: number;
+    'canvasWidth'?: number;
+    'chartData'?: IfcStvLineChart[];
+    'chartId'?: string;
+    'colorScheme'?: string;
+    'hideXAxis'?: boolean;
+    'hideXTicks'?: boolean;
+    'hideYAxis'?: boolean;
+    'hideYTicks'?: boolean;
+    'legend'?: boolean;
+    'legendFontSize'?: number;
+    'legendWidth'?: number;
+    'marginBottom'?: number;
+    'marginLeft'?: number;
+    'marginRight'?: number;
+    'marginTop'?: number;
+    'onStv-line-chart-loaded'?: (event: CustomEvent<any>) => void;
+    'responsive'?: boolean;
+    'strokeWidth'?: number;
+    'tooltips'?: boolean;
+    'vertices'?: boolean;
+    'xLabel'?: string;
+    'xMetric'?: string;
+    'xTickFormat'?: string;
+    'xTickSize'?: number;
+    'yLabel'?: string;
+    'yMetric'?: string;
+    'yTickFormat'?: string;
+    'yTickSize'?: number;
   }
 
   interface IntrinsicElements {
-    'my-component': MyComponent;
+    'stv-line-chart': StvLineChart;
   }
 }
 
@@ -55,21 +107,4 @@ declare module "@stencil/core" {
   }
 }
 
-
-declare global {
-
-
-
-  interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {}
-  var HTMLMyComponentElement: {
-    prototype: HTMLMyComponentElement;
-    new (): HTMLMyComponentElement;
-  };
-
-  interface HTMLElementTagNameMap {
-    'my-component': HTMLMyComponentElement;
-  }
-
-  interface ElementTagNameMap extends HTMLElementTagNameMap {}
-}
 

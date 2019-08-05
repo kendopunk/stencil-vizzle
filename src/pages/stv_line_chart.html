@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>stencil-vizzle (dev server)</title>
+  <link rel="stylesheet" type="text/css" href="../css/main.css">
+  <script type="module" src="/build/stencil-vizzle.esm.js"></script>
+  <script nomodule src="/build/stencil-vizzle.esm.js"></script>
+  <script src="../js/lineChart.js"></script>
+</head>
+<body>
+
+  <div id="header">
+    <div id="stv">stencil-vizzle</div>
+  </div>
+
+  <div id="wrapper">
+    <!-- interaction controls -->
+    <div id="control-container">
+
+      <!-- X axis -->
+      <div class="control-category">X-axis</div>
+      <div class="control-item">
+        <input type="checkbox" name="x-label" id="xLabel" checked
+          onClick="toggleShowHideXLabel()">
+          <label for="xLabel">Show Label</label>
+      </div>
+      <div class="control-item">
+        <input type="checkbox" name="x-ticks" id="xTicks" checked
+          onClick="toggleShowHideXTicks()">
+          <label for="xTicks">Show Ticks</label>
+      </div>
+      <div class="control-item">
+        <input type="checkbox" name="hide-x" id="hideX"
+          onClick="toggleShowHideXAxis()">
+          <label for="hideX">Hide X-axis</label>
+      </div>
+
+      <!-- Y axis -->
+      <div class="control-category">Y-axis</div>
+      <div class="control-item">
+        <input type="checkbox" name="y-label" id="yLabel" checked
+          onClick="toggleShowHideYLabel()">
+          <label for="yLabel">Show Label</label>
+      </div>
+      <div class="control-item">
+        <input type="checkbox" name="y-ticks" id="yTicks" checked
+          onClick="toggleShowHideYTicks()">
+          <label for="yTicks">Show Ticks</label>
+      </div>
+      <div class="control-item">
+        <input type="checkbox" name="hide-y" id="hideY"
+          onClick="toggleShowHideYAxis()">
+          <label for="hideY">Hide Y-axis</label>
+      </div>
+
+      <!-- misc -->
+      <div class="control-category">Options</div>
+      <div class="control-item">
+        <input type="checkbox" name="show-legend" id="showLegend" onClick="toggleLegend()">
+          <label for="showLegend">Legend</label>
+      </div>
+
+
+    </div>
+
+    <!-- chart container -->
+    <div id="chart-container">
+      <p class="page-title"><span>&lt;stv-line-chart&gt;</span></p>
+
+      <div class="hoz-group">
+        <div class="btn-item">
+          <button type="button" class="action" onClick="selectNumLines(1)">1 Line</button>
+        </div>
+        <div class="btn-item">
+          <button type="button" class="action" onClick="selectNumLines(2)">2 Lines</button>
+        </div>
+        <div class="btn-item">
+          <button type="button" class="action" onClick="selectNumLines(3)">3 Lines</button>
+        </div>
+        <div class="btn-item">
+          <button type="button" class="action" onClick="selectNumLines(4)">4 Lines</button>
+        </div>
+        <div class="btn-item">
+          <button type="button" class="action" onClick="generateRandomData()">Random</button>
+        </div>
+      </div>
+
+      <div class="chart">
+        <stv-line-chart chart-id="lineChart"
+          margin-left="50"
+          margin-right="50"
+          responsive
+          x-label="Date"
+          x-tick-format="M/D/YY"
+          y-label="Score"
+          y-tick-format="localestring"
+        ></stv-line-chart>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+<script>
+  document.addEventListener('stv-line-chart-loaded', function(evt) {
+    document.querySelector('stv-line-chart').chartData = generateLineChartData(3)
+  })
+</script>
+</html>

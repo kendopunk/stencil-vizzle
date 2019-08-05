@@ -17,10 +17,16 @@ export const config: Config = {
     {
       type: 'www',
       copy: [
-        {src: 'pages'}
+        {src: 'pages'},
+        {src: 'js'},
+        {src: 'css'}
       ],
       serviceWorker: null // disable service workers
     }
+  ],
+  excludeSrc: [
+    '**/*.spec.ts',
+    '**/*.e2e.ts'
   ],
   plugins: [
     sass()

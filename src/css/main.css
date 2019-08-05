@@ -1,0 +1,155 @@
+/**
+ * src/css/main.css
+ */
+
+/*********************************************
+ * Basic HTML
+ *********************************************/
+body {
+  font-family: "Tahoma", "Geneva", san-serif;
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: normal;
+  color: #777;
+}
+
+html, body {
+  height: 100vh;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3 {
+  color: #888;
+}
+
+a {
+  color: #336699;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #000099;
+  text-decoration: none;
+}
+
+/*********************************************
+ * IDs
+ *********************************************/
+#header {
+  height: 3.5em;
+  border-bottom: solid 1px #333;
+  background: #f6ddcc;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  padding-left: 20px;
+  position: fixed;
+  display: flex;
+  align-items: center;
+}
+
+#stv {
+  font-weight: 600;
+}
+
+#toc {
+  margin-top: 3.8em;
+}
+
+#toc > .toc-link-container {
+  padding: 20px;
+}
+
+#toc > .toc-link-container p {
+  margin: 10px 0px;
+}
+
+#wrapper {
+  display: flex;
+  margin-top: 3.5em;
+}
+
+#control-container {
+  flex: 0 0 14em;
+  border-right: solid 1px #ccc;
+  padding: 20px 10px;
+  height: 100vh;
+  font-size: 14px;
+}
+
+#chart-container {
+  flex: 1;
+  padding: 0px 20px;
+}
+
+/*********************************************
+ * Form
+ *********************************************/
+input[type=checkbox] {
+  height: 12px;
+  width: 12px;
+}
+
+input[type=checkbox]:checked + label {
+  color: #336699;
+} 
+
+/*********************************************
+ * Classes
+ *********************************************/
+button.action {
+  background: #009900;
+  font-size: 14px;
+  color: white;
+  height: 28px;
+  border-radius: 4px;
+  padding: 0px 10px;
+}
+
+div.btn-item {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+div.chart {
+  min-height: 450px;
+}
+
+div.control-category {
+  border-bottom: solid 1px #ccc;
+  padding-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+div.control-item {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+div.hoz-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+p.page-title {
+  font-family: "Courier", serif;
+  font-size: 18px;
+  color: #333;
+}
+
+p.page-title span {
+  background: #eee;
+  padding: 3px;
+}
+
+
