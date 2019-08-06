@@ -6,6 +6,7 @@
 /**
  * vars
  */
+var gridlines = false;
 var hideXAxis = false;
 var hideYAxis = false;
 var showLegend = false;
@@ -57,6 +58,11 @@ function selectMargins() {
 /**
  * Toggle functions
  */
+function toggleGridlines() {
+  gridlines = !gridlines;
+  getChartEl().gridlines = gridlines;
+}
+
 function toggleLegend() {
   showLegend = !showLegend;
   getChartEl().legend = showLegend;

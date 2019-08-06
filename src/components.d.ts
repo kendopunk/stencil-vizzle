@@ -57,6 +57,7 @@ export namespace Components {
     'chartData': IfcStvLineChart[];
     'chartId': string;
     'colorScheme': string;
+    'gridlines': boolean;
     'hideXAxis': boolean;
     'hideXTicks': boolean;
     'hideYAxis': boolean;
@@ -149,6 +150,7 @@ declare namespace LocalJSX {
     'chartData'?: IfcStvLineChart[];
     'chartId'?: string;
     'colorScheme'?: string;
+    'gridlines'?: boolean;
     'hideXAxis'?: boolean;
     'hideXTicks'?: boolean;
     'hideYAxis'?: boolean;

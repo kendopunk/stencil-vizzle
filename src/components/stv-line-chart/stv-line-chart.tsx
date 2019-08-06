@@ -33,7 +33,8 @@ import { IfcStvLineChart } from '../../interfaces/IfcStvLineChart'
 import {
   t50,
   t100,
-  t250
+  t250,
+  t500
 } from '../../utils/transition_definitions'
 import TickFormat from '../../utils/tickformat'
 
@@ -94,6 +95,7 @@ export class StvLineChart {
   @Prop() chartData: IfcStvLineChart[] = []
   @Prop() chartId: string = ''
   @Prop() colorScheme: string = 'category10'
+  @Prop() gridlines: boolean = false
   @Prop() hideXAxis: boolean = false
   @Prop() hideXTicks: boolean = false
   @Prop() hideYAxis: boolean = false
@@ -225,6 +227,7 @@ export class StvLineChart {
     this.setScales()
     this.callAxes()
     this.setColorScale()
+    this.handleGridlines()
     this.handlePaths()
     this.handleAxisLabels()
     this.handleVertices()
@@ -288,6 +291,76 @@ export class StvLineChart {
         .style('opacity', 0)
         .remove()
     }
+  }
+
+  /**
+   * @function
+   * Show/hide X + Y gridlines
+   */
+  handleGridlines(): void {
+    if (!this.gridlines) {
+      this.gGrid.selectAll('line')
+        .transition(t500)
+        .style('opacity', 0)
+        .remove()
+
+      return
+    }
+
+    // X gridlines (north/south)
+    const xGridSelection = this.gGrid.selectAll('line.x-gridline')
+      .data(this.xScale.ticks())
+
+    xGridSelection.exit().remove()
+
+    const xSel = xGridSelection.enter()
+      .append('svg:line')
+      .attr('class', 'x-gridline')
+      .style('stroke', '#bbb')
+      .style('stroke-width', 0.5)
+      .style('stroke-dasharray', ("7,3"))
+
+    xSel.merge(xGridSelection)
+      .attr('x1', (d) => {
+        return this.xScale(d)
+      })
+      .attr('x2', (d) => {
+        return this.xScale(d)
+      })
+      .attr('y1', this.marginTop)
+      .transition(t100)
+      .attr('y2', () => {
+        return this.canvasHeight
+          - this.marginBottom
+          - this.xLabelAdjustment()
+      })
+
+    // Y gridlines (east/west)
+    const yGridSelection = this.gGrid.selectAll('line.y-gridline')
+      .data(this.yScale.ticks())
+
+    yGridSelection.exit().remove()
+
+    const ySel = yGridSelection.enter()
+      .append('svg:line')
+      .attr('class', 'y-gridline')
+      .style('stroke', '#bbb')
+      .style('stroke-width', 0.5)
+      .style('stroke-dasharray', ("7,3"))
+
+    ySel.merge(yGridSelection)
+      .attr('x1', () => {
+        return this.marginLeft + this.yLabelAdjustment()
+      })
+      .attr('x2', () => {
+        return this.xScale.range()[1]
+      })
+      .attr('y1', (d) => {
+        return this.yScale(d)
+      })
+      .attr('y2', (d) => {
+        return this.yScale(d)
+      })
   }
 
   /**
