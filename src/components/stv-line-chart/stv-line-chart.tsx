@@ -12,7 +12,7 @@ import {
   Listen
 } from '@stencil/core'
 import isArray from 'lodash/isArray'
-import { max, min } from 'd3'
+import { event, max, min } from 'd3'
 import { axisBottom, axisLeft } from 'd3-axis'
 import { scaleLinear, scaleOrdinal } from 'd3-scale'
 import {
@@ -65,6 +65,7 @@ export class StvLineChart {
   gYAxis: Selection<Element, any, HTMLElement, any>
   // end </g>
 
+  maxTooltipWidth: number = 125
   svg: Selection<Element, any, HTMLElement, any>
   tooltipDiv: Selection<Element, any, HTMLElement, any>
   xAxis: any
@@ -99,6 +100,7 @@ export class StvLineChart {
   @Prop() hideYTicks: boolean = false
   @Prop() legend: boolean = false
   @Prop() legendFontSize: number = 12
+  @Prop() legendMetric: string = 'label'
   @Prop() legendWidth: number = 125
   @Prop({reflectToAttr: true}) marginBottom: number = 25
   @Prop({reflectToAttr: true}) marginLeft: number = 25
@@ -106,7 +108,7 @@ export class StvLineChart {
   @Prop({reflectToAttr: true}) marginTop: number = 25
   @Prop() responsive: boolean = false
   @Prop() strokeWidth: number = 1
-  @Prop() tooltips: boolean = false
+  @Prop() tooltips: boolean = true
   @Prop() vertices: boolean = false
   @Prop() xLabel: string = ''
   @Prop() xMetric: string = 'x'
@@ -146,22 +148,16 @@ export class StvLineChart {
       .attr('class', 'tooltip')
       .style('opacity', 0)
 
-    /**
-     * responsive configuration
-     */
+    // responsive configuration
     if (this.responsive) {
       this.canvasHeight = this.chartElement.parentElement.getBoundingClientRect().height
       this.canvasWidth = this.chartElement.parentElement.getBoundingClientRect().width
     }
 
-    /**
-     * color scale, if color not bound in data
-     */
+    // color scale, if color not bound in data
     this.colorScale = scaleOrdinal()
 
-    /**
-     * emit component loaded event
-     */
+    // emit component loaded event
     this.componentLoaded.emit({
       component: 'stv-line-chart',
       chartId: this.chartId
@@ -231,7 +227,7 @@ export class StvLineChart {
     this.setColorScale()
     this.handlePaths()
     this.handleAxisLabels()
-    // this.handleVertices()
+    this.handleVertices()
     this.handleLegend()
   }
 
@@ -384,7 +380,8 @@ export class StvLineChart {
         })
         .merge(textSel)
         .text((d) => {
-          return d.label || ''
+          return d[this.legendMetric] || ''
+          
         })
         .transition(t50)
         .attr('x', 15)
@@ -434,6 +431,89 @@ export class StvLineChart {
       .attr('d', (d) => {
         return lineFn(d.data)
       })
+  }
+
+  /**
+   * @function
+   * Show/hide vertex connection points (svg circle)
+   */
+ handleVertices(): void {
+    if (!this.vertices) {
+      this.gCanvas.selectAll('circle')
+        .transition(t100)
+        .style('opacity', 0)
+        .remove()
+
+      return
+    }
+
+    // normalize the data for circle generation
+    // need a circle at each X/Y
+    const normalized = this.chartData.map((m, i) => {
+      return m.data.map((item) => {
+        if (m.color) {
+          return Object.assign(item, {color: m.color})
+        } else {
+          return Object.assign(item, {color: this.colorScale(i)})
+        }
+      })
+    }).flat()
+
+    const circleSelection = this.gCanvas.selectAll('circle.vertex')
+      .style('opacity', 0)
+      .data(normalized)
+
+    circleSelection.exit().remove()
+
+    circleSelection.enter()
+      .append('circle')
+      .attr('r', 4)
+      .style('opacity', 0)
+      .attr('class', 'vertex')
+      .style('stroke', '#fff')
+      .style('stroke-width', 1)
+      .on('mouseover', (d) => {
+        this.tooltipDiv.style('left', () => {
+          let x = event.pageX
+
+          // not enough room on the right side for full tooltip
+          if (this.xScale.range()[1] - this.xScale(d[this.xMetric]) < this.maxTooltipWidth) {
+            x = x - this.maxTooltipWidth
+          }
+
+          return `${x}px`
+        })
+        .style('top', () => {
+          return `${event.pageY - 15}px`
+        })
+        .style('opacity', () => {
+          return this.tooltips ? 0.9 : 0
+        })
+        .html(() => {
+          return '<div class="key">'
+            + TickFormat(d[this.xMetric], this.xTickFormat)
+            + '</div><div class="value">'
+            + TickFormat(d[this.yMetric], this.yTickFormat)
+            + '</div>'
+        })
+      })
+      .on('mouseout', () => {
+        this.tooltipDiv.style('opacity', 0)
+          .html('')
+      })
+      .merge(circleSelection)
+      .transition(t100)
+      .style('fill', (d, i) => {
+        return d.color || this.colorScale(i)
+      })
+      .attr('cx', (d) => {
+        return this.xScale(d[this.xMetric])
+      })
+      .attr('cy', (d) => {
+        return this.yScale(d[this.yMetric])
+      })
+      .transition(t250)
+      .style('opacity', 1)
   }
 
   /**
@@ -571,13 +651,13 @@ export class StvLineChart {
   yZeroDomain(): boolean {
     return this.yScale.domain()[0] === this.yScale.domain()[1] ||
       Math.abs(this.yScale.domain()[0]) === Infinity ||
-      Math.abs(this.yScale.domain()[1]) === Infinity
+      Math.abs(this.yScale.domain()[1]) === Infinity  
   }
 
   render() {
     return (
       <div>
-        <div id="tooltip"></div>
+        <div id="tooltip" class="tooltip" />
         <svg version="1.1"
           baseProfile="full"
           width={this.canvasWidth}
@@ -589,91 +669,3 @@ export class StvLineChart {
     )
   }
 }
-
-
-/*
-
-
-  
-
-  handleVertices(): void {
-    const t100 = transition().duration(100)
-    const t300 = transition().duration(300)
-
-    if (!this.vertices) {
-      this.gCanvas.selectAll('circle')
-        .transition(t100)
-        .style('opacity', 0)
-        .remove()
-
-      return
-    }
-
-    // normalize the data for circle generation
-    // need a circle at each X/Y
-    const normalized = this.chartData.map((m, i) => {
-      return m.data.map((item) => {
-        if (m.color) {
-          return Object.assign(item, {color: m.color})
-        } else {
-          return Object.assign(item, {color: this.colorScale(i)})
-        }
-      })
-    }).flat()
-
-    const circleSelection = this.gCanvas.selectAll('circle.vertex')
-      .style('opacity', 0)
-      .data(normalized)
-
-    circleSelection.exit().remove()
-
-    circleSelection.enter()
-      .append('circle')
-      .attr('r', 4)
-      .style('opacity', 0)
-      .attr('class', 'vertex')
-      .style('stroke', '#fff')
-      .style('stroke-width', 1)
-      .on('mouseover', (d) => {
-        this.tooltipDiv.style('left', () => {
-          let x = event.pageX
-
-          // not enough room on the right side for full tooltip
-          if (this.xScale.range()[1] - this.xScale(d[this.xMetric]) < this.maxTooltipWidth) {
-            x = x - this.maxTooltipWidth
-          }
-
-          return `${x}px`
-        })
-        .style('top', () => {
-          return `${event.pageY - 15}px`
-        })
-        .style('opacity', () => {
-          return this.tooltips ? 0.9 : 0
-        })
-        .html(() => {
-          return '<b>' +
-            TickFormat(d[this.xMetric], this.xTickFormat) +
-            '<b><br />' +
-            TickFormat(d[this.yMetric], this.yTickFormat)
-        })
-      })
-      .on('mouseout', () => {
-        this.tooltipDiv.style('opacity', 0)
-          .html('')
-      })
-      .merge(circleSelection)
-      .transition(t100)
-      .style('fill', (d, i) => {
-        return d.color || this.colorScale(i)
-      })
-      .attr('cx', (d) => {
-        return this.xScale(d[this.xMetric])
-      })
-      .attr('cy', (d) => {
-        return this.yScale(d[this.yMetric])
-      })
-      .transition(t300)
-      .style('opacity', 1)
-  }
-*/

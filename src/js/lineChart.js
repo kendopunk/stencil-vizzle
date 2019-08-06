@@ -9,6 +9,7 @@
 var hideXAxis = false;
 var hideYAxis = false;
 var showLegend = false;
+var showVertices = true;
 var showXLabel = true;
 var showXTicks = true;
 var showYLabel = true;
@@ -20,6 +21,31 @@ var showYTicks = true;
  */
 function getChartEl() {
   return document.querySelector('stv-line-chart');
+}
+
+/**
+ * Select functions
+ */
+function selectAxisLabelFontSize() {
+  var val = document.querySelector('#axisLabelFontSize').value || 12;
+  getChartEl().axisLabelFontSize = val;
+}
+
+function selectAxisTickFontSize() {
+  var val = document.querySelector('#axisTickFontSize').value || 10;
+  getChartEl().axisTickFontSize = val;
+}
+
+function selectAxisTickSize() {
+  var val = document.querySelector('#axisTickSize').value || 2;
+  var el = getChartEl();
+  el.xTickSize = val;
+  el.yTickSize = val;
+}
+
+function selectColorScheme() {
+  var val = document.querySelector('#colorScheme').value;
+  getChartEl().colorScheme = val || 'category10'
 }
 
 /**
@@ -112,6 +138,11 @@ function toggleShowHideYTicks() {
   getChartEl().hideYTicks = !showYTicks;
 }
 
+function toggleVertices() {
+  showVertices = !showVertices;
+  getChartEl().vertices = showVertices;
+}
+
 
 /**
  * @function
@@ -124,6 +155,7 @@ function generateLineChartData(numLines) {
 
   var data = [{
     label: 'User 1',
+    name: 'Mark',
     data: [
       {x: dt.getTime() + (msd * 10), y: 71},
       {x: dt.getTime() + (msd * 20), y: 251},
@@ -134,6 +166,7 @@ function generateLineChartData(numLines) {
     ]
    }, {
     label: 'User 2',
+    name: 'Fred',
     data: [
       {x: dt.getTime() + (msd * 10), y: 418},
       {x: dt.getTime() + (msd * 20), y: 380},
@@ -144,6 +177,7 @@ function generateLineChartData(numLines) {
     ]
    }, {
     label: 'User 3',
+    name: 'Diane',
     data: [
       {x: dt.getTime() + (msd * 10), y: 473},
       {x: dt.getTime() + (msd * 20), y: 311},
@@ -154,6 +188,7 @@ function generateLineChartData(numLines) {
     ]
    }, {
     label: 'User 4',
+    name: 'Jackie',
     data: [
       {x: dt.getTime() + (msd * 10), y: 56},
       {x: dt.getTime() + (msd * 20), y: -7},
@@ -191,6 +226,7 @@ function generateRandomLineChartData() {
 
     data.push({
       label: user,
+      name: user.toUpperCase(),
       data: [
         {x: dt.getTime() + (msd * 10), y: randomizer()},
         {x: dt.getTime() + (msd * 20), y: randomizer()},

@@ -15,3 +15,7 @@ export const t100 = () => {
 export const t250 = () => {
   return transition().duration(250)
 }
+
+export const t500 = () => {
+  return transition().duration(500)
+}

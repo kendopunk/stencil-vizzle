@@ -7,10 +7,46 @@
 
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 import {
+  IfcStvBarChart,
+} from './interfaces/IfcStvBarChart';
+import {
   IfcStvLineChart,
 } from './interfaces/IfcStvLineChart';
 
 export namespace Components {
+  interface StvBarChart {
+    'axisLabelFontSize': number;
+    'axisTickFontSize': number;
+    'barStroke': string;
+    'barStrokeWidth': number;
+    'canvasHeight': number;
+    'canvasWidth': number;
+    'chartData': IfcStvBarChart[];
+    'chartId': string;
+    'colorScheme': string;
+    'gridlines': boolean;
+    'hideXAxis': boolean;
+    'hideXTicks': boolean;
+    'hideYAxis': boolean;
+    'hideYTicks': boolean;
+    'legend': boolean;
+    'legendWidth': number;
+    'linearMetric': string;
+    'linearTickFormat': string;
+    'marginBottom': number;
+    'marginLeft': number;
+    'marginRight': number;
+    'marginTop': number;
+    'maxBarWidth': number;
+    'ordinalMetric': string;
+    'orientation': string;
+    'responsive': boolean;
+    'tooltips': boolean;
+    'xLabel': string;
+    'xTickSize': number;
+    'yLabel': string;
+    'yTickSize': number;
+  }
   interface StvLineChart {
     'axisLabelFontSize': number;
     'axisTickFontSize': number;
@@ -25,6 +61,7 @@ export namespace Components {
     'hideYTicks': boolean;
     'legend': boolean;
     'legendFontSize': number;
+    'legendMetric': string;
     'legendWidth': number;
     'marginBottom': number;
     'marginLeft': number;
@@ -48,17 +85,58 @@ export namespace Components {
 declare global {
 
 
+  interface HTMLStvBarChartElement extends Components.StvBarChart, HTMLStencilElement {}
+  var HTMLStvBarChartElement: {
+    prototype: HTMLStvBarChartElement;
+    new (): HTMLStvBarChartElement;
+  };
+
   interface HTMLStvLineChartElement extends Components.StvLineChart, HTMLStencilElement {}
   var HTMLStvLineChartElement: {
     prototype: HTMLStvLineChartElement;
     new (): HTMLStvLineChartElement;
   };
   interface HTMLElementTagNameMap {
+    'stv-bar-chart': HTMLStvBarChartElement;
     'stv-line-chart': HTMLStvLineChartElement;
   }
 }
 
 declare namespace LocalJSX {
+  interface StvBarChart extends JSXBase.HTMLAttributes<HTMLStvBarChartElement> {
+    'axisLabelFontSize'?: number;
+    'axisTickFontSize'?: number;
+    'barStroke'?: string;
+    'barStrokeWidth'?: number;
+    'canvasHeight'?: number;
+    'canvasWidth'?: number;
+    'chartData'?: IfcStvBarChart[];
+    'chartId'?: string;
+    'colorScheme'?: string;
+    'gridlines'?: boolean;
+    'hideXAxis'?: boolean;
+    'hideXTicks'?: boolean;
+    'hideYAxis'?: boolean;
+    'hideYTicks'?: boolean;
+    'legend'?: boolean;
+    'legendWidth'?: number;
+    'linearMetric'?: string;
+    'linearTickFormat'?: string;
+    'marginBottom'?: number;
+    'marginLeft'?: number;
+    'marginRight'?: number;
+    'marginTop'?: number;
+    'maxBarWidth'?: number;
+    'onStv-bar-chart-loaded'?: (event: CustomEvent<any>) => void;
+    'ordinalMetric'?: string;
+    'orientation'?: string;
+    'responsive'?: boolean;
+    'tooltips'?: boolean;
+    'xLabel'?: string;
+    'xTickSize'?: number;
+    'yLabel'?: string;
+    'yTickSize'?: number;
+  }
   interface StvLineChart extends JSXBase.HTMLAttributes<HTMLStvLineChartElement> {
     'axisLabelFontSize'?: number;
     'axisTickFontSize'?: number;
@@ -73,6 +151,7 @@ declare namespace LocalJSX {
     'hideYTicks'?: boolean;
     'legend'?: boolean;
     'legendFontSize'?: number;
+    'legendMetric'?: string;
     'legendWidth'?: number;
     'marginBottom'?: number;
     'marginLeft'?: number;
@@ -94,6 +173,7 @@ declare namespace LocalJSX {
   }
 
   interface IntrinsicElements {
+    'stv-bar-chart': StvBarChart;
     'stv-line-chart': StvLineChart;
   }
 }

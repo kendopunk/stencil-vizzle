@@ -4,17 +4,27 @@
  */
 div.tooltip {
   position: absolute;
-  border: solid 1pc #ceccd0;
-  background-color: #faf8f9;
+  border: solid 1px #ceccd0;
+  background: #faf8f9;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
   color: #344653;
   font-size: 12px;
   text-align: left;
   padding: 10px;
   border-radius: 4px;
-  pointer-events: none;
   line-height: 18px;
+  pointer-events: none;
   max-width: 125px;
+}
+
+div.tooltip > div.key {
+  font-weight: 600;
+  padding-bottom: 5px;
+}
+
+div.tooltip > div.value {
+  font-weight: normal;
+  font-style: italic;
 }
 
 .axis path, .axis line {
