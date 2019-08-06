@@ -71,15 +71,36 @@
 
       <!-- misc -->
       <div class="control-category">Options</div>
+      
       <div class="control-item">
         <input type="checkbox" name="show-legend" id="showLegend" onClick="toggleLegend()">
           <label for="showLegend">Legend</label>
       </div>
 
       <div class="control-item">
-        <input type="checkbox" name="show-vertices" id="showVertices" checked
-          onClick="toggleVertices()">
-          <label for="showVertices">Vertices</label>
+        <input type="checkbox" name="gridlines" id="gridlines" onClick="toggleGridlines()">
+          <label for="gridlines">Gridlines</label>
+      </div>
+
+      <div class="control-item">
+        <div class="select-group">Orientation</div>
+        <div class="select-el">
+          <select name="orientation" id="orientation" onChange="selectOrientation()">
+            <option value="vertical">vertical (default)</option>
+            <option value="horizontal">horizontal</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-item">
+        <div class="select-group">Margins</div>
+        <div class="select-el">
+          <select name="margins" id="margins" onChange="selectMargins()">
+            <option value="35">35px</option>
+            <option value="50">50px</option>
+            <option value="75">75px</option>
+          </select>
+        </div>
       </div>
 
       <div class="control-item">
@@ -132,54 +153,65 @@
           </select>
         </div>
       </div>
+
+      <div class="control-item">
+        <div class="select-group">Max Bar Width</div>
+        <div class="select-el">
+          <select name="max-bar-width" id="maxBarWidth" onChange="selectMaxBarWidth()">
+           <option value="5">5px</option>
+           <option value="25">25px</option>
+           <option value="50">50px</option>
+           <option value="75" selected>75px</option>
+           <option value="2000">fill space</option>
+          </select>
+        </div>
+      </div>
     </div>
 
     <!-- chart container -->
     <div id="chart-container">
       <p class="page-title"><span>&lt;stv-bar-chart&gt;</span></p>
 
-      <!--
-
       <div class="hoz-group">
         <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumLines(1)">1 Line</button>
+          <button type="button" class="action" onClick="selectNumBars(1)">1 Bar</button>
         </div>
         <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumLines(2)">2 Lines</button>
+          <button type="button" class="action" onClick="selectNumBars(2)">2 Bars</button>
         </div>
         <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumLines(3)">3 Lines</button>
+          <button type="button" class="action" onClick="selectNumBars(3)">3 Bars</button>
         </div>
         <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumLines(4)">4 Lines</button>
+          <button type="button" class="action" onClick="selectNumBars(4)">4 Bars</button>
         </div>
         <div class="btn-item">
-          <button type="button" class="action" onClick="generateRandomData()">Random</button>
+          <button type="button" class="action" onClick="selectNumBars(5)">5 Bars</button>
         </div>
       </div>
 
       <div class="chart">
-        <stv-line-chart chart-id="myStvLineChart"
-          margin-left="50"
-          margin-right="50"
+        <stv-bar-chart chart-id="myStvBarChart"
+          legend-metric="name"
+          linear-metric="value"
+          linear-tick-format="USD"
+          margin-left="35"
+          ordinal-metric="ticker"
           responsive
-          vertices
-          x-label="Date"
-          x-tick-format="M/D/YY"
-          y-label="Score"
-          y-tick-format="localestring"
-        ></stv-line-chart>
+          tooltips
+          x-label="Stock Ticker"
+          y-label="Price"
+        ></stv-bar-chart>
       </div>
 
-    -->
     </div>
   </div>
 
 </body>
 
 <script>
-  // document.addEventListener('stv-line-chart-loaded', function(evt) {
-  //   document.querySelector('stv-line-chart').chartData = generateLineChartData(3)
-  // })
+  document.addEventListener('stv-bar-chart-loaded', function(evt) {
+    selectNumBars(3);
+  })
 </script>
 </html>

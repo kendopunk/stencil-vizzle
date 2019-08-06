@@ -48,6 +48,12 @@ function selectColorScheme() {
   getChartEl().colorScheme = val || 'category10'
 }
 
+function selectMargins() {
+  var val = document.querySelector('#margins').value;
+  var el = getChartEl()
+  el.marginTop = el.marginBottom = el.marginLeft = el.marginRight = val;
+}
+
 /**
  * Toggle functions
  */

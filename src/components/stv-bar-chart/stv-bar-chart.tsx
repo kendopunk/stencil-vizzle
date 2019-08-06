@@ -3,6 +3,7 @@
  */
 import {
   Component,
+  h,
   Prop,
   Element,
   Event,
@@ -87,9 +88,9 @@ export class StvBarChart {
   @Prop({
     reflectToAttr: true,
     mutable: true
-  }) canvasWidth: number = 500
-  @Prop() chartId: string = ''
+  }) canvasWidth: number = 500 
   @Prop() chartData: IfcStvBarChart[] = []
+  @Prop() chartId: string = ''
   @Prop() colorScheme: string = 'category10'
   @Prop() gridlines: boolean = false
   @Prop() hideXAxis: boolean = false
@@ -97,6 +98,8 @@ export class StvBarChart {
   @Prop() hideYAxis: boolean = false
   @Prop() hideYTicks: boolean = false
   @Prop() legend: boolean = false
+  @Prop() legendFontSize: number = 12
+  @Prop() legendMetric: string = 'label'
   @Prop() legendWidth: number = 125
   @Prop() linearMetric: string = 'value'
   @Prop() linearTickFormat: string = 'raw'
@@ -200,6 +203,7 @@ export class StvBarChart {
         }
         const x = this.marginLeft + this.yLabelAdjustment()
         const y = this.canvasHeight - this.marginBottom - this.xLabelAdjustment()
+
         return `translate(${x}, ${y})`
       })
       .style('opacity', () => {
@@ -216,6 +220,7 @@ export class StvBarChart {
 
         const x = this.marginLeft + this.yLabelAdjustment()
         const y = this.linearScale(0)
+
         return `translate(${x}, ${y})`
       })
       .style('opacity', () => {
@@ -236,7 +241,6 @@ export class StvBarChart {
         if (this.chartData.length === 0) {
           return
         }
-
         const x = this.marginLeft
         const y = this.linearScale(0)
         return `translate(${x}, ${y})`
@@ -278,7 +282,7 @@ export class StvBarChart {
       this.callVerticalAxes()
       this.handleVerticalBars()
     }
-    this.handleGridLines()
+    this.handleGridlines()
     this.handleAxisLabels()
     this.handleLegend()
   }
@@ -333,7 +337,7 @@ export class StvBarChart {
           const y = this.marginTop
             + (this.canvasHeight - this.marginBottom - this.marginTop - this.xLabelAdjustment())/2
 
-          return `translate(${x}, ${y})`
+          return `translate(${x}, ${y}), rotate(-90)`
         })
     } else {
       this.gCanvas.selectAll('text.y-axis-label')
@@ -369,7 +373,7 @@ export class StvBarChart {
       .attr('class', 'gridline')
       .style('stroke', '#bbb')
       .style('stroke-width', 0.5)
-      .style('stroke-dasharray', ("7","3"))
+      .style('stroke-dasharray', ("7,3"))
 
     if (this.orientation === 'horizontal') {
       sel.merge(gridSelection)
@@ -379,7 +383,7 @@ export class StvBarChart {
             + this.linearScale(d)
         })
         .attr('x2', (d) => {
-          this.this.marginLeft
+          return this.marginLeft
             + this.yLabelAdjustment()
             + this.linearScale(d)
         })
@@ -432,8 +436,12 @@ export class StvBarChart {
         select(a[i]).style('opacity', 1)
 
         this.tooltipDiv
-          .style('left', `${event.pageX}px`)
-          .style('top', `${event.pageY + 15}px`)
+          .style('left', () => {
+            return `${event.pageX}px`
+          })
+          .style('top', () => {
+            return `${event.pageY + 15}px`
+          })
           .style('opacity', () => {
             return this.tooltips ? 0.9 : 0
           })
@@ -476,7 +484,7 @@ export class StvBarChart {
       .style('fill', (d, i) => {
         return d.color || this.colorScale(i)
       })
-      .transition(t25)
+      .transition(t50)
       .style('opacity', 0.75)
   }
 
@@ -495,10 +503,75 @@ export class StvBarChart {
       return `translate(${x}, ${y})`
     })
 
+    //////////////////////////////
     // legend is in play
+    //////////////////////////////
     if (this.legend) {
-      // legend lines
 
+      // legend lines
+      const lineSel = this.gLegend.selectAll('line.legend-line')
+        .data(this.chartData)
+
+      lineSel.exit().remove()
+
+      lineSel.enter()
+        .append('line')
+        .attr('class', 'legend-line')
+        .attr('x1', 0)
+        .attr('x2', 10)
+        .style('opacity', 0)
+        .style('stroke-width', 3)
+        .merge(lineSel)
+        .transition(t100)
+        .attr('y1', (_d, i) => {
+          return i * lineIncrement
+        })
+        .attr('y2', (_d, i) => {
+          return i * lineIncrement
+        })
+        .style('stroke', (d, i) => {
+          return d.color || this.colorScale(i)
+        })
+        .transition(t100)
+        .style('opacity', 0.7)
+
+      // legend text
+      const textSel = this.gLegend.selectAll('text.legend-text')
+        .data(this.chartData)
+
+      textSel.exit().remove()
+
+      textSel.enter()
+        .append('text')
+        .attr('class', 'legend-text')
+        .style('fill', '#555')
+        .style('font-size', `${this.legendFontSize}px`)
+        .style('opacity', 0)
+        .on('mouseover', (_d, i) => {
+          this.gCanvas.selectAll('rect.bar')
+            .filter((_e, j) => {
+              return i === j
+            })
+            .style('opacity', 1)
+        })
+        .on('mouseout', (_d, i) => {
+          this.gCanvas.selectAll('rect.bar')
+            .filter((_e, j) => {
+              return i === j
+            })
+            .style('opacity', 0.75)
+        })
+        .merge(textSel)
+        .text((d) => {
+          return d[this.legendMetric] || ''
+        })
+        .transition(t100)
+        .attr('x', 15)
+        .attr('y', (_d, i) => {
+          return i * lineIncrement + 4
+        })
+        .transition(t100)
+        .style('opacity', 0.9)
     } else {
       this.gLegend.selectAll('line.legend-line')
         .transition(t100)
@@ -512,19 +585,237 @@ export class StvBarChart {
     }
   }
 
+  /**
+   * @function
+   * Draw bars, horizontal orientation
+   */
+  handleVerticalBars(): void {
+    const barSel = this.gCanvas.selectAll('rect.bar')
+      .data(this.chartData)
+
+    barSel.exit().remove()
+
+    barSel.enter()
+      .append('rect')
+      .attr('class', 'bar')
+      .style('opacity', 0)
+      .attr('rx', 3)
+      .attr('ry', 3)
+      .on('mouseover', (d, i, a) => {
+        select(a[i]).style('opacity', 1)
+
+        this.tooltipDiv
+          .style('left', () => {
+            return `${event.pageX}px`
+          })
+          .style('top', () => {
+            return `${event.pageY + 15}px`
+          })
+          .style('opacity', () => {
+            return this.tooltips ? 0.9 : 0
+          })
+          .html(() => {
+            return '<div class="key">'
+              + d[this.ordinalMetric]
+              + '</div><div class="value">'
+              + TickFormat(d[this.linearMetric], this.linearTickFormat)
+              + '</div>'
+          })
+      })
+      .on('mouseout', (_d, i, a) => {
+        select(a[i]).style('opacity', 0.75)
+
+        this.tooltipDiv.style('opacity', 0).html('')
+      })
+      .on('mousemove', () => {
+        this.tooltipDiv
+          .style('left', () => {
+            return `${event.pageX}px`
+          })
+          .style('top', () => {
+            return `${event.pageY + 15}px`
+          })
+      })
+      .merge(barSel)
+      .style('stroke', this.barStroke)
+      .style('stroke-width', this.barStrokeWidth)
+      .transition(t250)
+      .attr('x', (d) => {
+        return this.marginLeft
+          + this.ordinalScale(d[this.ordinalMetric])
+          + this.ordinalScale.bandwidth()/2
+          - Math.min(this.maxBarWidth, this.ordinalScale.bandwidth())/2
+      })
+      .attr('y', (d) => {
+        return this.linearScale(d[this.linearMetric])
+      })
+      .attr('width', () => {
+        return Math.min(this.maxBarWidth, this.ordinalScale.bandwidth())
+      })
+      .attr('height', (d) => {
+        return this.linearScale(0)
+          - this.linearScale(d[this.linearMetric])
+      })
+      .style('fill', (d, i) => {
+        return d.color || this.colorScale(i)
+      })
+      .transition(t50)
+      .style('opacity', 0.75)
+  }
+
+  isValidChartData(): boolean {
+    return isArray(this.chartData)
+  }
+
+  isValidXLabel(): boolean {
+    return this.xLabel
+      && this.xLabel.length > 0
+      && !this.hideXAxis
+  }
+
+  isValidYLabel(): boolean {
+    return this.yLabel
+      && this.yLabel.length > 0
+      && !this.hideYAxis
+  }
+
+  legendAdjustment(): number {
+    return this.legend ? this.legendWidth : 0
+  }
+
+  /**
+   * @function
+   * Set the back-up color scale
+   */
+  setColorScale(): void {
+    if (this.colorSchemes[this.colorScheme]) {
+      this.colorScale.range(this.colorSchemes[this.colorScheme])
+    } else {
+      this.colorScale.range(schemeCategory10)
+    }
+  }
+
+  /**
+   * @function
+   * Calculate X/Y scales for horizontal orientation
+   */
+  setHorizontalScales(): void {
+
+    // max linear value
+    this.linearMax = Math.max(...this.chartData.map((m) => {
+      return m[this.linearMetric] || 0
+    }))
+
+    // X = linear scale
+    this.linearScale = scaleLinear()
+      .domain([0, this.linearMax])
+      .range([
+        0,
+        this.canvasWidth
+          - this.marginLeft
+          - this.marginRight
+          - this.legendAdjustment()
+          - this.yLabelAdjustment()
+      ])
+      .nice()
+
+    // linear axis generator
+    this.xAxis.scale(this.linearScale)
+      .tickSize(this.xTickSize)
+      .tickValues(this.hideXTicks ? [] : null)
+      .tickFormat((d) => {
+        return TickFormat(d, this.linearTickFormat)
+      })
+
+    // Y = ordinal scale
+    this.ordinalScale = scaleBand()
+      .domain(this.chartData.map((m) => {
+        return m[this.ordinalMetric]
+      }))
+      .rangeRound([
+        this.marginTop,
+        this.canvasHeight
+          - this.marginBottom
+          - this.xLabelAdjustment()
+      ])
+      .padding(this.ordinalPadding)
+
+    // ordinal axis generators
+    this.yAxis.scale(this.ordinalScale)
+      .tickSize(this.yTickSize)
+      .tickValues(this.hideYTicks ? [] : null)
+  }
+
+  /**
+   * @function
+   * X/Y scales for vertical (default) orientation
+   */
+  setVerticalScales(): void {
+
+    // X is ordinal
+    this.ordinalScale = scaleBand()
+      .domain(this.chartData.map((m) => {
+        return m[this.ordinalMetric]
+      }))
+      .rangeRound([
+        this.yLabelAdjustment(),
+        this.canvasWidth
+          - this.marginLeft
+          - this.marginRight
+          - this.legendAdjustment()
+      ])
+      .padding(this.ordinalPadding)
+
+    // ordinal axis generator
+    this.xAxis.scale(this.ordinalScale)
+      .tickSize(this.xTickSize)
+      .tickValues(this.hideXTicks ? [] : null)
+
+    // max linear value
+    this.linearMax = Math.max(...this.chartData.map((m) => {
+      return m[this.linearMetric] || 0
+    }))
+
+    // Y is linear
+    this.linearScale = scaleLinear()
+      .domain([0, this.linearMax])
+      .range([
+        this.canvasHeight
+          - this.marginBottom
+          - this.xLabelAdjustment(),
+        this.marginTop
+      ])
+      .nice()
+
+    // linear axis generator
+    this.yAxis.scale(this.linearScale)
+      .tickSize(this.yTickSize)
+      .tickValues(this.hideYTicks ? [] : null)
+      .tickFormat((d) => {
+        return TickFormat(d, this.linearTickFormat)
+      })
+  }
+
+  xLabelAdjustment(): number {
+    return this.isValidXLabel() ? this.xLabelPadding : 0
+  }
+
+  yLabelAdjustment(): number {
+    return this.isValidYLabel() ? this.yLabelPadding: 0
+  }
+
+  render() {
+    return (
+      <div>
+        <div id="tooltip"></div>
+        <svg version="1.1"
+          baseProfile="full"
+          width={this.canvasWidth}
+          height={this.canvasHeight}
+          class="stv-bar-chart"
+          xmlns="http://www.w3.org/2000/svg"
+        ></svg>
+      </div>
+    )
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

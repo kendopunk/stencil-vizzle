@@ -657,7 +657,7 @@ export class StvLineChart {
   render() {
     return (
       <div>
-        <div id="tooltip" class="tooltip" />
+        <div id="tooltip"></div>
         <svg version="1.1"
           baseProfile="full"
           width={this.canvasWidth}

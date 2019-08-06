@@ -30,6 +30,8 @@ export namespace Components {
     'hideYAxis': boolean;
     'hideYTicks': boolean;
     'legend': boolean;
+    'legendFontSize': number;
+    'legendMetric': string;
     'legendWidth': number;
     'linearMetric': string;
     'linearTickFormat': string;
@@ -119,6 +121,8 @@ declare namespace LocalJSX {
     'hideYAxis'?: boolean;
     'hideYTicks'?: boolean;
     'legend'?: boolean;
+    'legendFontSize'?: number;
+    'legendMetric'?: string;
     'legendWidth'?: number;
     'linearMetric'?: string;
     'linearTickFormat'?: string;
