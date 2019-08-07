@@ -675,7 +675,7 @@ export class StvStackedBarChart {
    * @function
    * Draw bars, vertical (default) orientation
    */
-  drawVerticalBars(): void {
+  handleVerticalBars(): void {
 
     const layerSel = this.gCanvas.selectAll('.layer')
       .data(this.layers)
@@ -740,6 +740,204 @@ export class StvStackedBarChart {
       })
       .transition(t100)
       .style('opacity', this.layerOpacity)
+  }
+
+  /**
+   * @function
+   * "chartData" should be an array
+   */
+  isValidChartData(): boolean {
+    return isArray(this.chartData)
+  }
+
+  isValidXLabel(): boolean {
+    return this.xLabel
+      && this.xLabel.length > 0
+      && !this.hideXAxis
+  }
+
+  isValidYLabel(): boolean {
+    return this.yLabel
+      && this.yLabel.length > 0
+      && !this.hideYAxis
+  }
+
+  /**
+   * @function
+   * Calculate potential X adjustment for legend
+   */
+  legendAdjustment(): number {
+    return this.legend ? this.legendWidth : 0
+  }
+
+  /**
+   * @function
+   * Setting the color scale to use for bars
+   */
+  setColorScale(): void {
+    if (this.colorSchemes[this.colorScheme]) {
+      this.colorScale.range(this.colorSchemes[this.colorScheme])
+    } else {
+      this.colorScale.range(schemeCategory10)
+    }
+  }
+
+  /**
+   * @function
+   * Calculate scales and axis generators for horizontal layout
+   * X-axis = linear
+   * Y-axis = ordinal
+   */
+  setHorizontalScales(): void {
+    const series = this.toSeriesFormat()
+    this.layers = this.toStackFormat()
+
+    // X = linear
+    this.linearScale = scaleLinear()
+      .domain([
+        0,
+        max(series, (d) => d.total)
+      ])
+      .range([
+        0,
+        this.canvasWidth
+          - this.marginLeft
+          - this.marginRight
+          - this.legendAdjustment()
+          - this.yLabelAdjustment()
+      ])
+      .nice()
+
+    this.xAxis.scale(this.linearScale)
+      .tickSize(this.xTickSize)
+      .tickValues(this.hideXTickValues ? [] : null)
+      .tickFormat((d) => {
+        return TickFormat(d, this.linearTickFormat)
+      })
+
+    // Y = ordinal
+    this.ordinalScale = scaleBand()
+      .domain(reverse(this.getOrdinalKeys()))
+      .rangeRound([
+        this.canvasHeight
+          - this.marginBottom
+          - this.xLabelAdjustment(),
+        this.marginTop
+      ])
+      .padding(0.1)
+
+    this.yAxis.scale(this.ordinalScale)
+      .tickSize(this.yTickSize)
+      .tickValues(this.hideYTickValues ? [] : null)
+      .tickFormat((d) => {
+        return TickFormat(d, 'raw')
+      })
+  }
+
+  /**
+   * @function
+   * Calculate scales and axis generators for vertical (default) orientation
+   */
+  setVerticalScales(): void {
+    const series = this.toSeriesFormat()
+    this.layers = this.toStackFormat()
+
+    // X = ordinal
+    this.ordinalScale = scaleBand()
+      .domain(this.getOrdinalKeys())
+      .rangeRound([
+        this.yLabelAdjustment(),
+        this.canvasWidth
+          - this.marginLeft
+          - this.marginRight
+          - this.legendAdjustment()
+      ])
+      .padding(0.1)
+
+    this.xAxis.scale(this.ordinalScale)
+      .tickSize(this.xTickSize)
+      .tickValues(this.hideXTickValues ? [] : null)
+      .tickFormat((d) => {
+        return TickFormat(d, 'raw')
+      })
+
+    // Y = linear
+    this.linearScale = scaleLinear()
+      .domain([
+        0,
+        max(series, (d) => { return d.total })
+      ])
+      .range([
+        this.canvasHeight
+          - this.marginBottom
+          - this.xLabelAdjustment(),
+        this.marginTop
+      ])
+      .nice()
+
+    this.yAxis.scale(this.linearScale)
+      .tickSize(this.yTickSize)
+      .tickValues(this.hideYTickValues ? [] : null)
+      .tickFormat((d) => {
+        return TickFormat(d, this.linearTickFormat)
+      })
+  }
+
+  /**
+   * @function
+   * Format chartData into series formatting
+   */
+  toSeriesFormat(): Array<any> {
+    let ret = []
+
+    this.getOrdinalKeys().forEach((item) => {
+      let total = 0
+      const obj = {[`${this.ordinalMetric}`]: item}
+
+      this.chartData.filter((f) => {
+        return f[this.ordinalMetric] === item
+      }).forEach((entry) => {
+        let k = entry[this.seriesMetric]
+        obj[`${k}`] = entry[this.linearMetric]
+
+        total += entry[this.linearMetric]
+      })
+
+      ret.push(Object.assign({}, obj, {total}))
+    })
+
+    // converting absolute values to % values
+    if (this.linearDomain === 'percent') {
+      ret.forEach((m) => {
+        Object.keys(m).forEach((k) => {
+          if (k !== 'total' && k !== this.ordinalMetric) {
+            m[`${k}`] = (m[k]/m.total) * 100
+          }
+        })
+        m.total = 100
+      })
+    }
+
+    return ret
+  }
+
+  /**
+   * @function
+   * Convert chartData to a format that can be consumed
+   * by the D3.js stack layout function
+   */
+  toStackFormat(): Array<any> {
+    return stack()
+      .keys(this.getSeriesKeys())
+      .order(stackOrderReverse)(this.toSeriesFormat())
+  }
+
+  xLabelAdjustment(): number {
+    return this.isValidXLabel() ? this.xLabelPadding : 0
+  }
+
+  yLabelAdjustment(): number {
+    return this.isValidYLabel() ? this.yLabelPadding : 0
   }
 
   render() {
