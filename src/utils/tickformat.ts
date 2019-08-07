@@ -62,6 +62,33 @@ const TickFormat = (value: any, modifier: string = 'raw') => {
       break
     }
 
+    case 'percent': {
+      if (isFinite(toNumber(value))) {
+        val = toNumber(value).toLocaleString(locale) + '%'
+      }
+      break
+    }
+
+    case 'percent1d': {
+      if (isFinite(toNumber(value))) {
+        val = toNumber(value).toLocaleString(locale, {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1
+        }) + '%'
+      }
+      break
+    }
+
+    case 'percent2d': {
+      if (isFinite(toNumber(value))) {
+        val = toNumber(value).toLocaleString(locale, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }) + '%'
+      }
+      break
+    }
+
     case 'YYYY': {
       if (isValidDateString(value)) {
         val = new Date(value).toLocaleDateString(locale, {

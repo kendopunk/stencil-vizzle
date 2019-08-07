@@ -98,10 +98,11 @@ export namespace Components {
     'colorScheme': string;
     'gridlines': boolean;
     'hideXAxis': boolean;
-    'hideXTickValues': boolean;
+    'hideXTicks': boolean;
     'hideYAxis': boolean;
-    'hideYTickValues': boolean;
+    'hideYTicks': boolean;
     'legend': boolean;
+    'legendFontSize': number;
     'legendWidth': number;
     'linearDomain': string;
     'linearMetric': string;
@@ -234,10 +235,11 @@ declare namespace LocalJSX {
     'colorScheme'?: string;
     'gridlines'?: boolean;
     'hideXAxis'?: boolean;
-    'hideXTickValues'?: boolean;
+    'hideXTicks'?: boolean;
     'hideYAxis'?: boolean;
-    'hideYTickValues'?: boolean;
+    'hideYTicks'?: boolean;
     'legend'?: boolean;
+    'legendFontSize'?: number;
     'legendWidth'?: number;
     'linearDomain'?: string;
     'linearMetric'?: string;

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-  <title>stv: &lt;stv-bar-chart&gt;</title>
+  <title>stv: &lt;stv-stacked-bar-chart&gt;</title>
   <link rel="stylesheet" type="text/css" href="../css/main.css">
   <script type="module" src="/build/stencil-vizzle.esm.js"></script>
   <script nomodule src="/build/stencil-vizzle.esm.js"></script>
@@ -80,6 +80,11 @@
       <div class="control-item">
         <input type="checkbox" name="gridlines" id="gridlines" onClick="toggleGridlines()">
           <label for="gridlines">Gridlines</label>
+      </div>
+
+      <div class="control-item">
+        <input type="checkbox" name="calc-pct" id="calcPct" onClick="togglePercent()">
+          <label for="calcPct">Calculate %age</label>
       </div>
 
       <div class="control-item">
@@ -175,50 +180,62 @@
       <p>WW2 tank production by year for Germany, the Soviet Union and the United States</p>
 
       <div class="hoz-group">
+        <div class="select-item">
+          <label for="armament">Category:</label>
+          <select name="tank-category" id="tankCategory" onChange="selectTankCategory()">
+            <option selected value="Light Tank">Light Tanks</option>
+            <option value="Medium Tank">Medium Tanks</option>
+            <option value="Heavy Tank">Heavy Tanks</option>
+          </select>
+        </div>
+
+        <div class="select-item">
+          <label for="armament">Group By:</label>
+          <select name="group-by" id="groupBy" onChange="selectGroupBy()">
+            <option selected value="year">By Year</option>
+            <option value="country">By Country</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="hoz-group">
         <div class="cbx-item">
-          <input type="checkbox" name="year1941" value="1941">
+          <input type="checkbox" id="year1941" value="1941" onClick="yearCheck('1941')">
             <label for="year1941">1941</label>
         </div>
         <div class="cbx-item">
-          <input type="checkbox" name="year1942" value="1942" checked>
+          <input type="checkbox" id="year1942" value="1942" checked onClick="yearCheck('1942')">
             <label for="year1942">1942</label>
         </div>
 
         <div class="cbx-item">
-          <input type="checkbox" name="year1943" value="1943" checked>
+          <input type="checkbox" id="year1943" value="1943" checked onClick="yearCheck('1943')">
             <label for="year1943">1943</label>
         </div>
 
         <div class="cbx-item">
-          <input type="checkbox" name="year1944" value="1944" checked>
+          <input type="checkbox" id="year1944" value="1944" checked onClick="yearCheck('1944')">
             <label for="year1944">1944</label>
         </div>
 
         <div class="cbx-item">
-          <input type="checkbox" name="year1945" value="1945">
+          <input type="checkbox" id="year1945" value="1945" onClick="yearCheck('1945')">
             <label for="year1945">1945</label>
         </div>
-        <!--
-        <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumBars(1)">1 Bar</button>
-        </div>
-        <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumBars(2)">2 Bars</button>
-        </div>
-        <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumBars(3)">3 Bars</button>
-        </div>
-        <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumBars(4)">4 Bars</button>
-        </div>
-        <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumBars(5)">5 Bars</button>
-        </div>
-      -->
       </div>
 
       <div class="chart">
-        <stv-stacked-bar-chart chart-id="myStvStackedBarChart"></stv-stacked-bar-chart>
+        <stv-stacked-bar-chart
+          chart-id="myStvStackedBarChart"
+          linear-metric="produced"
+          linear-tick-format="localestring"
+          margin-left="50"
+          ordinal-metric="year"
+          responsive
+          series-metric="combatant"
+          x-label="Year"
+          y-label="Production"
+        ></stv-stacked-bar-chart>
       </div>
 
     </div>

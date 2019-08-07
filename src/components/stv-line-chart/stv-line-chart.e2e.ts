@@ -149,21 +149,11 @@ describe('<stv-line-chart> e2e test', () => {
 
     const yGridlineEl = contentElement.querySelectorAll('line.y-gridline')
     expect(yGridlineEl).toBeDefined()
+
+    ////////////////////////////////////////
+    // tooltip <div>
+    ////////////////////////////////////////
+    const tooltipDiv = contentElement.querySelector('#tooltip')
+    expect(tooltipDiv).toBeDefined()
   })
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

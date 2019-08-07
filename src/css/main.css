@@ -163,6 +163,7 @@ div.hoz-group {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 1.1em;
 }
 
 div.select-el {
@@ -173,6 +174,14 @@ div.select-group {
   font-size: 12px;
   font-style: italic;
   color: #336699;
+}
+
+div.select-item > label {
+  font-size: 0.8em;
+}
+
+div.select-item > label, div.select-item > select {
+  display: inline;
 }
 
 p.page-title {

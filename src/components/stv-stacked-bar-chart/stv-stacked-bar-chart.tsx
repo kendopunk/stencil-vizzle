@@ -100,10 +100,11 @@ export class StvStackedBarChart {
   @Prop() colorScheme: string = 'category10'
   @Prop() gridlines: boolean = false
   @Prop() hideXAxis: boolean = false
-  @Prop() hideXTickValues: boolean = false
+  @Prop() hideXTicks: boolean = false
   @Prop() hideYAxis: boolean = false
-  @Prop() hideYTickValues: boolean = false
+  @Prop() hideYTicks: boolean = false
   @Prop() legend: boolean = false
+  @Prop() legendFontSize: number = 12
   @Prop() legendWidth: number = 125
   @Prop() linearDomain: string = 'absolute'
   @Prop() linearMetric: string = 'value'
@@ -117,7 +118,7 @@ export class StvStackedBarChart {
   @Prop() orientation: string = 'vertical'
   @Prop() responsive: boolean = false
   @Prop() seriesMetric: string = 'label'
-  @Prop() tooltips: boolean = false
+  @Prop() tooltips: boolean = true
   @Prop() xLabel: string = ''
   @Prop() xTickSize: number = 2
   @Prop() yLabel: string = ''
@@ -133,7 +134,7 @@ export class StvStackedBarChart {
   // LIFECYCLE
   ////////////////////////////////////////
   componentDidLoad(): void {
-    this.svg = select(this.chartElement.shadowRoot.querySelector('svg.stv-bar-chart'))
+    this.svg = select(this.chartElement.shadowRoot.querySelector('svg.stv-stacked-bar-chart'))
     this.gCanvas = this.svg.append('svg:g')
       .attr('class', 'canvas')
     this.gGrid = this.gCanvas.append('svg:g')
@@ -448,7 +449,7 @@ export class StvStackedBarChart {
       .attr('class', 'gridline')
       .style('stroke', '#bbb')
       .style('stroke-width', 0.5)
-      .style('stroke-dasharray', "(7,3)")
+      .style('stroke-dasharray', ("7,3"))
 
     if (this.orientation === 'horizontal') {
       sel.merge(gridSelection)
@@ -626,6 +627,7 @@ export class StvStackedBarChart {
         .attr('class', 'legend-text')
         .style('fill', '#555')
         .style('opacity', 0)
+        .style('font-size', `${this.legendFontSize}px`)
         .on('mouseover', (d) => {
           this.gCanvas.selectAll('.layer')
             .filter((e) => {
@@ -681,7 +683,7 @@ export class StvStackedBarChart {
 
     layerSel.exit().remove()
 
-    const mergedLayers = layerSel().enter()
+    const mergedLayers = layerSel.enter()
       .append('g')
       .attr('class', 'layer')
       .attr('series', (d) => {
@@ -809,7 +811,7 @@ export class StvStackedBarChart {
 
     this.xAxis.scale(this.linearScale)
       .tickSize(this.xTickSize)
-      .tickValues(this.hideXTickValues ? [] : null)
+      .tickValues(this.hideXTicks ? [] : null)
       .tickFormat((d) => {
         return TickFormat(d, this.linearTickFormat)
       })
@@ -827,7 +829,7 @@ export class StvStackedBarChart {
 
     this.yAxis.scale(this.ordinalScale)
       .tickSize(this.yTickSize)
-      .tickValues(this.hideYTickValues ? [] : null)
+      .tickValues(this.hideYTicks ? [] : null)
       .tickFormat((d) => {
         return TickFormat(d, 'raw')
       })
@@ -855,7 +857,7 @@ export class StvStackedBarChart {
 
     this.xAxis.scale(this.ordinalScale)
       .tickSize(this.xTickSize)
-      .tickValues(this.hideXTickValues ? [] : null)
+      .tickValues(this.hideXTicks ? [] : null)
       .tickFormat((d) => {
         return TickFormat(d, 'raw')
       })
@@ -876,7 +878,7 @@ export class StvStackedBarChart {
 
     this.yAxis.scale(this.linearScale)
       .tickSize(this.yTickSize)
-      .tickValues(this.hideYTickValues ? [] : null)
+      .tickValues(this.hideYTicks ? [] : null)
       .tickFormat((d) => {
         return TickFormat(d, this.linearTickFormat)
       })
