@@ -20,6 +20,7 @@
     "lint:stencil": "tslint --project tsconfig.json",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
+    "test:e2e": "stencil test --e2e",
     "test:unit": "stencil test --spec",
     "test:unit:watch": "stencil test --spec --watchAll",
     "test.watch": "stencil test --spec --e2e --watchAll"
@@ -31,7 +32,7 @@
     "@types/puppeteer": "1.12.4",
     "jest": "24.8.0",
     "jest-cli": "24.8.0",
-    "puppeteer": "1.14.0",
+    "puppeteer": "1.17.0",
     "tslint": "^5.17.0",
     "tslint-ionic-rules": "0.0.21",
     "tslint-stencil": "^1.0.1"

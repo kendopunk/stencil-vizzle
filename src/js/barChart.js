@@ -1,6 +1,6 @@
 /**
- * src/js/lineChart.js
- * <stv-line-chart> helper functions
+ * src/js/barChart.js
+ * <stv-bar-chart> helper
  */
 
 /**
@@ -204,8 +204,6 @@ function generateBarChartData(numBars) {
 function randomizer() {
   return Math.floor(Math.random() * 500) - 250;
 }
-
-
 
 function selectNumBars(numBars) {
   getChartEl().chartData = generateBarChartData(numBars)

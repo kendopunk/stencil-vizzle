@@ -12,6 +12,9 @@ import {
 import {
   IfcStvLineChart,
 } from './interfaces/IfcStvLineChart';
+import {
+  IfcStvStackedBarChart,
+} from './interfaces/IfcStvStackedBarChart';
 
 export namespace Components {
   interface StvBarChart {
@@ -90,7 +93,7 @@ export namespace Components {
     'barStrokeWidth': number;
     'canvasHeight': number;
     'canvasWidth': number;
-    'chartData': any;
+    'chartData': IfcStvStackedBarChart[];
     'chartId': string;
     'colorScheme': string;
     'gridlines': boolean;
@@ -226,7 +229,7 @@ declare namespace LocalJSX {
     'barStrokeWidth'?: number;
     'canvasHeight'?: number;
     'canvasWidth'?: number;
-    'chartData'?: any;
+    'chartData'?: IfcStvStackedBarChart[];
     'chartId'?: string;
     'colorScheme'?: string;
     'gridlines'?: boolean;

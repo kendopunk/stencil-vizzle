@@ -109,6 +109,10 @@ input[type=checkbox] {
   box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
 }
 
+input[type=checkbox] + label {
+  font-size: 14px;
+}
+
 input[type=checkbox]:checked + label {
   color: #336699;
 }
@@ -133,7 +137,7 @@ button.action {
   padding: 0px 10px;
 }
 
-div.btn-item {
+div.btn-item, div.cbx-item, div.select-item {
   padding-left: 5px;
   padding-right: 5px;
 }

@@ -10,8 +10,8 @@ import {
   EventEmitter,
   Listen
 } from '@stencil/core'
-import isArray fromn 'lodash/isArray'
-import reverse fromn 'lodash/reverse'
+import isArray from 'lodash/isArray'
+import reverse from 'lodash/reverse'
 import uniq from 'lodash/uniq'
 import { event, max } from 'd3'
 import { axisBottom, axisLeft } from 'd3-axis'
@@ -38,8 +38,7 @@ import { IfcStvStackedBarChart } from '../../interfaces/IfcStvStackedBarChart'
 import {
   t50,
   t100,
-  t250,
-  t500
+  t250
 } from '../../utils/transition_definitions'
 import TickFormat from '../../utils/tickformat'
 
@@ -96,7 +95,7 @@ export class StvStackedBarChart {
     reflectToAttr: true,
     mutable: true
   }) canvasWidth: number = 500
-  @Prop() chartData: any = []
+  @Prop() chartData: IfcStvStackedBarChart[] = []
   @Prop() chartId: string = ''
   @Prop() colorScheme: string = 'category10'
   @Prop() gridlines: boolean = false
@@ -410,12 +409,12 @@ export class StvStackedBarChart {
         })
     }
 
-    if (mouseopt === 'mouseout') {
+    if (mouseOpt === 'mouseout') {
       barNode.style.opacity = this.layerOpacity
       this.tooltipDiv.style('opacity', 0).html('')
     }
 
-    if (mouseopt === 'mousemove') {
+    if (mouseOpt === 'mousemove') {
       this.tooltipDiv
         .style('left', () => {
           return `${event.pageX}px`
