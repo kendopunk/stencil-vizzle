@@ -83,6 +83,41 @@ export namespace Components {
     'yTickFormat': string;
     'yTickSize': number;
   }
+  interface StvStackedBarChart {
+    'axisLabelFontSize': number;
+    'axisTickFontSize': number;
+    'barStroke': string;
+    'barStrokeWidth': number;
+    'canvasHeight': number;
+    'canvasWidth': number;
+    'chartData': any;
+    'chartId': string;
+    'colorScheme': string;
+    'gridlines': boolean;
+    'hideXAxis': boolean;
+    'hideXTickValues': boolean;
+    'hideYAxis': boolean;
+    'hideYTickValues': boolean;
+    'legend': boolean;
+    'legendWidth': number;
+    'linearDomain': string;
+    'linearMetric': string;
+    'linearTickFormat': string;
+    'marginBottom': number;
+    'marginLeft': number;
+    'marginRight': number;
+    'marginTop': number;
+    'maxBarWidth': number;
+    'ordinalMetric': string;
+    'orientation': string;
+    'responsive': boolean;
+    'seriesMetric': string;
+    'tooltips': boolean;
+    'xLabel': string;
+    'xTickSize': number;
+    'yLabel': string;
+    'yTickSize': number;
+  }
 }
 
 declare global {
@@ -99,9 +134,16 @@ declare global {
     prototype: HTMLStvLineChartElement;
     new (): HTMLStvLineChartElement;
   };
+
+  interface HTMLStvStackedBarChartElement extends Components.StvStackedBarChart, HTMLStencilElement {}
+  var HTMLStvStackedBarChartElement: {
+    prototype: HTMLStvStackedBarChartElement;
+    new (): HTMLStvStackedBarChartElement;
+  };
   interface HTMLElementTagNameMap {
     'stv-bar-chart': HTMLStvBarChartElement;
     'stv-line-chart': HTMLStvLineChartElement;
+    'stv-stacked-bar-chart': HTMLStvStackedBarChartElement;
   }
 }
 
@@ -177,10 +219,47 @@ declare namespace LocalJSX {
     'yTickFormat'?: string;
     'yTickSize'?: number;
   }
+  interface StvStackedBarChart extends JSXBase.HTMLAttributes<HTMLStvStackedBarChartElement> {
+    'axisLabelFontSize'?: number;
+    'axisTickFontSize'?: number;
+    'barStroke'?: string;
+    'barStrokeWidth'?: number;
+    'canvasHeight'?: number;
+    'canvasWidth'?: number;
+    'chartData'?: any;
+    'chartId'?: string;
+    'colorScheme'?: string;
+    'gridlines'?: boolean;
+    'hideXAxis'?: boolean;
+    'hideXTickValues'?: boolean;
+    'hideYAxis'?: boolean;
+    'hideYTickValues'?: boolean;
+    'legend'?: boolean;
+    'legendWidth'?: number;
+    'linearDomain'?: string;
+    'linearMetric'?: string;
+    'linearTickFormat'?: string;
+    'marginBottom'?: number;
+    'marginLeft'?: number;
+    'marginRight'?: number;
+    'marginTop'?: number;
+    'maxBarWidth'?: number;
+    'onStv-stacked-bar-chart-loaded'?: (event: CustomEvent<any>) => void;
+    'ordinalMetric'?: string;
+    'orientation'?: string;
+    'responsive'?: boolean;
+    'seriesMetric'?: string;
+    'tooltips'?: boolean;
+    'xLabel'?: string;
+    'xTickSize'?: number;
+    'yLabel'?: string;
+    'yTickSize'?: number;
+  }
 
   interface IntrinsicElements {
     'stv-bar-chart': StvBarChart;
     'stv-line-chart': StvLineChart;
+    'stv-stacked-bar-chart': StvStackedBarChart;
   }
 }
 

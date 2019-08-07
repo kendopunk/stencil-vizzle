@@ -1,45 +1,55 @@
 /**
  * src/components/stv-stacked-bar-chart/stv-stacked-bar-chart.tsx
  */
-
-
-/*
 import {
   Component,
+  h,
   Prop,
   Element,
   Event,
   EventEmitter,
   Listen
 } from '@stencil/core'
-import isArray from 'lodash/isArray'
-import reverse from 'lodash/reverse'
+import isArray fromn 'lodash/isArray'
+import reverse fromn 'lodash/reverse'
 import uniq from 'lodash/uniq'
 import { event, max } from 'd3'
 import { axisBottom, axisLeft } from 'd3-axis'
-import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale'
+import {
+  scaleBand,
+  scaleOrdinal,
+  scaleLinear
+} from 'd3-scale'
 import {
   schemeCategory10,
   schemeAccent,
   schemePaired,
-  schemeSet1
+  schemeSet1,
   schemeSet2,
   schemeSet3
 } from 'd3-scale-chromatic'
 import { Selection, select } from 'd3-selection'
 import { stack, stackOrderReverse } from 'd3-shape'
-import { transition } from 'd3-transition'
 
+// interface
+import { IfcStvStackedBarChart } from '../../interfaces/IfcStvStackedBarChart'
+
+// utilities
+import {
+  t50,
+  t100,
+  t250,
+  t500
+} from '../../utils/transition_definitions'
 import TickFormat from '../../utils/tickformat'
 
-@Compoment({
+@Component({
   tag: 'stv-stacked-bar-chart',
   styleUrl: 'stv-stacked-bar-chart.scss',
   shadow: true
 })
 
 export class StvStackedBarChart {
-
   colorScale: any
   colorSchemes: any = {
     category10: schemeCategory10,
@@ -51,11 +61,15 @@ export class StvStackedBarChart {
     black: ['#000000'],
     gray: ['#888888']
   }
+
+  // <g>
   gCanvas: Selection<Element, any, HTMLElement, any>
   gGrid: Selection<Element, any, HTMLElement, any>
   gLegend: Selection<Element, any, HTMLElement, any>
   gXAxis: Selection<Element, any, HTMLElement, any>
   gYAxis: Selection<Element, any, HTMLElement, any>
+  // end </g>
+
   layerOpacity: number = 0.9
   layers: any
   linearScale: any
@@ -70,8 +84,9 @@ export class StvStackedBarChart {
 
   @Element() private chartElement: HTMLElement
 
-  @Prop() axisFontSize: number = 9
-  @Prop() barStroke: string = '#333333'
+  @Prop() axisLabelFontSize: number = 12
+  @Prop() axisTickFontSize: number = 10
+  @Prop() barStroke: string = '#333'
   @Prop() barStrokeWidth: number = 1
   @Prop({
     reflectToAttr: true,
@@ -82,13 +97,13 @@ export class StvStackedBarChart {
     mutable: true
   }) canvasWidth: number = 500
   @Prop() chartData: any = []
+  @Prop() chartId: string = ''
   @Prop() colorScheme: string = 'category10'
   @Prop() gridlines: boolean = false
   @Prop() hideXAxis: boolean = false
   @Prop() hideXTickValues: boolean = false
   @Prop() hideYAxis: boolean = false
   @Prop() hideYTickValues: boolean = false
-  @Prop({reflectToAttr: true}) id: string = ''
   @Prop() legend: boolean = false
   @Prop() legendWidth: number = 125
   @Prop() linearDomain: string = 'absolute'
@@ -110,28 +125,30 @@ export class StvStackedBarChart {
   @Prop() yTickSize: number = 2
 
   @Event({
-    eventName: 'webComponentLoaded'
+    eventName: 'stv-stacked-bar-chart-loaded',
+    bubbles: true,
+    composed: true
   }) componentLoaded: EventEmitter
 
   ////////////////////////////////////////
   // LIFECYCLE
   ////////////////////////////////////////
   componentDidLoad(): void {
-    this.svg = select(this.chartElement.shadowRoot.querySelector('svg.stacked-bar-chart'))
-    this.gCanvas = this.svg.appen('svg:g').attr('class', 'canvas')
-    this.gGrid = this.gCanvas.append('svg:g').attr('class', 'grid')
-    this.gLegend = this.svg.append('svg:g').attr('class', 'legend')
+    this.svg = select(this.chartElement.shadowRoot.querySelector('svg.stv-bar-chart'))
+    this.gCanvas = this.svg.append('svg:g')
+      .attr('class', 'canvas')
+    this.gGrid = this.gCanvas.append('svg:g')
+      .attr('class', 'grid')
+    this.gLegend = this.svg.append('svg:g')
+      .attr('class', 'legend')
     this.gXAxis = this.gCanvas.append('svg:g')
       .attr('class', 'axis')
       .style('opacity', 0)
-      .style('font-size', `${this.axisFontSize}px`)
+      .style('font-size', `${this.axisTickFontSize}px`)
     this.gYAxis = this.gCanvas.append('svg:g')
       .attr('class', 'axis')
       .style('opacity', 0)
-      .style('font-size', `${this.axisFontSize}px`)
-
-    // color scale
-    this.colorScale = scaleOrdinal()
+      .style('font-size', `${this.axisTickFontSize}px`)
 
     // tooltip <div>
     this.tooltipDiv = select(this.chartElement.shadowRoot.querySelector('#tooltip'))
@@ -144,17 +161,21 @@ export class StvStackedBarChart {
       this.canvasHeight = this.chartElement.parentElement.getBoundingClientRect().height
     }
 
-    // initialize axes
+    // basic X/Y axis positions which will not change
     this.xAxis = axisBottom()
     this.yAxis = axisLeft()
 
+    // color scale
+    this.colorScale = scaleOrdinal()
+
+    // emit component loaded event
     this.componentLoaded.emit({
       component: 'stv-stacked-bar-chart',
-      id: this.id
+      chartId: this.chartId
     })
   }
 
-  componentWillUpdate(): void {
+  componentDidUpdate(): void {
     if (this.isValidChartData()) {
       this.draw()
     }
@@ -165,7 +186,7 @@ export class StvStackedBarChart {
   ////////////////////////////////////////
   @Listen('resize', {target: 'window'})
   handleWindowResize() {
-    if (this.responsive) {
+    if (this.responsive && this.isValidChartData()) {
       this.canvasWidth = this.chartElement.parentElement.getBoundingClientRect().width
       this.draw()
     }
@@ -175,39 +196,40 @@ export class StvStackedBarChart {
   // CLASS METHODS
   ////////////////////////////////////////
 
-
+  /**
+   * @function
+   * Call axis generators for horizontal orientation
+   */
   callHorizontalAxes(): void {
-    //
     // X = linear
-    //
-    this.gXAxis.style('font-size', `${this.axisFontSize}px`)
+    this.gXAxis.style('font-size', `${this.axisTickFontSize}px`)
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
         }
 
-        const x = this.marginLeft + this.yLabelAdjustment()
-        const y = this.canvasHeight - this.marginBottom - this.xLabelAdjustment()
-
-        return `translate(${x}, ${y})`
+        const x = this.marginLeft
+          + this.yLabelAdjustment()
+        const y = this.canvasHeight
+          - this.marginBottom
+          - this.xLabelAdjustment()
+         return `translate(${x}, ${y})`
       })
       .style('opacity', () => {
         return this.hideXAxis || this.chartData.length === 0 ? 0 : 1
       })
       .call(this.xAxis)
 
-    //
     // Y = ordinal
-    //
-    this.gYAxis.style('font-size', `${this.axisFontSize}px`)
+    this.gYAxis.style('font-size', `${this.axisTickFontSize}px`)
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
         }
 
-        const x = this.marginLeft + this.yLabelAdjustment()
+        const x = this.marginLeft
+          + this.yLabelAdjustment()
         const y = this.linearScale(0)
-
         return `translate(${x}, ${y})`
       })
       .style('opacity', () => {
@@ -216,12 +238,13 @@ export class StvStackedBarChart {
       .call(this.yAxis)
   }
 
-
+  /**
+   * @function
+   * Call axis generators for vertical (default) orientation
+   */
   callVerticalAxes(): void {
-    //
     // X = ordinal
-    //
-    this.gXAxis.style('font-size', `${this.axisFontSize}px`)
+    this.gXAxis.style('font-size', `${this.axisTickFontSize}px`)
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
@@ -229,7 +252,6 @@ export class StvStackedBarChart {
 
         const x = this.marginLeft
         const y = this.linearScale(0)
-
         return `translate(${x}, ${y})`
       })
       .style('opacity', () => {
@@ -237,10 +259,8 @@ export class StvStackedBarChart {
       })
       .call(this.xAxis)
 
-    //
     // Y = linear
-    //
-    this.gYAxis.style('font-size', `${this.axisFontSize}px`)
+    this.gYAxis.style('font-size', `${this.axisTickFontSize}px`)
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
@@ -257,7 +277,10 @@ export class StvStackedBarChart {
       .call(this.yAxis)
   }
 
-
+  /**
+   * @function
+   * Wrapper function for individual drawing methods
+   */
   draw(): void {
     this.setColorScale()
     if (this.orientation === 'horizontal') {
@@ -269,50 +292,57 @@ export class StvStackedBarChart {
       this.callVerticalAxes()
       this.handleVerticalBars()
     }
-    this.handleGridLines()
+    this.handleGridlines()
     this.handleAxisLabels()
     this.handleLegend()
   }
 
-
+  /**
+   * @function
+   * Get a unique array of all ordinal keys
+   */
   getOrdinalKeys(): Array<string> {
     return uniq(this.chartData.map((m) => {
       return m[this.ordinalMetric]
     })).sort()
   }
 
-
+  /**
+   * @function
+   * Get a unique list of all series keys
+   */
   getSeriesKeys(): Array<string> {
     return uniq(this.chartData.map((m) => {
       return m[this.seriesMetric]
     })).sort()
   }
 
-
+  /**
+   * @function
+   * Optional labels for X/Y axes
+   */
   handleAxisLabels(): void {
-    const t100 = transition().duration(100)
 
-    //
-    // X: take into account left and right margins
-    // and possible Y-axis label padding
-    //
+    // X-axis
+    // take into account left/right margins and
+    // possible Y-axis label padding
     if (this.isValidXLabel()) {
       this.gCanvas.selectAll('text.x-axis-label').remove()
 
       this.gCanvas.append('text')
         .attr('class', 'x-axis-label')
         .style('text-anchor', 'middle')
+        .style('font-size', `${this.axisLabelFontSize}px`)
+        .text(this.xLabel)
         .attr('transform', () => {
-          // depends on orientation
+          // x depends on orientation
           let x = this.marginLeft + this.yLabelAdjustment()
           if (this.orientation === 'horizontal') {
             x = x + (this.linearScale.range()[1] - this.linearScale.range()[0])/2
           } else {
             x = x + (this.ordinalScale.range()[1] - this.ordinalScale.range()[0])/2
           }
-
           const y = this.canvasHeight - this.xLabelPadding/2
-
           return `translate(${x}, ${y})`
         })
     } else {
@@ -322,25 +352,409 @@ export class StvStackedBarChart {
         .remove()
     }
 
-    //
-    // Y: take into account top and bottom margins
-    // and possible X-axis label padding
-    //
+    // Y-axis
+    // take into account top/bottom margins
+    // and possible X axis label padding
+    if (this.isValidYLabel()) {
+      this.gCanvas.selectAll('text.y-axis-label').remove()
+
+      this.gCanvas.append('text')
+        .attr('class', 'y-axis-label')
+        .style('text-anchor', 'middle')
+        .style('font-size', `${this.axisLabelFontSize}px`)
+        .text(this.yLabel)
+        .attr('transform', () => {
+          const x = this.yLabelPadding/2
+          const y = this.marginTop
+            + (this.canvasHeight - this.marginBottom - this.marginTop - this.xLabelAdjustment())/2
+          return `translate(${x}, ${y}), rotate(-90)`
+        })
+    } else {
+      this.gCanvas.selectAll('text.y-axis-label')
+        .transition(t100)
+        .style('opacity', 0)
+        .remove()
+    }
+  }
+
+  /**
+   * @function
+   * Mouse event handler for layered bars
+   */
+  handleBarMouseEvent(mouseOpt, _d): void {
+    const barNode = this.gCanvas.selectAll('rect.bar').filter((e) => {
+      return _d === e
+    }).node()
+
+    if (mouseOpt === 'mouseover') {
+      barNode.style.opacity = 1
+      const series = barNode.parentNode.getAttribute('series') || ''
+      const diff = _d[1] - _d[0]
+
+      this.tooltipDiv
+        .style('left', () => {
+          return `${event.pageX}px`
+        })
+        .style('top', () => {
+          return `${event.pageY}px`
+        })
+        .style('opacity', () => {
+          return this.tooltips ? 0.9 : 0
+        })
+        .html(() => {
+          return '<div class="key">'
+            + `${series}`
+            + '</div><div class="value">'
+            + TickFormat(diff, this.linearTickFormat)
+            + '</div>'
+        })
+    }
+
+    if (mouseopt === 'mouseout') {
+      barNode.style.opacity = this.layerOpacity
+      this.tooltipDiv.style('opacity', 0).html('')
+    }
+
+    if (mouseopt === 'mousemove') {
+      this.tooltipDiv
+        .style('left', () => {
+          return `${event.pageX}px`
+        })
+        .style('top', () => {
+          return `${event.pageY + 15}px`
+        })
+    }
+  }
+
+  /**
+   * @function
+   * Render grid lines, depending on orientation
+   * Scales must be set before this will work properly and it should be called
+   * before drawing bars, due to z-index nature of SVG rendering
+   */
+  handleGridlines(): void {
+
+    if (!this.gridlines) {
+      this.gGrid.selectAll('line.gridline').remove()
+      return;
+    }
+
+    const gridSelection = this.gGrid.selectAll('line.gridline')
+      .data(this.linearScale.ticks())
+
+    gridSelection.exit().remove()
+
+    const sel = gridSelection.enter()
+      .append('svg:line')
+      .attr('class', 'gridline')
+      .style('stroke', '#bbb')
+      .style('stroke-width', 0.5)
+      .style('stroke-dasharray', "(7,3)")
+
+    if (this.orientation === 'horizontal') {
+      sel.merge(gridSelection)
+        .attr('x1', (d) => {
+          return this.marginLeft
+            + this.yLabelAdjustment()
+            + this.linearScale(d)
+        })
+        .attr('x2', (d) => {
+          return this.marginLeft
+            + this.yLabelAdjustment()
+            + this.linearScale(d)
+        })
+        .attr('y1', this.marginTop)
+        .transition(t250)
+        .attr('y2', () => {
+          return this.canvasHeight
+            - this.marginBottom
+            - this.xLabelAdjustment()
+        })
+    } else {
+      sel.merge(gridSelection)
+        .attr('x1', () => {
+          return this.marginLeft
+            + this.yLabelAdjustment()
+        })
+        .attr('y1', (d) => {
+          return this.linearScale(d)
+        })
+        .attr('y2', (d) => {
+          return this.linearScale(d)
+        })
+        .transition(t250)
+        .attr('x2', () => {
+          return this.canvasWidth
+            - this.marginRight
+            - this.legendAdjustment()
+        })
+    }
+  }
+
+  /**
+   * @function
+   * Draw bars for horizontal orientation
+   */
+  handleHorizontalBars(): void {
+    //////////////////////////////
+    // layers
+    //////////////////////////////
+    const layerSel = this.gCanvas.selectAll('.layer')
+      .data(this.layers)
+
+    layerSel.exit().remove()
+
+    const mergedLayers = layerSel.enter()
+      .append('g')
+      .attr('class', 'layer')
+      .attr('series', (d) => {
+        return d.key
+      })
+      .merge(layerSel)
+      .style('fill', (d) => {
+        return this.colorScale(d.key)
+      })
+
+    //////////////////////////////
+    // bars
+    //////////////////////////////
+    const barSel = mergedLayers.selectAll('rect.bar')
+      .data((d) => {
+        return d
+      })
+
+    barSel.exit()
+      .transition(t50)
+      .style('opacity', 0)
+      .remove()
+
+    barSel.enter()
+      .append('rect')
+      .attr('rx', 3)
+      .attr('ry', 3)
+      .attr('class', 'bar')
+      .style('opacity', 0)
+      .on('mouseover', (d) => {
+        this.handleBarMouseEvent('mouseover', d)
+      })
+      .on('mouseout', (d) => {
+        this.handleBarMouseEvent('mouseout', d)
+      })
+      .on('mousemove', (d) => {
+        this.handleBarMouseEvent('mousemove', d)
+      })
+      .merge(barSel)
+      .style('stroke', this.barStroke)
+      .style('stroke-width', this.barStrokeWidth)
+      .transition(t100)
+      .attr('x', (d) => {
+        return this.marginLeft
+          + this.yLabelAdjustment()
+          + this.linearScale(d[0])
+      })
+      .attr('y', (d) => {
+        return this.ordinalScale(d.data[this.ordinalMetric])
+          + this.ordinalScale.bandwidth()/2
+          - Math.min(this.maxBarWidth, this.ordinalScale.bandwidth())/2
+      })
+      .attr('height', () => {
+        return Math.min(this.maxBarWidth, this.ordinalScale.bandwidth())
+      })
+      .attr('width', (d) => {
+        return this.linearScale(d[1])
+          - this.linearScale(d[0])
+      })
+      .transition(t100)
+      .style('opacity', this.layerOpacity)
+  }
+
+  /**
+   * @function
+   * Optional legend
+   */
+  handleLegend(): void {
+    const lineIncrement = 25
+
+    // adjust position of "gLegend"
+    this.gLegend.attr('transform', () => {
+      const x = this.canvasWidth - this.legendWidth
+      const y = this.marginTop
+      return `translate(${x}, ${y})`
+    })
+
+    // legend is in play
+    if (this.legend) {
+
+      //////////////////////////////
+      // legend lines
+      //////////////////////////////
+      const lineSel = this.gLegend.selectAll('line.legend-line')
+        .data(this.layers)
+
+      lineSel.exit().remove()
+
+      lineSel.enter()
+        .append('line')
+        .attr('class', 'legend-line')
+        .attr('x1', 0)
+        .attr('x2', 10)
+        .style('opacity', 0)
+        .style('stroke-width', 3)
+        .merge(lineSel)
+        .transition(t100)
+        .attr('y1', (_d, i) => {
+          return i * lineIncrement
+        })
+        .attr('y2', (_d, i) => {
+          return i * lineIncrement
+        })
+        .style('stroke', (d) => {
+          return this.colorScale(d.key)
+        })
+        .transition(t100)
+        .style('opacity', this.layerOpacity)
+
+      //////////////////////////////
+      // legend text
+      //////////////////////////////
+      const textSel = this.gLegend.selectAll('text.legend-text')
+        .data(this.layers)
+
+      textSel.exit().remove()
+
+      textSel.enter()
+        .append('text')
+        .attr('class', 'legend-text')
+        .style('fill', '#555')
+        .style('opacity', 0)
+        .on('mouseover', (d) => {
+          this.gCanvas.selectAll('.layer')
+            .filter((e) => {
+              return d.key === e.key
+            })
+            .selectAll('rect.bar')
+            .style('opacity', 1)
+
+          this.gCanvas.selectAll('.layer')
+            .filter((e) => {
+              return d.key !== e.key
+            })
+            .selectAll('rect.bar')
+            .style('opacity', 0.3)
+        })
+        .on('mouseout', () => {
+          this.gCanvas.selectAll('.layer')
+            .selectAll('rect.bar')
+            .style('opacity', this.layerOpacity)
+        })
+        .merge(textSel)
+        .transition(t100)
+        .text((d) => {
+          return d.key
+        })
+        .attr('x', 15)
+        .attr('y', (_d, i) => {
+          return i * lineIncrement + 4
+        })
+        .transition(t100)
+        .style('opacity', this.layerOpacity)
+    } else {
+      this.gLegend.selectAll('line.legend-line')
+        .transition(t100)
+        .style('opacity', 0)
+        .remove()
+
+      this.gLegend.selectAll('text.legend-text')
+        .transition(t100)
+        .style('opacity', 0)
+        .remove()
+    }
+  }
+
+  /**
+   * @function
+   * Draw bars, vertical (default) orientation
+   */
+  drawVerticalBars(): void {
+
+    const layerSel = this.gCanvas.selectAll('.layer')
+      .data(this.layers)
+
+    layerSel.exit().remove()
+
+    const mergedLayers = layerSel().enter()
+      .append('g')
+      .attr('class', 'layer')
+      .attr('series', (d) => {
+        return d.key
+      })
+      .merge(layerSel)
+      .style('fill', (d) => {
+        return this.colorScale(d.key)
+      })
+
+    const barSel = mergedLayers.selectAll('rect.bar')
+      .data((d) => {
+        return d
+      })
+
+    barSel.exit()
+      .transition(t50)
+      .style('opacity', 0)
+      .remove()
+
+    barSel.enter()
+      .append('rect')
+      .attr('rx', 3)
+      .attr('ry', 3)
+      .attr('class', 'bar')
+      .style('opacity', 0)
+      .on('mouseover', (d) => {
+        this.handleBarMouseEvent('mouseover', d)
+      })
+      .on('mouseout', (d) => {
+        this.handleBarMouseEvent('mouseout', d)
+      })
+      .on('mousemove', (d) => {
+        this.handleBarMouseEvent('mousemove', d)
+      })
+      .merge(barSel)
+      .style('stroke', this.barStroke)
+      .style('stroke-width', this.barStrokeWidth)
+      .transition(t100)
+      .attr('x', (d) => {
+        return this.marginLeft
+          + this.ordinalScale(d.data[this.ordinalMetric])
+          + this.ordinalScale.bandwidth()/2
+          - Math.min(this.maxBarWidth, this.ordinalScale.bandwidth())/2
+      })
+      .attr('y', (d) => {
+        return this.linearScale(d[1])
+      })
+      .attr('height', (d) => {
+        return this.linearScale(d[0])
+          - this.linearScale(d[1])
+      })
+      .attr('width', () => {
+        return Math.min(this.maxBarWidth, this.ordinalScale.bandwidth())
+      })
+      .transition(t100)
+      .style('opacity', this.layerOpacity)
   }
 
   render() {
     return (
       <div>
         <div id="tooltip"></div>
-        <svg version="1.1"
+        <svg id={this.chartId}
+          version="1.1"
           baseProfile="full"
           width={this.canvasWidth}
           height={this.canvasHeight}
-          class="stacked-bar-chart"
+          class="stv-stacked-bar-chart"
           xmlns="http://www.w3.org/2000/svg">
         </svg>
       </div>
     )
   }
 }
-*/

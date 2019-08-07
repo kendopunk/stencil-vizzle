@@ -446,10 +446,11 @@ export class StvBarChart {
             return this.tooltips ? 0.9 : 0
           })
           .html(() => {
-            return '<b>'
+            return '<div class="key">'
               + d[this.ordinalMetric]
-              + '</b><br>'
+              + '</div><div class="value">'
               + TickFormat(d[this.linearMetric], this.linearTickFormat)
+              + '</div>'
           })
       })
       .on('mouseout', (_d, i, a) => {
