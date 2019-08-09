@@ -76,11 +76,11 @@ function selectGroupBy() {
   if (val === 'country') {
     el.ordinalMetric = 'combatant';
     el.seriesMetric = 'year';
-    el.xLabel = 'Country'
+    currentXLabel = el.xLabel = 'Country'
   } else {
     el.ordinalMetric = 'year';
     el.seriesMetric = 'combatant';
-    el.xLabel = 'Year'
+    currentXLabel = el.xLabel = 'Year'
   }
 }
 

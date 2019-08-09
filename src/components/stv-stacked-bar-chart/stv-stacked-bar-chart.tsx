@@ -507,10 +507,12 @@ export class StvStackedBarChart {
     const mergedLayers = layerSel.enter()
       .append('g')
       .attr('class', 'layer')
+      .merge(layerSel)
+      // series attribute must be set AFTER merge
+      // to handle potential changes in linear and/or ordinal metric
       .attr('series', (d) => {
         return d.key
       })
-      .merge(layerSel)
       .style('fill', (d) => {
         return this.colorScale(d.key)
       })
@@ -686,10 +688,12 @@ export class StvStackedBarChart {
     const mergedLayers = layerSel.enter()
       .append('g')
       .attr('class', 'layer')
+      .merge(layerSel)
+      // series attribute must be set AFTER merge
+      // to handle potential changes in linear and/or ordinal metric
       .attr('series', (d) => {
         return d.key
       })
-      .merge(layerSel)
       .style('fill', (d) => {
         return this.colorScale(d.key)
       })

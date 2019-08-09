@@ -177,7 +177,7 @@
     <div id="chart-container">
       <p class="page-title"><span>&lt;stv-stacked-bar-chart&gt;</span></p>
 
-      <p>WW2 tank production by year for Germany, the Soviet Union and the United States</p>
+      <p>WW2 tank production for Germany, the Soviet Union and the US.  <a href="https://i1.wp.com/mathscinotes.com/wp-content/uploads/2017/09/ProductionTable.png" target="_blank">(source)</a></p>
 
       <div class="hoz-group">
         <div class="select-item">
@@ -192,13 +192,16 @@
         <div class="select-item">
           <label for="armament">Group By:</label>
           <select name="group-by" id="groupBy" onChange="selectGroupBy()">
-            <option selected value="year">By Year</option>
-            <option value="country">By Country</option>
+            <option selected value="year">Year</option>
+            <option value="country">Country</option>
           </select>
         </div>
       </div>
 
       <div class="hoz-group">
+        <div class="cbx-item">
+          Production Year(s):
+        </div>
         <div class="cbx-item">
           <input type="checkbox" id="year1941" value="1941" onClick="yearCheck('1941')">
             <label for="year1941">1941</label>
