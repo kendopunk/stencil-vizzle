@@ -1,7 +1,21 @@
 /**
  * src/common.scss
- * Common SASS
+ * Common SASS across all components
  */
+
+$color-axis-path-direct: #999;
+$color-axis-path-inverse: #eee;
+
+$color-axis-text-direct: #555;
+$color-axis-text-inverse: #eee;
+
+$color-axis-line-direct: #555;
+$color-axis-line-inverse: #eee;
+
+$color-legend-text-direct: #555;
+$color-legend-text-inverse: #eee;
+
+/*
 div.tooltip {
   position: absolute;
   border: solid 1px #ceccd0;
@@ -51,4 +65,32 @@ text.x-axis-label, text.y-axis-label {
 
 text.legend-text {
   cursor: pointer;
+}
+*/
+
+/**
+ * tooltip div
+ */
+div.tooltip {
+  position: absolute;
+  border: solid 1px #ceccd0;
+  background: #faf8f9;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+  color: #344653;
+  font-size: 12px;
+  text-align: left;
+  padding: 10px;
+  border-radius: 4px;
+  line-height: 18px;
+  pointer-events: none;
+  max-width: 125px;
+}
+
+div.tooltip > div.key {
+  font-weight: 600;
+}
+
+div.tooltip > div.value {
+  font-weight: normal;
+  font-style: italic;
 }

@@ -152,7 +152,7 @@ declare global {
 }
 
 declare namespace LocalJSX {
-  interface StvBarChart extends JSXBase.HTMLAttributes<HTMLStvBarChartElement> {
+  interface StvBarChart {
     'axisLabelFontSize'?: number;
     'axisTickFontSize'?: number;
     'barStroke'?: string;
@@ -188,7 +188,7 @@ declare namespace LocalJSX {
     'yLabel'?: string;
     'yTickSize'?: number;
   }
-  interface StvLineChart extends JSXBase.HTMLAttributes<HTMLStvLineChartElement> {
+  interface StvLineChart {
     'axisLabelFontSize'?: number;
     'axisTickFontSize'?: number;
     'canvasHeight'?: number;
@@ -223,7 +223,7 @@ declare namespace LocalJSX {
     'yTickFormat'?: string;
     'yTickSize'?: number;
   }
-  interface StvStackedBarChart extends JSXBase.HTMLAttributes<HTMLStvStackedBarChartElement> {
+  interface StvStackedBarChart {
     'axisLabelFontSize'?: number;
     'axisTickFontSize'?: number;
     'barStroke'?: string;
@@ -273,7 +273,11 @@ export { LocalJSX as JSX };
 
 declare module "@stencil/core" {
   export namespace JSX {
-    interface IntrinsicElements extends LocalJSX.IntrinsicElements {}
+    interface IntrinsicElements {
+      'stv-bar-chart': LocalJSX.StvBarChart & JSXBase.HTMLAttributes<HTMLStvBarChartElement>;
+      'stv-line-chart': LocalJSX.StvLineChart & JSXBase.HTMLAttributes<HTMLStvLineChartElement>;
+      'stv-stacked-bar-chart': LocalJSX.StvStackedBarChart & JSXBase.HTMLAttributes<HTMLStvStackedBarChartElement>;
+    }
   }
 }
 

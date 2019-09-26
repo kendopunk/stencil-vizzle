@@ -2,12 +2,6 @@
  * src/js/lineChart.js
  * <stv-line-chart> helper functions
  */
-
-/**
- * @function
- * Generate chart data
- * @param numLines
- */
 function generateLineChartData(numLines) {
   var dt = new Date('2019-01-01 00:00:00');
   var msd = 86400000;
@@ -61,10 +55,6 @@ function generateLineChartData(numLines) {
    return data.slice(0, numLines);
 }
 
-/**
- * @function
- * Generate random line chart data, including negative numbers
- */
 function generateRandomLineChartData() {
   var dt = new Date('2019-01-01 00:00:00');
   var msd = 86400000;
@@ -93,9 +83,9 @@ function generateRandomLineChartData() {
 }
 
 function generateRandomData() {
-  getChartEl().chartData = generateRandomLineChartData()
+  getChartEl('stv-line-chart').chartData = generateRandomLineChartData()
 }
 
 function selectNumLines(numLines) {
-  getChartEl().chartData = generateLineChartData(numLines)
+  getChartEl('stv-line-chart').chartData = generateLineChartData(numLines)
 }

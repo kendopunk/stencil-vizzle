@@ -1,12 +1,21 @@
 /**
- * src/js/lineChart.js
- * <stv-line-chart> helper functions
+ * src/js/shared.js
+ * Common Javascript for all charts
  */
 
 /**
- * @function
- * Generate chart data
- * @param numLines
+ * utilities
+ */
+function randomizer() {
+  return Math.floor(Math.random() * 500) - 250;
+}
+
+function getChartEl(id) {
+  return document.querySelector(id);
+}
+
+/**
+ * <stv-line-chart>
  */
 function generateLineChartData(numLines) {
   var dt = new Date('2019-01-01 00:00:00');
@@ -61,10 +70,6 @@ function generateLineChartData(numLines) {
    return data.slice(0, numLines);
 }
 
-/**
- * @function
- * Generate random line chart data, including negative numbers
- */
 function generateRandomLineChartData() {
   var dt = new Date('2019-01-01 00:00:00');
   var msd = 86400000;
