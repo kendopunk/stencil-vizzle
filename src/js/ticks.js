@@ -7,6 +7,11 @@ function selectAxisTickFontSize(selector) {
   getChartEl(selector).axisTickFontSize = val;
 }
 
+function selectAxisTickFontFamily(selector) {
+  var val = document.querySelector('#axisTickFontFamily').value;
+  getChartEl(selector).axisTickFontFamily = val;
+}
+
 function selectXTickSize(selector) {
   var val = document.querySelector('#xTickSize').value;
   getChartEl(selector).xTickSize = val;

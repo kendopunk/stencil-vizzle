@@ -54,6 +54,7 @@ export namespace Components {
   }
   interface StvLineChart {
     'axisLabelFontSize': number;
+    'axisTickFontFamily': string;
     'axisTickFontSize': number;
     'canvasHeight': number;
     'canvasWidth': number;
@@ -65,6 +66,7 @@ export namespace Components {
     'hideXTicks': boolean;
     'hideYAxis': boolean;
     'hideYTicks': boolean;
+    'inverse': boolean;
     'legend': boolean;
     'legendFontSize': number;
     'legendMetric': string;
@@ -190,6 +192,7 @@ declare namespace LocalJSX {
   }
   interface StvLineChart {
     'axisLabelFontSize'?: number;
+    'axisTickFontFamily'?: string;
     'axisTickFontSize'?: number;
     'canvasHeight'?: number;
     'canvasWidth'?: number;
@@ -201,6 +204,7 @@ declare namespace LocalJSX {
     'hideXTicks'?: boolean;
     'hideYAxis'?: boolean;
     'hideYTicks'?: boolean;
+    'inverse'?: boolean;
     'legend'?: boolean;
     'legendFontSize'?: number;
     'legendMetric'?: string;

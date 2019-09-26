@@ -173,32 +173,41 @@
       <div class="control-item">
         <label for="axisTickFontSize" class="select">Axis Tick Font Size</label>
         <select name="axis-tick-font-size" id="axisTickFontSize" onChange="selectAxisTickFontSize('stv-line-chart')">
-         <option value="8">8px</option>
-         <option value="9">9px</option>
-         <option value="10" selected>10px</option>
-         <option value="12">12px</option>
+          <option value="8">8px</option>
+          <option value="9">9px</option>
+          <option value="10" selected>10px</option>
+          <option value="12">12px</option>
+        </select>
+      </div>
+
+      <div class="control-item">
+        <label for="axisTickFontFamily" class="select">Axis Tick Font Family</label>
+        <select name="axis-tick-font-family" id="axisTickFontFamily" onChange="selectAxisTickFontFamily('stv-line-chart')">
+          <option value="sans" selected>sans-serif</option>
+          <option value="serif">serif</option>
+          <option value="monospace">monospace</option>
         </select>
       </div>
 
       <div class="control-item">
         <label for="xTickSize" class="select">X-Axis Tick Size</label>
         <select name="x-tick-size" id="xTickSize" onChange="selectXTickSize('stv-line-chart')">
-         <option value="2" selected>2</option>
-         <option value="4">4</option>
-         <option value="10">10</option>
-         <option value="12">12</option>
-         <option value="16">16</option>
+          <option value="2" selected>2</option>
+          <option value="4">4</option>
+          <option value="10">10</option>
+          <option value="12">12</option>
+          <option value="16">16</option>
         </select>
       </div>
 
       <div class="control-item">
         <label for="yTickSize" class="select">Y-Axis Tick Size</label>
         <select name="y-tick-size" id="yTickSize" onChange="selectYTickSize('stv-line-chart')">
-         <option value="2" selected>2</option>
-         <option value="4">4</option>
-         <option value="10">10</option>
-         <option value="12">12</option>
-         <option value="16">16</option>
+          <option value="2" selected>2</option>
+          <option value="4">4</option>
+          <option value="10">10</option>
+          <option value="12">12</option>
+          <option value="16">16</option>
         </select>
       </div>
     </div>
@@ -227,6 +236,7 @@
 
       <div class="chart">
         <stv-line-chart chart-id="myStvLineChart"
+          gridlines
           margin-left="50"
           margin-right="50"
           responsive

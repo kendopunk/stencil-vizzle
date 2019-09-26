@@ -3,74 +3,92 @@
  * Common SASS across all components
  */
 
-$color-axis-path-direct: #999;
-$color-axis-path-inverse: #eee;
+/******************************
+ * COLORS
+ ******************************/
+$color-direct: #555;
+$color-inverse: #eee;
 
-$color-axis-text-direct: #555;
-$color-axis-text-inverse: #eee;
-
-$color-axis-line-direct: #555;
-$color-axis-line-inverse: #eee;
-
-$color-legend-text-direct: #555;
-$color-legend-text-inverse: #eee;
-
-/*
-div.tooltip {
-  position: absolute;
-  border: solid 1px #ceccd0;
-  background: #faf8f9;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
-  color: #344653;
-  font-size: 12px;
-  text-align: left;
-  padding: 10px;
-  border-radius: 4px;
-  line-height: 18px;
-  pointer-events: none;
-  max-width: 125px;
-}
-
-div.tooltip > div.key {
-  font-weight: 600;
-}
-
-div.tooltip > div.value {
-  font-weight: normal;
-  font-style: italic;
-}
-
-.axis path, .axis line {
+/******************************
+ * AXIS <svg:path>
+ ******************************/
+.axis path {
   fill: none;
-  stroke: #999;
   stroke-width: 1;
   shape-rendering: crispEdges;
 }
 
+.axis-direct path {
+  stroke: $color-direct;
+}
+
+.axis-inverse path {
+  stroke: $color-inverse;
+}
+
+/******************************
+ * AXIS <svg:text>
+ ******************************/
 .axis text {
-  font-family: sans-serif;
-  fill: #555;
   pointer-events: none;
 }
 
-.axis text.hidden {
-  visibility: hidden;
+.axis-direct text {
+  fill: $color-direct;
 }
 
-text.x-axis-label, text.y-axis-label {
-  font-family: sans-serif;
-  fill: #555;
+.axis-inverse text {
+  fill: $color-inverse;
+}
+
+/******************************
+ * AXIS TICK FONT FAMILIES
+ ******************************/
+.axis-sans {
+  font-family: "Gill Sans", Tahoma, Geneva, sans-serif;
+}
+
+.axis-serif {
+  font-family: "Times New Roman", Times, serif;
+}
+
+.axis-monospace {
+  font-family: "Courier New", Courier, monospace;
+}
+
+/******************************
+ * AXIS LABELS
+ ******************************/
+.x-axis-label, .y-axis-label {
   pointer-events: none;
 }
 
-text.legend-text {
+.axis-label-inverse {
+  fill: $color-inverse;
+}
+
+.axis-label-direct {
+  fill: $color-direct;
+}
+
+/******************************
+ * LEGEND LABEL
+ ******************************/
+text.legend-label {
   cursor: pointer;
 }
-*/
 
-/**
- * tooltip div
- */
+text.legend-label-inverse {
+  fill: $color-inverse !important;
+}
+
+text.legend-label-direct {
+  fill: $color-direct !important;
+}
+
+/******************************
+ * TOOLTIP
+ ******************************/
 div.tooltip {
   position: absolute;
   border: solid 1px #ceccd0;

@@ -31,12 +31,18 @@ import { IfcStvLineChart } from '../../interfaces/IfcStvLineChart'
 
 // utilities
 import {
+  t25,
   t50,
   t100,
   t250,
   t500
 } from '../../utils/transition_definitions'
 import TickFormat from '../../utils/tickformat'
+import {
+  calculateAxisClass,
+  calculateAxisLabelClass,
+  calculateLegendLabelClass
+} from '../../utils/css_utils'
 
 @Component({
   tag: 'stv-line-chart',
@@ -83,6 +89,7 @@ export class StvLineChart {
   @Element() private chartElement: HTMLElement
 
   @Prop() axisLabelFontSize: number = 12
+  @Prop() axisTickFontFamily: string = 'sans'
   @Prop() axisTickFontSize: number = 10
   @Prop({
     reflectToAttr: true,
@@ -100,6 +107,7 @@ export class StvLineChart {
   @Prop() hideXTicks: boolean = false
   @Prop() hideYAxis: boolean = false
   @Prop() hideYTicks: boolean = false
+  @Prop() inverse: boolean = false
   @Prop() legend: boolean = false
   @Prop() legendFontSize: number = 12
   @Prop() legendMetric: string = 'label'
@@ -132,20 +140,26 @@ export class StvLineChart {
   ////////////////////////////////////////
   componentDidLoad(): void {
     this.svg = select(this.chartElement.shadowRoot.querySelector('svg.stv-line-chart'))
+
     this.gCanvas = this.svg.append('svg:g')
       .attr('class', 'canvas')
+
     this.gGrid = this.gCanvas.append('svg:g')
       .attr('class', 'grid')
+
     this.gLegend = this.svg.append('svg:g')
       .attr('class', 'legend')
+
     this.gXAxis = this.gCanvas.append('svg:g')
-      .attr('class', 'axis')
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .style('opacity', 0)
       .style('font-size', `${this.axisTickFontSize}px`)
+
     this.gYAxis = this.gCanvas.append('svg:g')
-      .attr('class', 'axis')
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .style('opacity', 0)
       .style('font-size', `${this.axisTickFontSize}px`)
+
     this.tooltipDiv = select(this.chartElement.shadowRoot.querySelector('#tooltip'))
       .attr('class', 'tooltip')
       .style('opacity', 0)
@@ -193,6 +207,7 @@ export class StvLineChart {
   callAxes(): void {
     this.gXAxis
       .style('font-size', `${this.axisTickFontSize}px`)
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .attr('transform', () => {
         if (this.xZeroDomain()) {
           return 'translate(0, 0)'
@@ -207,6 +222,7 @@ export class StvLineChart {
 
     this.gYAxis
       .style('font-size', `${this.axisTickFontSize}px`)
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .attr('transform', () => {
         if (this.yZeroDomain()) {
           return 'translate(0, 0)'
@@ -246,7 +262,7 @@ export class StvLineChart {
       this.gCanvas.selectAll('text.x-axis-label').remove()
 
       this.gCanvas.append('text')
-        .attr('class', 'x-axis-label')
+        .attr('class', calculateAxisLabelClass(this.inverse, 'x'))
         .style('text-anchor', 'middle')
         .text(this.xLabel)
         .style('font-size', `${this.axisLabelFontSize}`)
@@ -273,7 +289,7 @@ export class StvLineChart {
       this.gCanvas.selectAll('text.y-axis-label').remove()
 
       this.gCanvas.append('text')
-        .attr('class', 'y-axis-label')
+        .attr('class', calculateAxisLabelClass(this.inverse, 'y'))
         .style('text-anchor', 'middle')
         .style('font-size', `${this.axisLabelFontSize}`)
         .text(this.yLabel)
@@ -405,21 +421,20 @@ export class StvLineChart {
         .style('stroke', (d, i) => {
           return d.color || this.colorScale(i)
         })
-        .transition(t50)
+        .transition(t25)
         .style('opacity', this.defaultLineOpacity)
 
       //////////////////////////////
       // legend text
       //////////////////////////////
-      const textSel = this.gLegend.selectAll('text.legend-text')
+      const textSel = this.gLegend.selectAll('text.legend-label')
         .data(this.chartData)
 
       textSel.exit().remove()
 
       textSel.enter()
         .append('text')
-        .attr('class', 'legend-text')
-        .style('fill', '#555')
+        .style('opacity', 0)
         .style('font-size', `${this.legendFontSize}px`)
         .on('mouseover', (_d, i) => {
           // highlight matches
@@ -452,21 +467,23 @@ export class StvLineChart {
             .style('opacity', this.defaultLineOpacity)
         })
         .merge(textSel)
+        .attr('class', calculateLegendLabelClass(this.inverse))
         .text((d) => {
           return d[this.legendMetric] || ''
-          
         })
-        .transition(t50)
+        
         .attr('x', 15)
         .attr('y', (_d, i) => {
           return i * lineIncrement + 4
         })
+        .transition(t50)
+        .style('opacity')
     } else {
       this.gLegend.selectAll('line.legend-line')
         //.style('opacity', 0)
         .remove()
 
-      this.gLegend.selectAll('text.legend-text')
+      this.gLegend.selectAll('text')
         //.style('opacity', 0)
         .remove()
     }
