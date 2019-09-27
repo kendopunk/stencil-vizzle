@@ -85,7 +85,7 @@ export class StvStackedBarChart {
 
   @Prop() axisLabelFontSize: number = 12
   @Prop() axisTickFontSize: number = 10
-  @Prop() barStroke: string = '#333'
+  @Prop() barStroke: string = 'transparent'
   @Prop() barStrokeWidth: number = 1
   @Prop({
     reflectToAttr: true,

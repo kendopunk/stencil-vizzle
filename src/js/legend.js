@@ -1,9 +1,9 @@
 /**
  * src/js/legend.js
  */
-var showLegend = false;
+// var showLegend = false;
 
-function toggleLegend(selector) {
-  showLegend = !showLegend;
-  getChartEl(selector).legend = showLegend;
-}
+// function toggleLegend(selector) {
+//   showLegend = !showLegend;
+//   getChartEl(selector).legend = showLegend;
+// }

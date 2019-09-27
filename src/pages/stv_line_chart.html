@@ -10,15 +10,6 @@
   <script src="../js/shared.js"></script>
   <script src="../js/xAxis.js"></script>
   <script src="../js/yAxis.js"></script>
-  <script src="../js/legend.js"></script>
-  <script src="../js/gridline.js"></script>
-  <script src="../js/vertices.js"></script>
-  <script src="../js/margins.js"></script>
-  <script src="../js/color_scheme.js"></script>
-  <script src="../js/axis_label.js"></script>
-  <script src="../js/ticks.js"></script>
-  <script src="../js/inverse.js"></script>
-  <script src="../js/interpolation.js"></script>
   <script src="../js/_lineChart.js"></script>
 </head>
 <body>
@@ -59,7 +50,7 @@
       <div class="control-item">
         <input type="checkbox" name="hide-x" id="hideX"
           onClick="toggleShowHideXAxis('stv-line-chart')">
-          <label for="hideX">Hide X-axis</label>
+          <label for="hideX">Hide Entire X-axis</label>
       </div>
 
       <!-- Y axis -->
@@ -77,16 +68,11 @@
       <div class="control-item">
         <input type="checkbox" name="hide-y" id="hideY"
           onClick="toggleShowHideYAxis('stv-line-chart')">
-          <label for="hideY">Hide Y-axis</label>
+          <label for="hideY">Hide Entire Y-axis</label>
       </div>
 
       <!-- miscellaneous options -->
       <div class="control-category">Options</div>
-
-      <div class="control-item">
-        <input type="checkbox" name="inverse" id="inverse" onClick="toggleInverse('stv-line-chart')">
-        <label for="inverse">Inverse Color</label>
-      </div>
 
       <div class="control-item">
         <input type="checkbox" name="show-legend" id="showLegend" onClick="toggleLegend('stv-line-chart')">
@@ -106,6 +92,11 @@
       </div>
 
       <div class="control-item">
+        <input type="checkbox" name="inverse" id="inverse" onClick="toggleInverse('stv-line-chart')">
+        <label for="inverse">Inverse</label>
+      </div>
+
+      <div class="control-item">
         <label for="interpolation" class="select">Line Interpolation</label>
         <select name="interp" id="interpolation" onChange="selectInterpolation('stv-line-chart')">
           <option value="linear" selected>linear</option>
@@ -120,7 +111,7 @@
       <!-- top, right, bottom, left margins -->
       <div class="control-item">
         <label for="marginTop" class="select">Margin Top</label>
-        <select name="margin_top" id="marginTop" onChange="setMargin('marginTop', 'stv-line-chart')">
+        <select name="margin_top" id="marginTop" onChange="selectMargin('marginTop', 'stv-line-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
@@ -129,7 +120,7 @@
 
       <div class="control-item">
         <label for="marginRight" class="select">Margin Right</label>
-        <select name="margin_right" id="marginRight" onChange="setMargin('marginRight', 'stv-line-chart')">
+        <select name="margin_right" id="marginRight" onChange="selectMargin('marginRight', 'stv-line-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
@@ -138,7 +129,7 @@
 
       <div class="control-item">
         <label for="marginBottom" class="select">Margin Bottom</label>
-        <select name="margin-bottom" id="marginBottom" onChange="setMargin('marginBottom', 'stv-line-chart')">
+        <select name="margin-bottom" id="marginBottom" onChange="selectMargin('marginBottom', 'stv-line-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
@@ -147,7 +138,7 @@
 
       <div class="control-item">
         <label for="marginLeft" class="select">Margin Left</label>
-        <select name="margin_left" id="marginLeft" onChange="setMargin('marginLeft', 'stv-line-chart')">
+        <select name="margin_left" id="marginLeft" onChange="selectMargin('marginLeft', 'stv-line-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
@@ -157,7 +148,7 @@
       <!-- color scheme --->
       <div class="control-item">
         <label for="colorScheme" class="select">Color Scheme</label>
-        <select name="color-scheme" id="colorScheme" onChange="setColorScheme('stv-line-chart')">
+        <select name="color-scheme" id="colorScheme" onChange="selectColorScheme('stv-line-chart')">
           <option value="category10" selected>Category 10</option>
           <option value="accent">Accent</option>
           <option value="paired">Paired</option>

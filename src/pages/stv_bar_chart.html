@@ -10,15 +10,6 @@
   <script src="../js/shared.js"></script>
   <script src="../js/xAxis.js"></script>
   <script src="../js/yAxis.js"></script>
-  <script src="../js/legend.js"></script>
-  <script src="../js/gridline.js"></script>
-  <script src="../js/margins.js"></script>
-  <script src="../js/color_scheme.js"></script>
-  <script src="../js/axis_label.js"></script>
-  <script src="../js/ticks.js"></script>
-  <script src="../js/inverse.js"></script>
-  <script src="../js/orientation.js"></script>
-  <script src="../js/bar_width.js"></script>
   <script src="../js/_barChart.js"></script>
 </head>
 <body>
@@ -59,7 +50,7 @@
       <div class="control-item">
         <input type="checkbox" name="hide-x" id="hideX"
           onClick="toggleShowHideXAxis('stv-bar-chart')">
-          <label for="hideX">Hide X-axis</label>
+          <label for="hideX">Hide Entire X-axis</label>
       </div>
 
       <!-- Y axis -->
@@ -77,16 +68,11 @@
       <div class="control-item">
         <input type="checkbox" name="hide-y" id="hideY"
           onClick="toggleShowHideYAxis('stv-bar-chart')">
-          <label for="hideY">Hide Y-axis</label>
+          <label for="hideY">Hide Entire Y-axis</label>
       </div>
 
       <!-- miscellaneous options -->
       <div class="control-category">Options</div>
-
-      <div class="control-item">
-        <input type="checkbox" name="inverse" id="inverse" onClick="toggleInverse('stv-bar-chart')">
-        <label for="inverse">Inverse Color</label>
-      </div>
 
       <div class="control-item">
         <input type="checkbox" name="show-legend" id="showLegend" onClick="toggleLegend('stv-bar-chart')">
@@ -97,6 +83,11 @@
         <input type="checkbox" name="show-gridlines" id="showGridlines"
           onClick="toggleGridlines('stv-bar-chart')">
           <label for="showGridlines">Gridlines</label>
+      </div>
+
+      <div class="control-item">
+        <input type="checkbox" name="inverse" id="inverse" onClick="toggleInverse('stv-bar-chart')">
+        <label for="inverse">Inverse</label>
       </div>
 
       <div class="control-item">
@@ -121,7 +112,7 @@
       <!-- top, right, bottom, left margins -->
       <div class="control-item">
         <label for="marginTop" class="select">Margin Top</label>
-        <select name="margin_top" id="marginTop" onChange="setMargin('marginTop', 'stv-bar-chart')">
+        <select name="margin_top" id="marginTop" onChange="selectMargin('marginTop', 'stv-bar-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
@@ -130,7 +121,7 @@
 
       <div class="control-item">
         <label for="marginRight" class="select">Margin Right</label>
-        <select name="margin_right" id="marginRight" onChange="setMargin('marginRight', 'stv-bar-chart')">
+        <select name="margin_right" id="marginRight" onChange="selectMargin('marginRight', 'stv-bar-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
@@ -139,7 +130,7 @@
 
       <div class="control-item">
         <label for="marginBottom" class="select">Margin Bottom</label>
-        <select name="margin-bottom" id="marginBottom" onChange="setMargin('marginBottom', 'stv-bar-chart')">
+        <select name="margin-bottom" id="marginBottom" onChange="selectMargin('marginBottom', 'stv-bar-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
@@ -148,7 +139,7 @@
 
       <div class="control-item">
         <label for="marginLeft" class="select">Margin Left</label>
-        <select name="margin_left" id="marginLeft" onChange="setMargin('marginLeft', 'stv-bar-chart')">
+        <select name="margin_left" id="marginLeft" onChange="selectMargin('marginLeft', 'stv-bar-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
@@ -158,7 +149,7 @@
       <!-- color scheme --->
       <div class="control-item">
         <label for="colorScheme" class="select">Color Scheme</label>
-        <select name="color-scheme" id="colorScheme" onChange="setColorScheme('stv-bar-chart')">
+        <select name="color-scheme" id="colorScheme" onChange="selectColorScheme('stv-bar-chart')">
           <option value="category10" selected>Category 10</option>
           <option value="accent">Accent</option>
           <option value="paired">Paired</option>
@@ -231,19 +222,19 @@
 
       <div class="hoz-group">
         <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumBars(1)">1 Bar</button>
+          <button type="button" class="action" onClick="selectNumBars(1)">1 Stock</button>
         </div>
         <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumBars(2)">2 Bars</button>
+          <button type="button" class="action" onClick="selectNumBars(2)">2 Stocks</button>
         </div>
         <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumBars(3)">3 Bars</button>
+          <button type="button" class="action" onClick="selectNumBars(3)">3 Stocks</button>
         </div>
         <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumBars(4)">4 Bars</button>
+          <button type="button" class="action" onClick="selectNumBars(4)">4 Stocks</button>
         </div>
         <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumBars(5)">5 Bars</button>
+          <button type="button" class="action" onClick="selectNumBars(5)">5 Stocks</button>
         </div>
       </div>
 
