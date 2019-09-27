@@ -40,11 +40,7 @@ import {
   calculateAxisLabelClass,
   calculateLegendLabelClass,
 } from '../../utils/css_utils'
-import {
-  t50,
-  t100,
-  t250
-} from '../../utils/transition_definitions'
+import { t50, t100 } from '../../utils/transition_definitions'
 import TickFormat from '../../utils/tickformat'
 
 @Component({
@@ -450,6 +446,9 @@ export class StvStackedBarChart {
    */
   handleGridlines(): void {
 
+    /**
+     * !gridlines
+     */
     if (!this.gridlines) {
       this.gGrid.selectAll('line.gridline').remove()
       return;
@@ -466,6 +465,7 @@ export class StvStackedBarChart {
       .style('stroke', '#bbb')
       .style('stroke-width', 0.5)
       .style('stroke-dasharray', ("7,3"))
+      .style('opacity', 0)
 
     if (this.orientation === 'horizontal') {
       sel.merge(gridSelection)
@@ -480,7 +480,8 @@ export class StvStackedBarChart {
             + this.linearScale(d)
         })
         .attr('y1', this.marginTop)
-        .transition(t250)
+        .transition(t100)
+        .style('opacity', 1)
         .attr('y2', () => {
           return this.canvasHeight
             - this.marginBottom
@@ -498,7 +499,8 @@ export class StvStackedBarChart {
         .attr('y2', (d) => {
           return this.linearScale(d)
         })
-        .transition(t250)
+        .transition(t100)
+        .style('opacity', 1)
         .attr('x2', () => {
           return this.canvasWidth
             - this.marginRight
@@ -635,15 +637,13 @@ export class StvStackedBarChart {
       //////////////////////////////
       // legend text
       //////////////////////////////
-      const textSel = this.gLegend.selectAll('text.legend-text')
+      const textSel = this.gLegend.selectAll('text.legend-label')
         .data(this.layers)
 
       textSel.exit().remove()
 
       textSel.enter()
         .append('text')
-        .attr('class', 'legend-text')
-        .style('fill', '#555')
         .style('opacity', 0)
         .style('font-size', `${this.legendFontSize}px`)
         .on('mouseover', (d) => {

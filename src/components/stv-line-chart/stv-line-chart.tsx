@@ -337,6 +337,7 @@ export class StvLineChart {
       .style('stroke', '#bbb')
       .style('stroke-width', 0.5)
       .style('stroke-dasharray', ("7,3"))
+      .style('opacity', 0)
 
     xSel.merge(xGridSelection)
       .attr('x1', (d) => {
@@ -347,6 +348,7 @@ export class StvLineChart {
       })
       .attr('y1', this.marginTop)
       .transition(t100)
+      .style('opacity', 1)
       .attr('y2', () => {
         return this.canvasHeight
           - this.marginBottom
@@ -365,6 +367,7 @@ export class StvLineChart {
       .style('stroke', '#bbb')
       .style('stroke-width', 0.5)
       .style('stroke-dasharray', ("7,3"))
+      .style('opacity', 0)
 
     ySel.merge(yGridSelection)
       .attr('x1', () => {
@@ -376,6 +379,8 @@ export class StvLineChart {
       .attr('y1', (d) => {
         return this.yScale(d)
       })
+      .transition(t100)
+      .style('opacity', 1)
       .attr('y2', (d) => {
         return this.yScale(d)
       })

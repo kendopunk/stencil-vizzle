@@ -392,6 +392,7 @@ export class StvBarChart {
       .style('stroke', '#bbb')
       .style('stroke-width', 0.5)
       .style('stroke-dasharray', ("7,3"))
+      .style('opacity', 0)
 
     if (this.orientation === 'horizontal') {
       sel.merge(gridSelection)
@@ -407,6 +408,7 @@ export class StvBarChart {
         })
         .attr('y1', this.marginTop)
         .transition(t100)
+        .style('opacity', 1)
         .attr('y2', () => {
           return this.canvasHeight
             - this.marginBottom
@@ -425,6 +427,7 @@ export class StvBarChart {
           return this.linearScale(d)
         })
         .transition(t100)
+        .style('opacity', 1)
         .attr('x2', () => {
           return this.canvasWidth
             - this.marginRight
