@@ -31,6 +31,13 @@ import { IfcStvLineChart } from '../../interfaces/IfcStvLineChart'
 
 // utilities
 import {
+  calculateAxisClass,
+  calculateAxisLabelClass,
+  calculateLegendLabelClass,
+  foo
+} from '../../utils/css_utils'
+import { getInterpolation } from '../../utils/interpolation'
+import {
   t25,
   t50,
   t100,
@@ -38,11 +45,6 @@ import {
   t500
 } from '../../utils/transition_definitions'
 import TickFormat from '../../utils/tickformat'
-import {
-  calculateAxisClass,
-  calculateAxisLabelClass,
-  calculateLegendLabelClass
-} from '../../utils/css_utils'
 
 @Component({
   tag: 'stv-line-chart',
@@ -88,7 +90,7 @@ export class StvLineChart {
 
   @Element() private chartElement: HTMLElement
 
-  @Prop() axisLabelFontSize: number = 12
+  @Prop() axisLabelFontSize: number = 14
   @Prop() axisTickFontFamily: string = 'sans'
   @Prop() axisTickFontSize: number = 10
   @Prop({
@@ -107,6 +109,7 @@ export class StvLineChart {
   @Prop() hideXTicks: boolean = false
   @Prop() hideYAxis: boolean = false
   @Prop() hideYTicks: boolean = false
+  @Prop() interpolation: string = 'linear'
   @Prop() inverse: boolean = false
   @Prop() legend: boolean = false
   @Prop() legendFontSize: number = 12
@@ -501,6 +504,8 @@ export class StvLineChart {
       .y((d) => {
         return this.yScale(d[this.yMetric])
       })
+      .curve(getInterpolation(this.interpolation))
+
 
     const pathSelection = this.gCanvas.selectAll('path.main')
       .data(this.chartData)

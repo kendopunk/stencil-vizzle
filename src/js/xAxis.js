@@ -39,7 +39,18 @@ function toggleShowHideXAxis(selector) {
 
 function toggleShowHideXLabel(selector) {
   showXLabel = !showXLabel;
-  getChartEl(selector).xLabel = showXLabel ? 'Date' : '';
+
+  let label = ''
+  switch (selector) {
+    default:
+      label = 'Date'
+    break
+  }
+
+
+
+
+  getChartEl(selector).xLabel = showXLabel ? label : '';
 }
 
 function toggleShowHideXTicks(selector) {

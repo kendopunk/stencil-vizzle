@@ -66,6 +66,7 @@ export namespace Components {
     'hideXTicks': boolean;
     'hideYAxis': boolean;
     'hideYTicks': boolean;
+    'interpolation': string;
     'inverse': boolean;
     'legend': boolean;
     'legendFontSize': number;
@@ -204,6 +205,7 @@ declare namespace LocalJSX {
     'hideXTicks'?: boolean;
     'hideYAxis'?: boolean;
     'hideYTicks'?: boolean;
+    'interpolation'?: string;
     'inverse'?: boolean;
     'legend'?: boolean;
     'legendFontSize'?: number;
