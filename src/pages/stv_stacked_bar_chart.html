@@ -7,7 +7,10 @@
   <link rel="stylesheet" type="text/css" href="../css/main.css">
   <script type="module" src="/build/stencil-vizzle.esm.js"></script>
   <script nomodule src="/build/stencil-vizzle.esm.js"></script>
-  <script src="../js/stackedBarChart.js"></script>
+  <script src="../js/shared.js"></script>
+  <script src="../js/xAxis.js"></script>
+  <script src="../js/yAxis.js"></script>
+  <script src="../js/_stackedBarChart.js"></script>
 </head>
 <body>
 
@@ -30,152 +33,220 @@
   </div>
 
   <div id="wrapper">
-    <!-- interaction controls -->
     <div id="control-container">
 
       <!-- X axis -->
       <div class="control-category">X-axis</div>
       <div class="control-item">
         <input type="checkbox" name="x-label" id="xLabel" checked
-          onClick="toggleShowHideXLabel()">
+          onClick="toggleShowHideXLabel('stv-stacked-bar-chart')">
           <label for="xLabel">Show Label</label>
       </div>
       <div class="control-item">
         <input type="checkbox" name="x-ticks" id="xTicks" checked
-          onClick="toggleShowHideXTicks()">
-          <label for="xTicks">Show Ticks</label>
+          onClick="toggleShowHideXTicks('stv-stacked-bar-chart')">
+          <label for="xTicks">Show Tick Values</label>
       </div>
       <div class="control-item">
         <input type="checkbox" name="hide-x" id="hideX"
-          onClick="toggleShowHideXAxis()">
-          <label for="hideX">Hide X-axis</label>
+          onClick="toggleShowHideXAxis('stv-stacked-bar-chart')">
+          <label for="hideX">Hide Entire X-axis</label>
       </div>
 
       <!-- Y axis -->
       <div class="control-category">Y-axis</div>
       <div class="control-item">
         <input type="checkbox" name="y-label" id="yLabel" checked
-          onClick="toggleShowHideYLabel()">
+          onClick="toggleShowHideYLabel('stv-stacked-bar-chart')">
           <label for="yLabel">Show Label</label>
       </div>
       <div class="control-item">
         <input type="checkbox" name="y-ticks" id="yTicks" checked
-          onClick="toggleShowHideYTicks()">
-          <label for="yTicks">Show Ticks</label>
+          onClick="toggleShowHideYTicks('stv-stacked-bar-chart')">
+          <label for="yTicks">Show Tick Values</label>
       </div>
       <div class="control-item">
         <input type="checkbox" name="hide-y" id="hideY"
-          onClick="toggleShowHideYAxis()">
-          <label for="hideY">Hide Y-axis</label>
+          onClick="toggleShowHideYAxis('stv-stacked-bar-chart')">
+          <label for="hideY">Hide Entire Y-axis</label>
       </div>
 
-      <!-- misc -->
+      <!-- miscellaneous options -->
       <div class="control-category">Options</div>
-      
+
       <div class="control-item">
-        <input type="checkbox" name="show-legend" id="showLegend" onClick="toggleLegend()">
+        <input type="checkbox" name="show-legend" id="showLegend" onClick="toggleLegend('stv-stacked-bar-chart')">
           <label for="showLegend">Legend</label>
       </div>
 
       <div class="control-item">
-        <input type="checkbox" name="gridlines" id="gridlines" onClick="toggleGridlines()">
-          <label for="gridlines">Gridlines</label>
+        <input type="checkbox" name="show-gridlines" id="showGridlines"
+          onClick="toggleGridlines('stv-stacked-bar-chart')">
+          <label for="showGridlines">Gridlines</label>
       </div>
 
       <div class="control-item">
-        <input type="checkbox" name="calc-pct" id="calcPct" onClick="togglePercent()">
-          <label for="calcPct">Calculate %age</label>
+        <input type="checkbox" name="inverse" id="inverse" onClick="toggleInverse('stv-stacked-bar-chart')">
+        <label for="inverse">Inverse</label>
       </div>
 
       <div class="control-item">
-        <div class="select-group">Orientation</div>
-        <div class="select-el">
-          <select name="orientation" id="orientation" onChange="selectOrientation()">
-            <option value="vertical">vertical (default)</option>
-            <option value="horizontal">horizontal</option>
-          </select>
-        </div>
+        <label for="orientation" class="select">Orientation</label>
+        <select name="orient" id="orientation" onChange="toggleOrientation('stv-stacked-bar-chart')">
+          <option value="vertical" selected>vertical</option>
+          <option value="horizontal">horizontal</option>
+        </select>
       </div>
 
       <div class="control-item">
-        <div class="select-group">Margins</div>
-        <div class="select-el">
-          <select name="margins" id="margins" onChange="selectMargins()">
-            <option value="35">35px</option>
-            <option value="50">50px</option>
-            <option value="75">75px</option>
-          </select>
-        </div>
+        <label for="linearDomain" class="select">Values</label>
+        <select name="linear_domain" id="linearDomain" onChange="selectLinearDomain('stv-stacked-bar-chart')">
+          <option value="absolute" selected>absolute</option>
+          <option value="percent">percentages</option>
+        </select>
       </div>
 
       <div class="control-item">
-        <div class="select-group">Color Scheme</div>
-        <div class="select-el">
-          <select name="color-scheme" id="colorScheme" onChange="selectColorScheme()">
-            <option value="category10" selected>Category 10</option>
-            <option value="accent">Accent</option>
-            <option value="paired">Paired</option>
-            <option value="set1">Set 1</option>
-            <option value="set2">Set 2</option>
-            <option value="set3">Set 3</option>
-            <option value="black">Black</option>
-            <option value="gray">Gray</option>
-          </select>
-        </div>
+        <label for="barStroke" class="select">Bar Stroke</label>
+        <select name="bar_stroke" id="barStroke" onChange="selectBarStroke('stv-stacked-bar-chart')">
+          <option value="transparent" selected>transparent</option>
+          <option value="#000000">black</option>
+          <option value="#ffffff">white</option>
+          <option value="#999999">gray</option>
+        </select>
       </div>
 
       <div class="control-item">
-        <div class="select-group">Axis Label Font Size</div>
-        <div class="select-el">
-          <select name="axis-label-font-size" id="axisLabelFontSize" onChange="selectAxisLabelFontSize()">
+        <label for="barStrokeWidth" class="select">Bar Stroke Width</label>
+        <select name="bar_stroke_width" id="barStrokeWidth" onChange="selectBarStrokeWidth('stv-stacked-bar-chart')">
+          <option value="0">none</option>
+          <option value="1" selected>1px</option>
+          <option value="2">2px</option>
+          <option value="5">5px</option>
+        </select>
+      </div>
+
+      <div class="control-item">
+        <label for="maxBarWidth" class="select">Max Bar Width</label>
+        <select name="max_bar_width" id="maxBarWidth" onChange="selectMaxBarWidth('stv-stacked-bar-chart')">
+          <option value="5">5px</option>
+          <option value="25">25px</option>
+          <option value="50">50px</option>
+          <option value="75" selected>75px</option>
+          <option value="2000">fill space</option>
+        </select>
+      </div>
+
+      <!-- top, right, bottom, left margins -->
+      <div class="control-item">
+        <label for="marginTop" class="select">Margin Top</label>
+        <select name="margin_top" id="marginTop" onChange="selectMargin('marginTop', 'stv-stacked-bar-chart')">
+          <option value="25" selected>25px</option>
+          <option value="50">50px</option>
+          <option value="75">75px</option>
+        </select>
+      </div>
+
+      <div class="control-item">
+        <label for="marginRight" class="select">Margin Right</label>
+        <select name="margin_right" id="marginRight" onChange="selectMargin('marginRight', 'stv-stacked-bar-chart')">
+          <option value="25" selected>25px</option>
+          <option value="50">50px</option>
+          <option value="75">75px</option>
+        </select>
+      </div>
+
+      <div class="control-item">
+        <label for="marginBottom" class="select">Margin Bottom</label>
+        <select name="margin-bottom" id="marginBottom" onChange="selectMargin('marginBottom', 'stv-stacked-bar-chart')">
+          <option value="25" selected>25px</option>
+          <option value="50">50px</option>
+          <option value="75">75px</option>
+        </select>
+      </div>
+
+      <div class="control-item">
+        <label for="marginLeft" class="select">Margin Left</label>
+        <select name="margin_left" id="marginLeft" onChange="selectMargin('marginLeft', 'stv-stacked-bar-chart')">
+          <option value="25" selected>25px</option>
+          <option value="50">50px</option>
+          <option value="75">75px</option>
+        </select>
+      </div>
+
+      <!-- color scheme --->
+      <div class="control-item">
+        <label for="colorScheme" class="select">Color Scheme</label>
+        <select name="color-scheme" id="colorScheme" onChange="selectColorScheme('stv-stacked-bar-chart')">
+          <option value="category10" selected>Category 10</option>
+          <option value="accent">Accent</option>
+          <option value="paired">Paired</option>
+          <option value="set1">Set 1</option>
+          <option value="set2">Set 2</option>
+          <option value="set3">Set 3</option>
+          <option value="black">Black</option>
+          <option value="gray">Gray</option>
+        </select>
+      </div>
+
+      <!-- axis label font size -->
+      <div class="control-item">
+        <label for="axisLabelFontSize" class="select">Axis Label Font Size</label>
+        <select name="axis-label-font-size" id="axisLabelFontSize" onChange="selectAxisLabelFontSize('stv-stacked-bar-chart')">
            <option value="9">9px</option>
-           <option value="12" selected>12px</option>
-           <option value="14">14px</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="control-item">
-        <div class="select-group">Axis Tick Font Size</div>
-        <div class="select-el">
-          <select name="axis-tick-font-size" id="axisTickFontSize" onChange="selectAxisTickFontSize()">
-           <option value="8">8px</option>
-           <option value="9">9px</option>
-           <option value="10" selected>10px</option>
            <option value="12">12px</option>
-          </select>
-        </div>
+           <option value="14" selected>14px</option>
+           <option value="16">16px</option>
+           <option value="20">20px</option>
+        </select>
+      </div>
+
+      <!-- tick stuff -->
+      <div class="control-item">
+        <label for="axisTickFontSize" class="select">Axis Tick Font Size</label>
+        <select name="axis-tick-font-size" id="axisTickFontSize" onChange="selectAxisTickFontSize('stv-stacked-bar-chart')">
+          <option value="8">8px</option>
+          <option value="9">9px</option>
+          <option value="10" selected>10px</option>
+          <option value="12">12px</option>
+        </select>
       </div>
 
       <div class="control-item">
-        <div class="select-group">Axis Tick Length</div>
-        <div class="select-el">
-          <select name="axis-tick-size" id="axisTickSize" onChange="selectAxisTickSize()">
-           <option value="2" selected>2</option>
-           <option value="4">4</option>
-           <option value="10">10</option>
-           <option value="12">12</option>
-          </select>
-        </div>
+        <label for="axisTickFontFamily" class="select">Axis Tick Font Family</label>
+        <select name="axis-tick-font-family" id="axisTickFontFamily" onChange="selectAxisTickFontFamily('stv-stacked-bar-chart')">
+          <option value="sans" selected>sans-serif</option>
+          <option value="serif">serif</option>
+          <option value="monospace">monospace</option>
+        </select>
       </div>
 
       <div class="control-item">
-        <div class="select-group">Max Bar Width</div>
-        <div class="select-el">
-          <select name="max-bar-width" id="maxBarWidth" onChange="selectMaxBarWidth()">
-           <option value="5">5px</option>
-           <option value="25">25px</option>
-           <option value="50">50px</option>
-           <option value="75" selected>75px</option>
-           <option value="2000">fill space</option>
-          </select>
-        </div>
+        <label for="xTickSize" class="select">X-Axis Tick Size</label>
+        <select name="x-tick-size" id="xTickSize" onChange="selectXTickSize('stv-stacked-bar-chart')">
+          <option value="2" selected>2</option>
+          <option value="4">4</option>
+          <option value="10">10</option>
+          <option value="12">12</option>
+          <option value="16">16</option>
+        </select>
+      </div>
+
+      <div class="control-item">
+        <label for="yTickSize" class="select">Y-Axis Tick Size</label>
+        <select name="y-tick-size" id="yTickSize" onChange="selectYTickSize('stv-stacked-bar-chart')">
+          <option value="2" selected>2</option>
+          <option value="4">4</option>
+          <option value="10">10</option>
+          <option value="12">12</option>
+          <option value="16">16</option>
+        </select>
       </div>
     </div>
 
     <!-- chart container -->
     <div id="chart-container">
-      <p class="page-title"><span>&lt;stv-stacked-bar-chart&gt;</span></p>
+      <div class="page-title">&lt;stv-bar-chart&gt;</div>
 
       <p>WW2 tank production for Germany, the Soviet Union and the US.  <a href="https://i1.wp.com/mathscinotes.com/wp-content/uploads/2017/09/ProductionTable.png" target="_blank">(source)</a></p>
 

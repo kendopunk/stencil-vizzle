@@ -37,6 +37,16 @@ function selectAxisTickFontFamily(selector) {
   getChartEl(selector).axisTickFontFamily = val;
 }
 
+function selectBarStroke(selector) {
+  var val = document.querySelector('#barStroke').value;
+  getChartEl(selector).barStroke = val;
+}
+
+function selectBarStrokeWidth(selector) {
+  var val = document.querySelector('#barStrokeWidth').value;
+  getChartEl(selector).barStrokeWidth = val;
+}
+
 function selectColorScheme(selector) {
   var val = document.querySelector('#colorScheme').value;
   getChartEl(selector).colorScheme = val;
@@ -45,6 +55,17 @@ function selectColorScheme(selector) {
 function selectInterpolation(selector) {
   var val = document.querySelector('#interpolation').value;
   getChartEl(selector).interpolation = val;
+}
+
+function selectLinearDomain(selector) {
+  var val = document.querySelector('#linearDomain').value
+  var el = getChartEl(selector)
+  if (val === 'percent') {
+    el.linearTickFormat = 'percent1d'
+  } else {
+    el.linearTickFormat = 'localestring'
+  }
+  getChartEl(selector).linearDomain = val;
 }
 
 function selectMargin(marginAttribute, selector) {
@@ -89,8 +110,8 @@ function toggleLegend(selector) {
   getChartEl(selector).legend = showLegend;
 }
 
+
 function toggleOrientation(selector) {
-  console.log(selector)
   var val = document.querySelector('#orientation').value || 'vertical';
   var el = getChartEl(selector);
   var xLabel, yLabel;
@@ -98,7 +119,7 @@ function toggleOrientation(selector) {
   // horizontal orientation
   if (val === 'horizontal') {
     if (selector === 'stv-stacked-bar-chart') {
-      xlabel = 'Production';
+      xLabel = 'Production';
       yLabel = 'Year'
     } else {
       xLabel = 'Price'
@@ -106,7 +127,7 @@ function toggleOrientation(selector) {
     }
   } else {
     if (selector === 'stv-stacked-bar-chart') {
-      xlabel = 'Year';
+      xLabel = 'Year';
       yLabel = 'Production'
     } else {
       xLabel = 'Stock Ticker'

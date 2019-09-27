@@ -99,6 +99,26 @@
       </div>
 
       <div class="control-item">
+        <label for="barStroke" class="select">Bar Stroke</label>
+        <select name="bar_stroke" id="barStroke" onChange="selectBarStroke('stv-bar-chart')">
+          <option value="transparent" selected>transparent</option>
+          <option value="#000000">black</option>
+          <option value="#ffffff">white</option>
+          <option value="#999999">gray</option>
+        </select>
+      </div>
+
+      <div class="control-item">
+        <label for="barStrokeWidth" class="select">Bar Stroke Width</label>
+        <select name="bar_stroke_width" id="barStrokeWidth" onChange="selectBarStrokeWidth('stv-bar-chart')">
+          <option value="0">none</option>
+          <option value="1" selected>1px</option>
+          <option value="2">2px</option>
+          <option value="5">5px</option>
+        </select>
+      </div>
+
+      <div class="control-item">
         <label for="maxBarWidth" class="select">Max Bar Width</label>
         <select name="max_bar_width" id="maxBarWidth" onChange="selectMaxBarWidth('stv-bar-chart')">
           <option value="5">5px</option>
@@ -219,6 +239,8 @@
     <!-- chart container -->
     <div id="chart-container">
       <div class="page-title">&lt;stv-bar-chart&gt;</div>
+
+      <p>Demonstrating a bar chart with stock tickers / prices.</p>
 
       <div class="hoz-group">
         <div class="btn-item">

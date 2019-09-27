@@ -93,6 +93,7 @@ export namespace Components {
   }
   interface StvStackedBarChart {
     'axisLabelFontSize': number;
+    'axisTickFontFamily': string;
     'axisTickFontSize': number;
     'barStroke': string;
     'barStrokeWidth': number;
@@ -106,6 +107,7 @@ export namespace Components {
     'hideXTicks': boolean;
     'hideYAxis': boolean;
     'hideYTicks': boolean;
+    'inverse': boolean;
     'legend': boolean;
     'legendFontSize': number;
     'legendWidth': number;
@@ -235,6 +237,7 @@ declare namespace LocalJSX {
   }
   interface StvStackedBarChart {
     'axisLabelFontSize'?: number;
+    'axisTickFontFamily'?: string;
     'axisTickFontSize'?: number;
     'barStroke'?: string;
     'barStrokeWidth'?: number;
@@ -248,6 +251,7 @@ declare namespace LocalJSX {
     'hideXTicks'?: boolean;
     'hideYAxis'?: boolean;
     'hideYTicks'?: boolean;
+    'inverse'?: boolean;
     'legend'?: boolean;
     'legendFontSize'?: number;
     'legendWidth'?: number;

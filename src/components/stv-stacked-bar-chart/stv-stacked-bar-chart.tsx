@@ -36,6 +36,11 @@ import { IfcStvStackedBarChart } from '../../interfaces/IfcStvStackedBarChart'
 
 // utilities
 import {
+  calculateAxisClass,
+  calculateAxisLabelClass,
+  calculateLegendLabelClass,
+} from '../../utils/css_utils'
+import {
   t50,
   t100,
   t250
@@ -83,7 +88,8 @@ export class StvStackedBarChart {
 
   @Element() private chartElement: HTMLElement
 
-  @Prop() axisLabelFontSize: number = 12
+  @Prop() axisLabelFontSize: number = 14
+  @Prop() axisTickFontFamily: string = 'sans'
   @Prop() axisTickFontSize: number = 10
   @Prop() barStroke: string = 'transparent'
   @Prop() barStrokeWidth: number = 1
@@ -103,6 +109,7 @@ export class StvStackedBarChart {
   @Prop() hideXTicks: boolean = false
   @Prop() hideYAxis: boolean = false
   @Prop() hideYTicks: boolean = false
+  @Prop() inverse: boolean = false
   @Prop() legend: boolean = false
   @Prop() legendFontSize: number = 12
   @Prop() legendWidth: number = 125
@@ -135,18 +142,23 @@ export class StvStackedBarChart {
   ////////////////////////////////////////
   componentDidLoad(): void {
     this.svg = select(this.chartElement.shadowRoot.querySelector('svg.stv-stacked-bar-chart'))
+
     this.gCanvas = this.svg.append('svg:g')
       .attr('class', 'canvas')
+
     this.gGrid = this.gCanvas.append('svg:g')
       .attr('class', 'grid')
+
     this.gLegend = this.svg.append('svg:g')
       .attr('class', 'legend')
+
     this.gXAxis = this.gCanvas.append('svg:g')
-      .attr('class', 'axis')
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .style('opacity', 0)
       .style('font-size', `${this.axisTickFontSize}px`)
+
     this.gYAxis = this.gCanvas.append('svg:g')
-      .attr('class', 'axis')
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .style('opacity', 0)
       .style('font-size', `${this.axisTickFontSize}px`)
 
@@ -203,6 +215,7 @@ export class StvStackedBarChart {
   callHorizontalAxes(): void {
     // X = linear
     this.gXAxis.style('font-size', `${this.axisTickFontSize}px`)
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
@@ -222,6 +235,7 @@ export class StvStackedBarChart {
 
     // Y = ordinal
     this.gYAxis.style('font-size', `${this.axisTickFontSize}px`)
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
@@ -245,6 +259,7 @@ export class StvStackedBarChart {
   callVerticalAxes(): void {
     // X = ordinal
     this.gXAxis.style('font-size', `${this.axisTickFontSize}px`)
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
@@ -261,6 +276,7 @@ export class StvStackedBarChart {
 
     // Y = linear
     this.gYAxis.style('font-size', `${this.axisTickFontSize}px`)
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
@@ -330,7 +346,7 @@ export class StvStackedBarChart {
       this.gCanvas.selectAll('text.x-axis-label').remove()
 
       this.gCanvas.append('text')
-        .attr('class', 'x-axis-label')
+        .attr('class', calculateAxisLabelClass(this.inverse, 'x'))
         .style('text-anchor', 'middle')
         .style('font-size', `${this.axisLabelFontSize}px`)
         .text(this.xLabel)
@@ -359,7 +375,7 @@ export class StvStackedBarChart {
       this.gCanvas.selectAll('text.y-axis-label').remove()
 
       this.gCanvas.append('text')
-        .attr('class', 'y-axis-label')
+        .attr('class', calculateAxisLabelClass(this.inverse, 'y'))
         .style('text-anchor', 'middle')
         .style('font-size', `${this.axisLabelFontSize}px`)
         .text(this.yLabel)
@@ -651,6 +667,7 @@ export class StvStackedBarChart {
             .style('opacity', this.layerOpacity)
         })
         .merge(textSel)
+        .attr('class', calculateLegendLabelClass(this.inverse))
         .transition(t100)
         .text((d) => {
           return d.key

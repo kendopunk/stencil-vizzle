@@ -208,15 +208,3 @@ div.select-item > label {
 div.select-item > label, div.select-item > select {
   display: inline;
 }
-
-p.page-title {
-  font-family: "Courier", serif;
-  font-size: 18px;
-  color: #333;
-  padding: 4px 8px;
-}
-
-p.page-title span {
-  background: #eee;
-  padding: 3px;
-}

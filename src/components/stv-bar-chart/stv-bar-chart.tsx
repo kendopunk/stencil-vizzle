@@ -562,7 +562,6 @@ export class StvBarChart {
 
       textSel.enter()
         .append('text')
-        .attr('class', 'legend-text')
         .style('fill', '#555')
         .style('font-size', `${this.legendFontSize}px`)
         .style('opacity', 0)
