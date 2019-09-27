@@ -22,7 +22,6 @@
   <script src="../js/_lineChart.js"></script>
 </head>
 <body>
-
   <div id="header">
     <div id="stv">stencil-vizzle</div>
     <div id="header-links">
@@ -55,7 +54,7 @@
       <div class="control-item">
         <input type="checkbox" name="x-ticks" id="xTicks" checked
           onClick="toggleShowHideXTicks('stv-line-chart')">
-          <label for="xTicks">Show Ticks</label>
+          <label for="xTicks">Show Tick Values</label>
       </div>
       <div class="control-item">
         <input type="checkbox" name="hide-x" id="hideX"
@@ -73,7 +72,7 @@
       <div class="control-item">
         <input type="checkbox" name="y-ticks" id="yTicks" checked
           onClick="toggleShowHideYTicks('stv-line-chart')">
-          <label for="yTicks">Show Ticks</label>
+          <label for="yTicks">Show Tick Values</label>
       </div>
       <div class="control-item">
         <input type="checkbox" name="hide-y" id="hideY"
@@ -227,7 +226,7 @@
 
     <!-- chart container -->
     <div id="chart-container">
-      <p class="page-title"><span>&lt;stv-line-chart&gt;</span></p>
+      <div class="page-title">&lt;stv-line-chart&gt;</div>
 
       <div class="hoz-group">
         <div class="btn-item">

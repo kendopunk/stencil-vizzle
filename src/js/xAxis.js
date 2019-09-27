@@ -46,10 +46,6 @@ function toggleShowHideXLabel(selector) {
       label = 'Date'
     break
   }
-
-
-
-
   getChartEl(selector).xLabel = showXLabel ? label : '';
 }
 

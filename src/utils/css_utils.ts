@@ -2,8 +2,6 @@
  * src/utils/css_utils.ts
  * Helper functions for managing styles
  */
-import { curveBasis } from 'd3-shape'
-
 export const calculateAxisClass = (inverse, axisTickFontFamily) => {
   const cls = ['axis']
 

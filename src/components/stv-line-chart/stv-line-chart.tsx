@@ -34,7 +34,6 @@ import {
   calculateAxisClass,
   calculateAxisLabelClass,
   calculateLegendLabelClass,
-  foo
 } from '../../utils/css_utils'
 import { getInterpolation } from '../../utils/interpolation'
 import {
@@ -486,9 +485,7 @@ export class StvLineChart {
         //.style('opacity', 0)
         .remove()
 
-      this.gLegend.selectAll('text')
-        //.style('opacity', 0)
-        .remove()
+      this.gLegend.selectAll('text').remove()
     }
   }
 

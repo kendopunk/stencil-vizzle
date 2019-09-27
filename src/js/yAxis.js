@@ -11,7 +11,7 @@ function toggleShowHideYAxis(selector) {
   var el = getChartEl(selector);
 
   if (hideYAxis) {
-    el.xLabel = ''
+    el.yLabel = ''
     el.hideYAxis = true;
     el.hideYTicks = true;
 

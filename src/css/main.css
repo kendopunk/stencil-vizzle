@@ -180,6 +180,17 @@ div.hoz-group {
   margin-bottom: 1.1em;
 }
 
+div.page-title {
+  font-family: "Courier", serif;
+  font-size: 18px;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #eee;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
 div.select-el {
   margin-top: 5px;
 }
@@ -202,6 +213,7 @@ p.page-title {
   font-family: "Courier", serif;
   font-size: 18px;
   color: #333;
+  padding: 4px 8px;
 }
 
 p.page-title span {
