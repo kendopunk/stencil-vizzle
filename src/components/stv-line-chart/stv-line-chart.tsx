@@ -557,7 +557,6 @@ export class StvLineChart {
     }).flat()
 
     const circleSelection = this.gCanvas.selectAll('circle.vertex')
-      .style('opacity', 0)
       .data(normalized)
 
     circleSelection.exit().remove()
@@ -609,7 +608,7 @@ export class StvLineChart {
       .attr('cy', (d) => {
         return this.yScale(d[this.yMetric])
       })
-      .transition(t250)
+      .transition(t100)
       .style('opacity', 1)
   }
 

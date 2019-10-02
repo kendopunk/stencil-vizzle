@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "build": "stencil build --docs",
+    "demo": "npm run build && http-server ./demo",
     "lint": "npm run lint:stencil",
     "lint:stencil": "tslint --project tsconfig.json",
     "start": "stencil build --dev --watch --serve",
@@ -30,6 +31,7 @@
     "@stencil/sass": "^1.0.1",
     "@types/jest": "24.0.15",
     "@types/puppeteer": "1.12.4",
+    "http-server": "^0.11.1",
     "jest": "24.8.0",
     "jest-cli": "24.8.0",
     "puppeteer": "1.17.0",

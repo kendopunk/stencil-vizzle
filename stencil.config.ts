@@ -19,7 +19,19 @@ export const config: Config = {
       copy: [
         {src: 'pages'},
         {src: 'js'},
-        {src: 'css'}
+        {src: 'css'},
+        {src: 'assets'}
+      ],
+      serviceWorker: null // disable service workers
+    },
+    {
+      type: 'www',
+      dir: 'demo',
+      copy: [
+        {src: 'pages'},
+        {src: 'js'},
+        {src: 'css'},
+        {src: 'assets'}
       ],
       serviceWorker: null // disable service workers
     }
