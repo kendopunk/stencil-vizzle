@@ -4,6 +4,10 @@
  */
 import { transition } from 'd3-transition'
 
+export const t25 = () => {
+  return transition().duration(25)
+}
+
 export const t50 = () => {
   return transition().duration(50)
 }

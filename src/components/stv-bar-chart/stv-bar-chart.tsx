@@ -29,6 +29,12 @@ import { IfcStvBarChart } from '../../interfaces/IfcStvBarChart'
 
 // utilities
 import {
+  calculateAxisClass,
+  calculateAxisLabelClass,
+  calculateLegendLabelClass,
+} from '../../utils/css_utils'
+import {
+  t25,
   t50,
   t100,
   t250,
@@ -54,6 +60,7 @@ export class StvBarChart {
     black: ['#000000'],
     gray: ['#888888']
   }
+  defaultLineOpacity: number = 0.7
 
   // <g> elements
   gCanvas: Selection<Element, any, HTMLElement, any>
@@ -77,9 +84,10 @@ export class StvBarChart {
 
   @Element() private chartElement: HTMLElement
 
-  @Prop() axisLabelFontSize: number = 12
+  @Prop() axisLabelFontSize: number = 14
+  @Prop() axisTickFontFamily: string = 'sans'
   @Prop() axisTickFontSize: number = 10
-  @Prop() barStroke: string = '#333'
+  @Prop() barStroke: string = 'transparent'
   @Prop() barStrokeWidth: number = 1
   @Prop({
     reflectToAttr: true,
@@ -97,6 +105,7 @@ export class StvBarChart {
   @Prop() hideXTicks: boolean = false
   @Prop() hideYAxis: boolean = false
   @Prop() hideYTicks: boolean = false
+  @Prop() inverse: boolean = false
   @Prop() legend: boolean = false
   @Prop() legendFontSize: number = 12
   @Prop() legendMetric: string = 'label'
@@ -128,18 +137,23 @@ export class StvBarChart {
   ////////////////////////////////////////
   componentDidLoad(): void {
     this.svg = select(this.chartElement.shadowRoot.querySelector('svg.stv-bar-chart'))
+
     this.gCanvas = this.svg.append('svg:g')
       .attr('class', 'canvas')
+
     this.gGrid = this.gCanvas.append('svg:g')
       .attr('class', 'grid')
+
     this.gLegend = this.svg.append('svg:g')
       .attr('class', 'legend')
+
     this.gXAxis = this.gCanvas.append('svg:g')
-      .attr('class', 'axis')
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .style('opacity', 0)
       .style('font-size', `${this.axisTickFontSize}px`)
+
     this.gYAxis = this.gCanvas.append('svg:g')
-      .attr('class', 'axis')
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .style('opacity', 0)
       .style('font-size', `${this.axisTickFontSize}px`)
 
@@ -197,6 +211,7 @@ export class StvBarChart {
 
     // X is linear
     this.gXAxis.style('font-size', `${this.axisTickFontSize}px`)
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
@@ -213,6 +228,7 @@ export class StvBarChart {
 
     // Y is ordinal
     this.gYAxis.style('font-size', `${this.axisTickFontSize}px`)
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
@@ -237,6 +253,7 @@ export class StvBarChart {
 
     // X is ordinal
     this.gXAxis.style('font-size', `${this.axisTickFontSize}px`)
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
@@ -252,6 +269,7 @@ export class StvBarChart {
 
     // Y is linear
     this.gYAxis.style('font-size', `${this.axisTickFontSize}px`)
+      .attr('class', calculateAxisClass(this.inverse, this.axisTickFontFamily))
       .attr('transform', () => {
         if (this.chartData.length === 0) {
           return
@@ -298,7 +316,7 @@ export class StvBarChart {
       this.gCanvas.selectAll('text.x-axis-label').remove()
 
       this.gCanvas.append('text')
-        .attr('class', 'x-axis-label')
+        .attr('class', calculateAxisLabelClass(this.inverse, 'x'))
         .style('font-size', `${this.axisLabelFontSize}px`)
         .style('text-anchor', 'middle')
         .text(this.xLabel)
@@ -328,7 +346,7 @@ export class StvBarChart {
       this.gCanvas.selectAll('text.y-axis-label').remove()
 
       this.gCanvas.append('text')
-        .attr('class', 'y-axis-label')
+        .attr('class', calculateAxisLabelClass(this.inverse, 'y'))
         .style('font-size', `${this.axisLabelFontSize}px`)
         .style('text-anchor', 'middle')
         .text(this.yLabel)
@@ -374,6 +392,7 @@ export class StvBarChart {
       .style('stroke', '#bbb')
       .style('stroke-width', 0.5)
       .style('stroke-dasharray', ("7,3"))
+      .style('opacity', 0)
 
     if (this.orientation === 'horizontal') {
       sel.merge(gridSelection)
@@ -389,6 +408,7 @@ export class StvBarChart {
         })
         .attr('y1', this.marginTop)
         .transition(t100)
+        .style('opacity', 1)
         .attr('y2', () => {
           return this.canvasHeight
             - this.marginBottom
@@ -407,6 +427,7 @@ export class StvBarChart {
           return this.linearScale(d)
         })
         .transition(t100)
+        .style('opacity', 1)
         .attr('x2', () => {
           return this.canvasWidth
             - this.marginRight
@@ -533,18 +554,17 @@ export class StvBarChart {
         .style('stroke', (d, i) => {
           return d.color || this.colorScale(i)
         })
-        .transition(t100)
-        .style('opacity', 0.7)
+        .transition(t25)
+        .style('opacity', this.defaultLineOpacity)
 
       // legend text
-      const textSel = this.gLegend.selectAll('text.legend-text')
+      const textSel = this.gLegend.selectAll('text.legend-label')
         .data(this.chartData)
 
       textSel.exit().remove()
 
       textSel.enter()
         .append('text')
-        .attr('class', 'legend-text')
         .style('fill', '#555')
         .style('font-size', `${this.legendFontSize}px`)
         .style('opacity', 0)
@@ -563,6 +583,7 @@ export class StvBarChart {
             .style('opacity', 0.75)
         })
         .merge(textSel)
+        .attr('class', calculateLegendLabelClass(this.inverse))
         .text((d) => {
           return d[this.legendMetric] || ''
         })
@@ -579,10 +600,7 @@ export class StvBarChart {
         .style('opacity', 0)
         .remove()
 
-      this.gLegend.selectAll('text.legend-text')
-        .transition(t100)
-        .style('opacity', 0)
-        .remove()
+      this.gLegend.selectAll('text').remove()
     }
   }
 
@@ -666,6 +684,9 @@ export class StvBarChart {
 
   isValidChartData(): boolean {
     return isArray(this.chartData)
+      && this.chartData.length > 0
+      && this.chartData[0].hasOwnProperty(this.linearMetric)
+      && this.chartData[0].hasOwnProperty(this.ordinalMetric)
   }
 
   isValidXLabel(): boolean {

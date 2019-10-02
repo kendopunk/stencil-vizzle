@@ -19,6 +19,7 @@ import {
 export namespace Components {
   interface StvBarChart {
     'axisLabelFontSize': number;
+    'axisTickFontFamily': string;
     'axisTickFontSize': number;
     'barStroke': string;
     'barStrokeWidth': number;
@@ -32,6 +33,7 @@ export namespace Components {
     'hideXTicks': boolean;
     'hideYAxis': boolean;
     'hideYTicks': boolean;
+    'inverse': boolean;
     'legend': boolean;
     'legendFontSize': number;
     'legendMetric': string;
@@ -54,6 +56,7 @@ export namespace Components {
   }
   interface StvLineChart {
     'axisLabelFontSize': number;
+    'axisTickFontFamily': string;
     'axisTickFontSize': number;
     'canvasHeight': number;
     'canvasWidth': number;
@@ -65,6 +68,8 @@ export namespace Components {
     'hideXTicks': boolean;
     'hideYAxis': boolean;
     'hideYTicks': boolean;
+    'interpolation': string;
+    'inverse': boolean;
     'legend': boolean;
     'legendFontSize': number;
     'legendMetric': string;
@@ -88,6 +93,7 @@ export namespace Components {
   }
   interface StvStackedBarChart {
     'axisLabelFontSize': number;
+    'axisTickFontFamily': string;
     'axisTickFontSize': number;
     'barStroke': string;
     'barStrokeWidth': number;
@@ -101,6 +107,7 @@ export namespace Components {
     'hideXTicks': boolean;
     'hideYAxis': boolean;
     'hideYTicks': boolean;
+    'inverse': boolean;
     'legend': boolean;
     'legendFontSize': number;
     'legendWidth': number;
@@ -152,8 +159,9 @@ declare global {
 }
 
 declare namespace LocalJSX {
-  interface StvBarChart extends JSXBase.HTMLAttributes<HTMLStvBarChartElement> {
+  interface StvBarChart {
     'axisLabelFontSize'?: number;
+    'axisTickFontFamily'?: string;
     'axisTickFontSize'?: number;
     'barStroke'?: string;
     'barStrokeWidth'?: number;
@@ -167,6 +175,7 @@ declare namespace LocalJSX {
     'hideXTicks'?: boolean;
     'hideYAxis'?: boolean;
     'hideYTicks'?: boolean;
+    'inverse'?: boolean;
     'legend'?: boolean;
     'legendFontSize'?: number;
     'legendMetric'?: string;
@@ -188,8 +197,9 @@ declare namespace LocalJSX {
     'yLabel'?: string;
     'yTickSize'?: number;
   }
-  interface StvLineChart extends JSXBase.HTMLAttributes<HTMLStvLineChartElement> {
+  interface StvLineChart {
     'axisLabelFontSize'?: number;
+    'axisTickFontFamily'?: string;
     'axisTickFontSize'?: number;
     'canvasHeight'?: number;
     'canvasWidth'?: number;
@@ -201,6 +211,8 @@ declare namespace LocalJSX {
     'hideXTicks'?: boolean;
     'hideYAxis'?: boolean;
     'hideYTicks'?: boolean;
+    'interpolation'?: string;
+    'inverse'?: boolean;
     'legend'?: boolean;
     'legendFontSize'?: number;
     'legendMetric'?: string;
@@ -223,8 +235,9 @@ declare namespace LocalJSX {
     'yTickFormat'?: string;
     'yTickSize'?: number;
   }
-  interface StvStackedBarChart extends JSXBase.HTMLAttributes<HTMLStvStackedBarChartElement> {
+  interface StvStackedBarChart {
     'axisLabelFontSize'?: number;
+    'axisTickFontFamily'?: string;
     'axisTickFontSize'?: number;
     'barStroke'?: string;
     'barStrokeWidth'?: number;
@@ -238,6 +251,7 @@ declare namespace LocalJSX {
     'hideXTicks'?: boolean;
     'hideYAxis'?: boolean;
     'hideYTicks'?: boolean;
+    'inverse'?: boolean;
     'legend'?: boolean;
     'legendFontSize'?: number;
     'legendWidth'?: number;
@@ -273,7 +287,11 @@ export { LocalJSX as JSX };
 
 declare module "@stencil/core" {
   export namespace JSX {
-    interface IntrinsicElements extends LocalJSX.IntrinsicElements {}
+    interface IntrinsicElements {
+      'stv-bar-chart': LocalJSX.StvBarChart & JSXBase.HTMLAttributes<HTMLStvBarChartElement>;
+      'stv-line-chart': LocalJSX.StvLineChart & JSXBase.HTMLAttributes<HTMLStvLineChartElement>;
+      'stv-stacked-bar-chart': LocalJSX.StvStackedBarChart & JSXBase.HTMLAttributes<HTMLStvStackedBarChartElement>;
+    }
   }
 }
 

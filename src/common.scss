@@ -1,7 +1,94 @@
 /**
  * src/common.scss
- * Common SASS
+ * Common SASS across all components
  */
+
+/******************************
+ * COLORS
+ ******************************/
+$color-direct: #555;
+$color-inverse: #eee;
+
+/******************************
+ * AXIS <svg:path>
+ ******************************/
+.axis path {
+  fill: none;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.axis-direct path {
+  stroke: $color-direct;
+}
+
+.axis-inverse path {
+  stroke: $color-inverse;
+}
+
+/******************************
+ * AXIS <svg:text>
+ ******************************/
+.axis text {
+  pointer-events: none;
+}
+
+.axis-direct text {
+  fill: $color-direct;
+}
+
+.axis-inverse text {
+  fill: $color-inverse;
+}
+
+/******************************
+ * AXIS TICK FONT FAMILIES
+ ******************************/
+.axis-sans {
+  font-family: "Gill Sans", Tahoma, Geneva, sans-serif;
+}
+
+.axis-serif {
+  font-family: "Times New Roman", Times, serif;
+}
+
+.axis-monospace {
+  font-family: "Courier New", Courier, monospace;
+}
+
+/******************************
+ * AXIS LABELS
+ ******************************/
+.x-axis-label, .y-axis-label {
+  pointer-events: none;
+}
+
+.axis-label-inverse {
+  fill: $color-inverse;
+}
+
+.axis-label-direct {
+  fill: $color-direct;
+}
+
+/******************************
+ * LEGEND LABEL
+ ******************************/
+text.legend-label {
+  cursor: pointer;
+}
+
+text.legend-label-inverse {
+  fill: $color-inverse !important;
+}
+
+text.legend-label-direct {
+  fill: $color-direct !important;
+}
+
+/******************************
+ * TOOLTIP
+ ******************************/
 div.tooltip {
   position: absolute;
   border: solid 1px #ceccd0;
@@ -24,31 +111,4 @@ div.tooltip > div.key {
 div.tooltip > div.value {
   font-weight: normal;
   font-style: italic;
-}
-
-.axis path, .axis line {
-  fill: none;
-  stroke: #999;
-  stroke-width: 1;
-  shape-rendering: crispEdges;
-}
-
-.axis text {
-  font-family: sans-serif;
-  fill: #555;
-  pointer-events: none;
-}
-
-.axis text.hidden {
-  visibility: hidden;
-}
-
-text.x-axis-label, text.y-axis-label {
-  font-family: sans-serif;
-  fill: #555;
-  pointer-events: none;
-}
-
-text.legend-text {
-  cursor: pointer;
 }
