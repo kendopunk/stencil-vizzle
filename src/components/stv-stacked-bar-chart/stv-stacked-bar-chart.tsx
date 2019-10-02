@@ -770,6 +770,10 @@ export class StvStackedBarChart {
    */
   isValidChartData(): boolean {
     return isArray(this.chartData)
+      && this.chartData.length > 0
+      && this.chartData[0].hasOwnProperty(this.linearMetric)
+      && this.chartData[0].hasOwnProperty(this.ordinalMetric)
+      && this.chartData[0].hasOwnProperty(this.seriesMetric)
   }
 
   isValidXLabel(): boolean {
