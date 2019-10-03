@@ -645,7 +645,6 @@ export class StvStackedBarChart {
       textSel.enter()
         .append('text')
         .style('opacity', 0)
-        .style('font-size', `${this.legendFontSize}px`)
         .on('mouseover', (d) => {
           this.gCanvas.selectAll('.layer')
             .filter((e) => {
@@ -668,6 +667,7 @@ export class StvStackedBarChart {
         })
         .merge(textSel)
         .attr('class', calculateLegendLabelClass(this.inverse))
+        .style('font-size', `${this.legendFontSize}px`)
         .transition(t100)
         .text((d) => {
           return d.key
@@ -679,15 +679,8 @@ export class StvStackedBarChart {
         .transition(t100)
         .style('opacity', this.layerOpacity)
     } else {
-      this.gLegend.selectAll('line.legend-line')
-        .transition(t100)
-        .style('opacity', 0)
-        .remove()
-
-      this.gLegend.selectAll('text.legend-text')
-        .transition(t100)
-        .style('opacity', 0)
-        .remove()
+      this.gLegend.selectAll('line.legend-line').remove()
+      this.gLegend.selectAll('text').remove()
     }
   }
 

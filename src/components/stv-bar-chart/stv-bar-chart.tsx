@@ -566,7 +566,6 @@ export class StvBarChart {
       textSel.enter()
         .append('text')
         .style('fill', '#555')
-        .style('font-size', `${this.legendFontSize}px`)
         .style('opacity', 0)
         .on('mouseover', (_d, i) => {
           this.gCanvas.selectAll('rect.bar')
@@ -584,6 +583,7 @@ export class StvBarChart {
         })
         .merge(textSel)
         .attr('class', calculateLegendLabelClass(this.inverse))
+        .style('font-size', `${this.legendFontSize}px`)
         .text((d) => {
           return d[this.legendMetric] || ''
         })
@@ -595,11 +595,7 @@ export class StvBarChart {
         .transition(t100)
         .style('opacity', 0.9)
     } else {
-      this.gLegend.selectAll('line.legend-line')
-        .transition(t100)
-        .style('opacity', 0)
-        .remove()
-
+      this.gLegend.selectAll('line.legend-line').remove()
       this.gLegend.selectAll('text').remove()
     }
   }

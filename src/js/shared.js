@@ -57,6 +57,11 @@ function selectInterpolation(selector) {
   getChartEl(selector).interpolation = val;
 }
 
+function selectLegendFontSize(selector) {
+  var val = document.querySelector('#legendFontSize').value
+  getChartEl(selector).legendFontSize = val;
+}
+
 function selectLinearDomain(selector) {
   var val = document.querySelector('#linearDomain').value
   var el = getChartEl(selector)
@@ -66,6 +71,11 @@ function selectLinearDomain(selector) {
     el.linearTickFormat = 'localestring'
   }
   getChartEl(selector).linearDomain = val;
+}
+
+function selectLineStroke(selector) {
+  var val = document.querySelector('#lineStroke').value
+  getChartEl(selector).strokeWidth = val;
 }
 
 function selectMargin(marginAttribute, selector) {

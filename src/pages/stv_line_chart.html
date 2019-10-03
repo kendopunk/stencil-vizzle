@@ -59,6 +59,16 @@
           onClick="toggleShowHideXAxis('stv-line-chart')">
           <label for="hideX">Hide Entire X-axis</label>
       </div>
+      <div class="control-item">
+        <label for="xTickSize" class="select">Tick Size / Length</label>
+        <select name="x-tick-size" id="xTickSize" onChange="selectXTickSize('stv-line-chart')">
+          <option value="2" selected>2</option>
+          <option value="4">4</option>
+          <option value="10">10</option>
+          <option value="12">12</option>
+          <option value="16">16</option>
+        </select>
+      </div>
 
       <!-- Y axis -->
       <div class="control-category">Y-axis</div>
@@ -77,14 +87,19 @@
           onClick="toggleShowHideYAxis('stv-line-chart')">
           <label for="hideY">Hide Entire Y-axis</label>
       </div>
+      <div class="control-item">
+        <label for="yTickSize" class="select">Tick Size / Length</label>
+        <select name="y-tick-size" id="yTickSize" onChange="selectYTickSize('stv-line-chart')">
+          <option value="2" selected>2</option>
+          <option value="4">4</option>
+          <option value="10">10</option>
+          <option value="12">12</option>
+          <option value="16">16</option>
+        </select>
+      </div>
 
       <!-- miscellaneous options -->
       <div class="control-category">Options</div>
-
-      <div class="control-item">
-        <input type="checkbox" name="show-legend" id="showLegend" onClick="toggleLegend('stv-line-chart')">
-          <label for="showLegend">Legend</label>
-      </div>
 
       <div class="control-item">
         <input type="checkbox" name="show-gridlines" id="showGridlines"
@@ -93,62 +108,53 @@
       </div>
 
       <div class="control-item">
-        <input type="checkbox" name="show-vertices" id="showVertices" checked
-          onClick="toggleVertices('stv-line-chart')">
-          <label for="showVertices">Vertices</label>
-      </div>
-
-      <div class="control-item">
         <input type="checkbox" name="inverse" id="inverse" onClick="toggleInverse('stv-line-chart')">
         <label for="inverse">Inverse</label>
       </div>
 
       <div class="control-item">
-        <label for="interpolation" class="select">Line Interpolation</label>
-        <select name="interp" id="interpolation" onChange="selectInterpolation('stv-line-chart')">
-          <option value="linear" selected>linear</option>
-          <option value="basis">basis</option>
-          <option value="monotone">monotone</option>
-          <option value="step">step</option>
-          <option value="step-before">step before</option>
-          <option value="step-after">step-after</option>
-        </select>
-      </div>
-
-      <!-- top, right, bottom, left margins -->
-      <div class="control-item">
-        <label for="marginTop" class="select">Margin Top</label>
-        <select name="margin_top" id="marginTop" onChange="selectMargin('marginTop', 'stv-line-chart')">
-          <option value="25" selected>25px</option>
-          <option value="50">50px</option>
-          <option value="75">75px</option>
-        </select>
+        <input type="checkbox"
+          name="show-legend"
+          id="showLegend"
+          checked
+          onClick="toggleLegend('stv-line-chart')">
+          <label for="showLegend">Legend</label>
       </div>
 
       <div class="control-item">
-        <label for="marginRight" class="select">Margin Right</label>
-        <select name="margin_right" id="marginRight" onChange="selectMargin('marginRight', 'stv-line-chart')">
-          <option value="25" selected>25px</option>
-          <option value="50">50px</option>
-          <option value="75">75px</option>
+        <input type="checkbox" name="show-vertices" id="showVertices" checked
+          onClick="toggleVertices('stv-line-chart')">
+          <label for="showVertices">Vertices</label>
+      </div>
+
+      <!-- axis stuff -->
+      <div class="control-item">
+        <label for="axisLabelFontSize" class="select">Axis Label Font Size</label>
+        <select name="axis-label-font-size" id="axisLabelFontSize" onChange="selectAxisLabelFontSize('stv-line-chart')">
+           <option value="9">9px</option>
+           <option value="12">12px</option>
+           <option value="14" selected>14px</option>
+           <option value="16">16px</option>
+           <option value="20">20px</option>
         </select>
       </div>
 
       <div class="control-item">
-        <label for="marginBottom" class="select">Margin Bottom</label>
-        <select name="margin-bottom" id="marginBottom" onChange="selectMargin('marginBottom', 'stv-line-chart')">
-          <option value="25" selected>25px</option>
-          <option value="50">50px</option>
-          <option value="75">75px</option>
+        <label for="axisTickFontFamily" class="select">Axis Tick Font Family</label>
+        <select name="axis-tick-font-family" id="axisTickFontFamily" onChange="selectAxisTickFontFamily('stv-line-chart')">
+          <option value="sans" selected>sans-serif</option>
+          <option value="serif">serif</option>
+          <option value="monospace">monospace</option>
         </select>
       </div>
 
       <div class="control-item">
-        <label for="marginLeft" class="select">Margin Left</label>
-        <select name="margin_left" id="marginLeft" onChange="selectMargin('marginLeft', 'stv-line-chart')">
-          <option value="25" selected>25px</option>
-          <option value="50">50px</option>
-          <option value="75">75px</option>
+        <label for="axisTickFontSize" class="select">Axis Tick Font Size</label>
+        <select name="axis-tick-font-size" id="axisTickFontSize" onChange="selectAxisTickFontSize('stv-line-chart')">
+          <option value="8">8px</option>
+          <option value="9">9px</option>
+          <option value="10" selected>10px</option>
+          <option value="12">12px</option>
         </select>
       </div>
 
@@ -167,57 +173,70 @@
         </select>
       </div>
 
-      <!-- axis label font size -->
       <div class="control-item">
-        <label for="axisLabelFontSize" class="select">Axis Label Font Size</label>
-        <select name="axis-label-font-size" id="axisLabelFontSize" onChange="selectAxisLabelFontSize('stv-line-chart')">
-           <option value="9">9px</option>
-           <option value="12">12px</option>
-           <option value="14" selected>14px</option>
-           <option value="16">16px</option>
-           <option value="20">20px</option>
-        </select>
-      </div>
-
-      <!-- tick stuff -->
-      <div class="control-item">
-        <label for="axisTickFontSize" class="select">Axis Tick Font Size</label>
-        <select name="axis-tick-font-size" id="axisTickFontSize" onChange="selectAxisTickFontSize('stv-line-chart')">
-          <option value="8">8px</option>
-          <option value="9">9px</option>
-          <option value="10" selected>10px</option>
-          <option value="12">12px</option>
+        <label for="legendFontSize" class="select">Legend Font Size</label>
+        <select name="legend_font_size" id="legendFontSize" onChange="selectLegendFontSize('stv-line-chart')">
+          <option value="10">10px</option>
+          <option value="12" selected>12px</option>
+          <option value="14">14px</option>
         </select>
       </div>
 
       <div class="control-item">
-        <label for="axisTickFontFamily" class="select">Axis Tick Font Family</label>
-        <select name="axis-tick-font-family" id="axisTickFontFamily" onChange="selectAxisTickFontFamily('stv-line-chart')">
-          <option value="sans" selected>sans-serif</option>
-          <option value="serif">serif</option>
-          <option value="monospace">monospace</option>
+        <label for="interpolation" class="select">Line Interpolation</label>
+        <select name="interp" id="interpolation" onChange="selectInterpolation('stv-line-chart')">
+          <option value="linear" selected>linear</option>
+          <option value="basis">basis</option>
+          <option value="monotone">monotone</option>
+          <option value="step">step</option>
+          <option value="step-before">step before</option>
+          <option value="step-after">step-after</option>
         </select>
       </div>
 
       <div class="control-item">
-        <label for="xTickSize" class="select">X-Axis Tick Size</label>
-        <select name="x-tick-size" id="xTickSize" onChange="selectXTickSize('stv-line-chart')">
-          <option value="2" selected>2</option>
-          <option value="4">4</option>
-          <option value="10">10</option>
-          <option value="12">12</option>
-          <option value="16">16</option>
+        <label for="lineStroke" class="select">Line Stroke</label>
+        <select name="line_stroke" id="lineStroke" onChange="selectLineStroke('stv-line-chart')">
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+
+      <!-- top, right, bottom, left margins -->
+      <div class="control-item">
+        <label for="marginBottom" class="select">Margin Bottom</label>
+        <select name="margin-bottom" id="marginBottom" onChange="selectMargin('marginBottom', 'stv-line-chart')">
+          <option value="25" selected>25px</option>
+          <option value="50">50px</option>
+          <option value="75">75px</option>
         </select>
       </div>
 
       <div class="control-item">
-        <label for="yTickSize" class="select">Y-Axis Tick Size</label>
-        <select name="y-tick-size" id="yTickSize" onChange="selectYTickSize('stv-line-chart')">
-          <option value="2" selected>2</option>
-          <option value="4">4</option>
-          <option value="10">10</option>
-          <option value="12">12</option>
-          <option value="16">16</option>
+        <label for="marginLeft" class="select">Margin Left</label>
+        <select name="margin_left" id="marginLeft" onChange="selectMargin('marginLeft', 'stv-line-chart')">
+          <option value="25" selected>25px</option>
+          <option value="50">50px</option>
+          <option value="75">75px</option>
+        </select>
+      </div>
+
+      <div class="control-item">
+        <label for="marginRight" class="select">Margin Right</label>
+        <select name="margin_right" id="marginRight" onChange="selectMargin('marginRight', 'stv-line-chart')">
+          <option value="25" selected>25px</option>
+          <option value="50">50px</option>
+          <option value="75">75px</option>
+        </select>
+      </div>
+
+      <div class="control-item">
+        <label for="marginTop" class="select">Margin Top</label>
+        <select name="margin_top" id="marginTop" onChange="selectMargin('marginTop', 'stv-line-chart')">
+          <option value="25" selected>25px</option>
+          <option value="50">50px</option>
+          <option value="75">75px</option>
         </select>
       </div>
     </div>
@@ -246,6 +265,7 @@
 
       <div class="chart">
         <stv-line-chart chart-id="myStvLineChart"
+          legend
           margin-left="50"
           margin-right="50"
           responsive

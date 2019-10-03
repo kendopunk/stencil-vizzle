@@ -442,7 +442,6 @@ export class StvLineChart {
       textSel.enter()
         .append('text')
         .style('opacity', 0)
-        .style('font-size', `${this.legendFontSize}px`)
         .on('mouseover', (_d, i) => {
           // highlight matches
           this.gCanvas.selectAll('path.main')
@@ -475,6 +474,7 @@ export class StvLineChart {
         })
         .merge(textSel)
         .attr('class', calculateLegendLabelClass(this.inverse))
+        .style('font-size', `${this.legendFontSize}px`)
         .text((d) => {
           return d[this.legendMetric] || ''
         })
@@ -486,10 +486,7 @@ export class StvLineChart {
         .transition(t50)
         .style('opacity')
     } else {
-      this.gLegend.selectAll('line.legend-line')
-        //.style('opacity', 0)
-        .remove()
-
+      this.gLegend.selectAll('line.legend-line').remove()
       this.gLegend.selectAll('text').remove()
     }
   }
