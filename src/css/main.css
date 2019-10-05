@@ -101,12 +101,17 @@ a:hover {
 }
 
 #toc > .toc-link-container {
-  padding: 20px;
+  padding-left: 20px;
 }
 
 #toc > .toc-link-container p {
   margin: 10px 0px;
 }
+
+#toc > .toc-link-container p a {
+  font-size: 20px;
+}
+
 
 #wrapper {
   width: 100%;

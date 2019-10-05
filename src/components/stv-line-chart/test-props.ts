@@ -41,7 +41,7 @@ export default {
   marginLeft: 25,
   marginRight: 25,
   marginTop: 25,
-  responsive: true,
+  responsive: false,
   strokeWidth: 1,
   tooltips: true,
   vertices: true,

@@ -36,7 +36,7 @@ export default {
   maxBarWidth: 75,
   ordinalMetric: 'ticker',
   orientation: 'horizontal',
-  responsive: true,
+  responsive: false,
   tooltips: true,
   xLabel: 'Ticker',
   xTickSize: 2,
