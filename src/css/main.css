@@ -161,6 +161,11 @@ button.action {
   height: 28px;
   border-radius: 4px;
   padding: 0px 10px;
+  cursor: pointer;
+}
+
+button.action:hover {
+  background: #006600;
 }
 
 div.btn-item, div.cbx-item, div.select-item {
