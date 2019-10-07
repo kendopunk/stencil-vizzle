@@ -2,5 +2,44 @@
  * src/components/stv-line-chart/test-props.ts
  */
 export default {
-  foo: 'bar'
+  axisLabelFontSize: 14,
+  axisTickFontFamily: 'sans',
+  axisTickFontSize: 10,
+  barStroke: 'transparent',
+  barStrokeWidth: 1,
+  canvasHeight: 300,
+  canvasWidth: 500,
+  chartData: [
+    {ticker: 'KO', name: 'Coca-Cola', value: 52.36},
+    {ticker: 'BZH', name: 'Beazer Homes', value: 11.11},
+    {ticker: 'ADM', name: 'Arch-Dan-Mid', value: 37.17},
+    {ticker: 'ABCB', name: 'Ameris Bancorp', value: 36.44},
+    {ticker: 'ORCL', name: 'Oracle', value: 53.75},
+    {ticker: 'PLNT', name: 'Planet Fitness', value: 77.27}
+  ],
+  chartId: 'my-stv-bar-chart',
+  colorScheme: 'category10',
+  gridlines: true,
+  hideXAxis: false,
+  hideXTicks: false,
+  hideYAxis: false,
+  hideYTicks: false,
+  inverse: false,
+  legend: true,
+  legendMetric: 'name',
+  legendWidth: 150,
+  linearMetric: 'value',
+  marginBottom: 25,
+  marginLeft: 25,
+  marginRight: 25,
+  marginTop: 25,
+  maxBarWidth: 75,
+  ordinalMetric: 'ticker',
+  orientation: 'horizontal',
+  responsive: false,
+  tooltips: true,
+  xLabel: 'Ticker',
+  xTickSize: 2,
+  yLabel: 'Price',
+  yTickSize: 2
 }

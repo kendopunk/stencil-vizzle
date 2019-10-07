@@ -42,5 +42,10 @@ export const config: Config = {
   ],
   plugins: [
     sass()
-  ]
+  ],
+  testing: {
+    collectCoverageFrom: [
+      "src/utils/**/*.ts"
+    ]
+  }
 }

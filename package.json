@@ -12,29 +12,31 @@
   "unpkg": "dist/stencil-vizzle/stencil-vizzle.js",
   "files": [
     "dist/",
-    "loader/"
+    "loader/",
+    "demo/"
   ],
   "scripts": {
     "build": "stencil build --docs",
-    "demo": "npm run build && http-server ./demo",
+    "coverage": "stencil test --spec --coverage",
+    "demo": "npm run build && node_modules/.bin/http-server ./demo -a localhost -p 5150 -o",
+    "e2e": "stencil test --e2e",
+    "e2e:watch": "stencil test --e2e --watchAll",
     "lint": "npm run lint:stencil",
     "lint:stencil": "tslint --project tsconfig.json",
     "start": "stencil build --dev --watch --serve",
-    "test": "stencil test --spec --e2e",
-    "test:e2e": "stencil test --e2e",
-    "test:unit": "stencil test --spec",
-    "test:unit:watch": "stencil test --spec --watchAll",
-    "test.watch": "stencil test --spec --e2e --watchAll"
+    "test": "stencil test --spec",
+    "test:watch": "stencil test --spec --watchAll"
   },
   "devDependencies": {
     "@stencil/core": "^1.5.1",
     "@stencil/sass": "^1.0.1",
     "@types/jest": "24.0.15",
-    "@types/puppeteer": "1.12.4",
+    "@types/puppeteer": "1.20.1",
     "http-server": "^0.11.1",
     "jest": "24.8.0",
     "jest-cli": "24.8.0",
-    "puppeteer": "1.17.0",
+    "kebab-case": "^1.0.0",
+    "puppeteer": "1.20.0",
     "tslint": "^5.20.0",
     "tslint-ionic-rules": "0.0.21",
     "tslint-stencil": "^1.0.1"

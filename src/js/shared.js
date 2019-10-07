@@ -14,6 +14,16 @@ var vertices = true;
 /****************************************
  * shared functions
  ****************************************/
+function changeXLabel(selector, value) {
+  getChartEl(selector).xLabel = value;
+  document.querySelector('#xLabelInput').value = '';
+}
+
+function changeYLabel(selector, value) {
+  getChartEl(selector).yLabel = value;
+  document.querySelector('#yLabelInput').value = '';
+}
+
 function getChartEl(id) {
   return document.querySelector(id);
 }
@@ -57,6 +67,11 @@ function selectInterpolation(selector) {
   getChartEl(selector).interpolation = val;
 }
 
+function selectLegendFontSize(selector) {
+  var val = document.querySelector('#legendFontSize').value
+  getChartEl(selector).legendFontSize = val;
+}
+
 function selectLinearDomain(selector) {
   var val = document.querySelector('#linearDomain').value
   var el = getChartEl(selector)
@@ -66,6 +81,11 @@ function selectLinearDomain(selector) {
     el.linearTickFormat = 'localestring'
   }
   getChartEl(selector).linearDomain = val;
+}
+
+function selectLineStroke(selector) {
+  var val = document.querySelector('#lineStroke').value
+  getChartEl(selector).strokeWidth = val;
 }
 
 function selectMargin(marginAttribute, selector) {
@@ -123,14 +143,14 @@ function toggleOrientation(selector) {
       yLabel = 'Year'
     } else {
       xLabel = 'Price'
-      yLabel = 'Stock Ticker'
+      yLabel = 'Ticker Symbol'
     }
   } else {
     if (selector === 'stv-stacked-bar-chart') {
       xLabel = 'Year';
       yLabel = 'Production'
     } else {
-      xLabel = 'Stock Ticker'
+      xLabel = 'Ticker Symbol'
       yLabel = 'Price'
     }
   }

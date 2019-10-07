@@ -1,7 +1,7 @@
 /**
- * src/utils/tickformat.spec.ts
+ * src/utils/tests/tickformat.spec.ts
  */
-import TickFormat from './tickformat'
+import TickFormat from '../tickformat'
 
 describe('TickFormat() for numerics', () => {
 
@@ -11,6 +11,7 @@ describe('TickFormat() for numerics', () => {
   // "raw"
   it('verifies the "raw" formatting code', () => {
     expect(TickFormat(num, 'raw')).toEqual(num)
+    expect(TickFormat(num)).toEqual(num)  // raw = default
     expect(TickFormat(stringnum, 'raw')).toEqual(stringnum)
     expect(TickFormat('hello', 'raw')).toEqual('hello')
     expect(TickFormat(Infinity, 'raw')).toEqual(Infinity)
@@ -42,6 +43,33 @@ describe('TickFormat() for numerics', () => {
     expect(TickFormat('hello', 'localestring2d')).toEqual('hello')
     expect(TickFormat(Infinity, 'localestring2d')).toEqual(Infinity)
     expect(TickFormat(null, 'localestring2d')).toEqual('0.00')
+  })
+
+  // percent
+  it('verifies the "percent" formatting code', () => {
+    expect(TickFormat(num, 'percent')).toEqual('1,234.568%')
+    expect(TickFormat(stringnum, 'percent')).toEqual('1,234.568%')
+    expect(TickFormat('hello', 'percent')).toEqual('hello')
+    expect(TickFormat(Infinity, 'percent')).toEqual(Infinity)
+    expect(TickFormat(null, 'percent')).toEqual('0%')
+  })
+
+  // percent1d
+  it('verifies the "percent1d" formatting code', () => {
+    expect(TickFormat(num, 'percent1d')).toEqual('1,234.6%')
+    expect(TickFormat(stringnum, 'percent1d')).toEqual('1,234.6%')
+    expect(TickFormat('hello', 'percent1d')).toEqual('hello')
+    expect(TickFormat(Infinity, 'percent1d')).toEqual(Infinity)
+    expect(TickFormat(null, 'percent1d')).toEqual('0.0%')
+  })
+
+  // percent2d
+  it('verifies the "percent2d" formatting code', () => {
+    expect(TickFormat(num, 'percent2d')).toEqual('1,234.57%')
+    expect(TickFormat(stringnum, 'percent2d')).toEqual('1,234.57%')
+    expect(TickFormat('hello', 'percent2d')).toEqual('hello')
+    expect(TickFormat(Infinity, 'percent2d')).toEqual(Infinity)
+    expect(TickFormat(null, 'percent2d')).toEqual('0.00%')
   })
 
   // USD

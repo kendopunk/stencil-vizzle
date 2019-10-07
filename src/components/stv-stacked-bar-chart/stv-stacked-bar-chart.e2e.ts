@@ -1,6 +1,7 @@
 /**
- * src/components/stv-line-chart/stv-line-chart.e2e.ts
+ * src/components/stv-stacked-bar-chart/stv-stacked-bar-chart.e2e.ts
  */
+import props from './test-props'
 import {
   E2EElement,
   E2EPage,
@@ -8,21 +9,18 @@ import {
 } from '@stencil/core/testing'
 import kebabCase from 'kebab-case'
 
-import props from './test-props'
-
 const getContentElement = async(element: E2EElement) => {
   return await element.shadowRoot.querySelector('div')
 }
 
-describe('<stv-line-chart> e2e test', () => {
+describe('<stv-stacked-bar-chart> e2e test', () => {
   let page: E2EPage
   let element: E2EElement
   let contentElement: any
-  const tagName: string = 'stv-line-chart'
+  const tagName: string = 'stv-stacked-bar-chart'
 
   beforeEach(async() => {
-
-    let content = '<div><stv-line-chart '
+    let content = '<div><stv-stacked-bar-chart '
     for (const [key, value] of Object.entries(props)) {
       if(value !== false) {
         if (value === true) {
@@ -34,29 +32,31 @@ describe('<stv-line-chart> e2e test', () => {
         }
       }
     }
-    content = content + '></stv-line-chart></div>'
+    content = content + '></stv-stacked-bar-chart></div>'
 
     page = await newE2EPage()
     await page.setContent(content)
-    element = await page.find('stv-line-chart')
+    element = await page.find(tagName)
     contentElement = await element.shadowRoot.querySelector('div')
   })
 
   /**
-   * basic render
+   * generic render test
    */
   it('renders without crashing', () => {
     expect(element).toHaveClass('hydrated')
   })
 
   /**
-   * applying "chartData"
+   * chartData
    */
   it('correctly handles a new "chartData" attribute', async() => {
-    await page.$eval('stv-line-chart', (elm: any, {chartData}) => {
+    await page.$eval(tagName, (elm: any, {chartData}) => {
       elm.chartData = chartData
     }, props)
+
     await page.waitForChanges()
+
     contentElement = await getContentElement(element)
     // console.log(contentElement.innerHTML)
 
@@ -68,40 +68,35 @@ describe('<stv-line-chart> e2e test', () => {
     expect(svgEl).toBeDefined()
     expect(svgEl.getAttribute('height')).toBe(props.canvasHeight.toString())
     expect(svgEl.getAttribute('width')).toBe(props.canvasWidth.toString())
-    expect(svgEl.childNodes.length).toEqual(2)
+    expect(svgEl.childNodes.length).toBe(2)
 
     ////////////////////////////////////////
     // <g class="canvas">
-    // 13 child nodes: 3 <g>, 2 <path>, 2 <text> for axis labels
-    // and 6 vertex circles
+    // 3 <g> - grid, x-axis, y-axis
+    // 3 g.layer groups (US, Soviet Union, Germany)
+    // 2 axis label <text> elements
+    // = 8 child nodes
     ////////////////////////////////////////
     const canvasEl = contentElement.querySelector('g.canvas')
     expect(canvasEl).toBeDefined()
-    expect(canvasEl.childNodes.length).toEqual(13)
+    expect(canvasEl.childNodes.length).toBe(8)
 
     ////////////////////////////////////////
     // <g class="legend">
-    // number of child nodes = chartData.length * 2
     ////////////////////////////////////////
     const legendEl = contentElement.querySelector('g.legend')
     expect(legendEl).toBeDefined()
-    expect(legendEl.childNodes.length).toBe(props.chartData.length * 2)
+    expect(legendEl.childNodes.length).toBe(6)
+    expect(legendEl.querySelectorAll('line').length).toBe(3)
+    expect(legendEl.querySelectorAll('text').length).toBe(3)
 
-    ////////////////////////////////////////
-    // <path class="main">
-    // number of path elements = chartData.length
-    ////////////////////////////////////////
-    const pathEl = contentElement.querySelectorAll('path.main')
-    expect(pathEl).toBeDefined()
-    expect(pathEl.length).toBe(props.chartData.length)
+    const legendLineEl = contentElement.querySelectorAll('line.legend-line')
+    expect(legendLineEl).toBeDefined()
+    expect(legendLineEl.length).toBe(3)
 
-    ////////////////////////////////////////
-    // <circle class="vertex">
-    // total count = total number of x/y objects
-    ////////////////////////////////////////
-    const vertexEl = contentElement.querySelectorAll('circle.vertex')
-    expect(vertexEl).toBeDefined()
-    expect(vertexEl.length).toBe(6)
+    const legendTextEl = contentElement.querySelectorAll('text.legend-label')
+    expect(legendTextEl).toBeDefined()
+    expect(legendTextEl.length).toBe(3)
 
     ////////////////////////////////////////
     // X + Y axis labels
@@ -115,21 +110,9 @@ describe('<stv-line-chart> e2e test', () => {
     expect(yLabelEl.textContent).toEqual(props.yLabel)
 
     ////////////////////////////////////////
-    // legend lines + text elements
-    ////////////////////////////////////////
-    const legendLineEl = contentElement.querySelectorAll('line.legend-line')
-    expect(legendLineEl).toBeDefined()
-    expect(legendLineEl.length).toBe(props.chartData.length)
-
-    const legendTextEl = contentElement.querySelectorAll('text.legend-label')
-    expect(legendTextEl).toBeDefined()
-    expect(legendTextEl.length).toBe(props.chartData.length)
-
-    ////////////////////////////////////////
     // gridlines
     ////////////////////////////////////////
-    expect(contentElement.querySelectorAll('line.x-gridline').length).toBeGreaterThan(0)
-    expect(contentElement.querySelectorAll('line.y-gridline').length).toBeGreaterThan(0)
+    expect(contentElement.querySelectorAll('line.gridline').length).toBeGreaterThan(0)
 
     ////////////////////////////////////////
     // tooltip <div>
@@ -141,15 +124,14 @@ describe('<stv-line-chart> e2e test', () => {
    * gridlines FALSE
    */
   it('turns gridlines off', async() => {
-    await page.$eval('stv-line-chart', (elm: any, {chartData}) => {
+    await page.$eval(tagName, (elm: any, {chartData}) => {
       elm.chartData = chartData
       elm.gridlines = false
     }, props)
     await page.waitForChanges()
     contentElement = await getContentElement(element)
 
-    expect(contentElement.querySelectorAll('line.x-gridline').length).toBe(0)
-    expect(contentElement.querySelectorAll('line.y-gridline').length).toBe(0)
+    expect(contentElement.querySelectorAll('line.gridline').length).toBe(0)
   })
 
   /**
@@ -157,7 +139,7 @@ describe('<stv-line-chart> e2e test', () => {
    * This removes all g.tick group elements
    */
   it('hides the X and Y axis ticks', async () => {
-    await page.$eval('stv-line-chart', (elm: any, {chartData}) => {
+    await page.$eval(tagName, (elm: any, {chartData}) => {
       elm.chartData = chartData
       elm.hideXTicks = true
       elm.hideYTicks = true
@@ -172,7 +154,7 @@ describe('<stv-line-chart> e2e test', () => {
    * legend FALSE
    */
   it('hides the legend', async() => {
-    await page.$eval('stv-line-chart', (elm: any, {chartData}) => {
+    await page.$eval(tagName, (elm: any, {chartData}) => {
       elm.chartData = chartData
       elm.hideXAxis = false
       elm.hideYAxis = false
@@ -185,24 +167,10 @@ describe('<stv-line-chart> e2e test', () => {
   })
 
   /**
-   * vertices FALSE
-   */
-  it('hides the vertices', async() => {
-    await page.$eval('stv-line-chart', (elm: any, {chartData}) => {
-      elm.chartData = chartData
-      elm.vertices = false
-    }, props)
-    await page.waitForChanges()
-    contentElement = await getContentElement(element)
-
-    expect(contentElement.querySelectorAll('circle.vertex').length).toBe(0)
-  })
-
-  /**
    * hide X and Y axis labels, set to ""
    */
   it('hides the X and Y axis labels', async() => {
-    await page.$eval('stv-line-chart', (elm: any, {chartData}) => {
+    await page.$eval(tagName, (elm: any, {chartData}) => {
       elm.chartData = chartData
       elm.xLabel = ''
       elm.yLabel = ''
@@ -218,7 +186,7 @@ describe('<stv-line-chart> e2e test', () => {
    * repopulate X and Y axis labels
    */
   it('repopulates the X and Y axis labels', async() => {
-    await page.$eval('stv-line-chart', (elm: any, {chartData}) => {
+    await page.$eval(tagName, (elm: any, {chartData}) => {
       elm.chartData = chartData
       elm.xLabel = 'Foo'
       elm.yLabel = 'Bar'
@@ -234,7 +202,7 @@ describe('<stv-line-chart> e2e test', () => {
    * changing tick format size
    */
   it('handles tick size changes', async() => {
-    await page.$eval('stv-line-chart', (elm: any, {chartData}) => {
+    await page.$eval(tagName, (elm: any, {chartData}) => {
       elm.chartData = chartData
       elm.xTickSize = 4
       elm.yTickSize = 6
@@ -257,7 +225,7 @@ describe('<stv-line-chart> e2e test', () => {
    * going inverse
    */
   it('handles the "inverse" prop', async() => {
-    await page.$eval('stv-line-chart', (elm: any, {chartData}) => {
+    await page.$eval(tagName, (elm: any, {chartData}) => {
       elm.chartData = chartData
       elm.inverse = true
     }, props)
@@ -265,8 +233,7 @@ describe('<stv-line-chart> e2e test', () => {
     contentElement = await getContentElement(element)
 
     expect(contentElement.querySelectorAll('g.axis-inverse').length).toBe(2)
-    expect(contentElement.querySelectorAll('text.legend-label-inverse').length).toBe(props.chartData.length)
+    expect(contentElement.querySelectorAll('text.legend-label-inverse').length).toBe(3)
     expect(contentElement.querySelectorAll('text.axis-label-inverse').length).toBe(2)
   })
-
 })
