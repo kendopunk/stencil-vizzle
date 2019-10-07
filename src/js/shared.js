@@ -14,6 +14,16 @@ var vertices = true;
 /****************************************
  * shared functions
  ****************************************/
+function changeXLabel(selector, value) {
+  getChartEl(selector).xLabel = value;
+  document.querySelector('#xLabelInput').value = '';
+}
+
+function changeYLabel(selector, value) {
+  getChartEl(selector).yLabel = value;
+  document.querySelector('#yLabelInput').value = '';
+}
+
 function getChartEl(id) {
   return document.querySelector(id);
 }
@@ -133,14 +143,14 @@ function toggleOrientation(selector) {
       yLabel = 'Year'
     } else {
       xLabel = 'Price'
-      yLabel = 'Stock Ticker'
+      yLabel = 'Ticker Symbol'
     }
   } else {
     if (selector === 'stv-stacked-bar-chart') {
       xLabel = 'Year';
       yLabel = 'Production'
     } else {
-      xLabel = 'Stock Ticker'
+      xLabel = 'Ticker Symbol'
       yLabel = 'Price'
     }
   }

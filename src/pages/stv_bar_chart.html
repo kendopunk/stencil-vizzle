@@ -12,7 +12,7 @@
   <script src="../js/yAxis.js"></script>
   <script src="../js/_barChart.js"></script>
 </head>
-<body>
+<body onLoad="addListeners()">
 
   <!-- header -->
   <div id="header">
@@ -68,6 +68,10 @@
           <option value="16">16</option>
         </select>
       </div>
+      <div class="control-item">
+        <label for="xLabelInput" class="select">Label</label>
+        <input type="text" placeholder="Enter text" id="xLabelInput" />
+      </div>
 
       <!-- Y axis -->
       <div class="control-category">Y-axis</div>
@@ -95,6 +99,10 @@
           <option value="12">12</option>
           <option value="16">16</option>
         </select>
+      </div>
+      <div class="control-item">
+        <label for="yLabelInput" class="select">Label</label>
+        <input type="text" placeholder="Enter text" id="yLabelInput" />
       </div>
 
       <!-- miscellaneous options -->
@@ -255,7 +263,7 @@
     <div id="chart-container">
       <div class="page-title">&lt;stv-bar-chart&gt;</div>
 
-      <p>Demonstrating a bar chart with stock tickers / prices.</p>
+      <p>Demonstrating a bar chart with stock ticker symbols / prices.</p>
 
       <div class="hoz-group">
         <div class="btn-item">
@@ -284,7 +292,7 @@
           ordinal-metric="ticker"
           responsive
           tooltips
-          x-label="Stock Ticker"
+          x-label="Ticker Symbol"
           y-label="Price"
         ></stv-bar-chart>
       </div>
@@ -298,5 +306,19 @@
   document.addEventListener('stv-bar-chart-loaded', function(evt) {
     selectNumBars(3);
   })
+
+  function addListeners() {
+    document.getElementById('xLabelInput').addEventListener('keyup', function(evt) {
+      if(evt.keyCode === 13) {
+        changeXLabel('stv-bar-chart', evt.target.value)
+      }
+    })
+
+    document.getElementById('yLabelInput').addEventListener('keyup', function(evt) {
+      if(evt.keyCode === 13) {
+        changeYLabel('stv-bar-chart', evt.target.value)
+      }
+    })
+  }
 </script>
 </html>

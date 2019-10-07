@@ -12,7 +12,7 @@
   <script src="../js/yAxis.js"></script>
   <script src="../js/_stackedBarChart.js"></script>
 </head>
-<body>
+<body onLoad="addListeners()">
 
   <!-- header -->
   <div id="header">
@@ -68,6 +68,10 @@
           <option value="16">16</option>
         </select>
       </div>
+      <div class="control-item">
+        <label for="xLabelInput" class="select">Label</label>
+        <input type="text" placeholder="Enter text" id="xLabelInput" />
+      </div>
 
       <!-- Y axis -->
       <div class="control-category">Y-axis</div>
@@ -95,6 +99,10 @@
           <option value="12">12</option>
           <option value="16">16</option>
         </select>
+      </div>
+      <div class="control-item">
+        <label for="yLabelInput" class="select">Label</label>
+        <input type="text" placeholder="Enter text" id="yLabelInput" />
       </div>
 
       <!-- miscellaneous options -->
@@ -342,5 +350,19 @@
   document.addEventListener('stv-stacked-bar-chart-loaded', function(evt) {
     generateStackedBarChartData()
   })
+
+  function addListeners() {
+    document.getElementById('xLabelInput').addEventListener('keyup', function(evt) {
+      if(evt.keyCode === 13) {
+        changeXLabel('stv-stacked-bar-chart', evt.target.value)
+      }
+    })
+
+    document.getElementById('yLabelInput').addEventListener('keyup', function(evt) {
+      if(evt.keyCode === 13) {
+        changeYLabel('stv-stacked-bar-chart', evt.target.value)
+      }
+    })
+  }
 </script>
 </html>

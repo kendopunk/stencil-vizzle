@@ -12,7 +12,7 @@
   <script src="../js/yAxis.js"></script>
   <script src="../js/_lineChart.js"></script>
 </head>
-<body>
+<body onLoad="addListeners()">
 
   <!-- header -->
   <div id="header">
@@ -69,6 +69,10 @@
           <option value="16">16</option>
         </select>
       </div>
+      <div class="control-item">
+        <label for="xLabelInput" class="select">Label</label>
+        <input type="text" placeholder="Enter text" id="xLabelInput" />
+      </div>
 
       <!-- Y axis -->
       <div class="control-category">Y-axis</div>
@@ -96,6 +100,10 @@
           <option value="12">12</option>
           <option value="16">16</option>
         </select>
+      </div>
+      <div class="control-item">
+        <label for="yLabelInput" class="select">Label</label>
+        <input type="text" placeholder="Enter text" id="yLabelInput" />
       </div>
 
       <!-- miscellaneous options -->
@@ -283,5 +291,19 @@
   document.addEventListener('stv-line-chart-loaded', function(evt) {
     document.querySelector('stv-line-chart').chartData = generateLineChartData(3)
   })
+
+  function addListeners() {
+    document.getElementById('xLabelInput').addEventListener('keyup', function(evt) {
+      if(evt.keyCode === 13) {
+        changeXLabel('stv-line-chart', evt.target.value)
+      }
+    })
+
+    document.getElementById('yLabelInput').addEventListener('keyup', function(evt) {
+      if(evt.keyCode === 13) {
+        changeYLabel('stv-line-chart', evt.target.value)
+      }
+    })
+  }
 </script>
 </html>

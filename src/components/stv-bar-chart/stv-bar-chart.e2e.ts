@@ -21,7 +21,6 @@ describe('<stv-bar-chart> e2e test', () => {
   const tagName: string = 'stv-bar-chart'
 
   beforeEach(async() => {
-
     let content = '<div><stv-bar-chart '
     for (const [key, value] of Object.entries(props)) {
       if(value !== false) {
@@ -64,18 +63,18 @@ describe('<stv-bar-chart> e2e test', () => {
     expect(svgEl).toBeDefined()
     expect(svgEl.getAttribute('height')).toBe(props.canvasHeight.toString())
     expect(svgEl.getAttribute('width')).toBe(props.canvasWidth.toString())
-    expect(svgEl.childNodes.length).toEqual(2)
+    expect(svgEl.childNodes.length).toBe(2)
 
     ////////////////////////////////////////
     // <g class="canvas">
-    // 3 <g> - x-axis, y-axis, legend, and grid
+    // 4 <g> - x-axis, y-axis, legend, and grid
     // 5 <rect>
     // 2 <text> for axis labels
     // = 11 child nodes
     ////////////////////////////////////////
     const canvasEl = contentElement.querySelector('g.canvas')
     expect(canvasEl).toBeDefined()
-    expect(canvasEl.childNodes.length).toEqual(11)
+    expect(canvasEl.childNodes.length).toBe(11)
 
     ////////////////////////////////////////
     // <g class="legend">

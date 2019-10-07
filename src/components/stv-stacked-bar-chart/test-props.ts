@@ -59,7 +59,7 @@ export default {
   maxBarWidth: 75,
   ordinalMetric: 'year',
   orientation: 'vertical',
-  responsive: true,
+  responsive: false,
   seriesMetric: 'combatant',
   tooltips: true,
   xLabel: 'Year',
