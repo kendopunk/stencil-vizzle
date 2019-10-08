@@ -5,8 +5,10 @@
 import {
   Component,
   h,
-  Element
+  Element,
+  Listen
 } from '@stencil/core'
+import { event } from 'd3'
 import { scaleOrdinal } from 'd3-scale'
 import {
   schemeCategory10,
@@ -19,6 +21,16 @@ import {
 import { select } from 'd3-selection'
 import { arc, pie } from 'd3-shape'
 
+// utilities
+import { calculateLegendLabelClass } from '../../utils/css_utils'
+import TickFormat from '../../utils/tickformat'
+import {
+  t25,
+  t50,
+  t100,
+  t500
+} from '../../utils/transition_definitions'
+
 @Component({
   tag: 'stv-pie-chart',
   styleUrl: 'stv-pie-chart.scss',
@@ -26,6 +38,7 @@ import { arc, pie } from 'd3-shape'
 })
 
 export class StvPieChart {
+  arcObject: any
   colorScale: any
   colorSchemes: any = {
     category10: schemeCategory10,
@@ -37,7 +50,10 @@ export class StvPieChart {
     black: ['#000000'],
     gray: ['#888888']
   }
-  pieFn: any = pie()
+  defaultArcOpacity: number = 0.8
+  defaultLineOpacity: number = 0.7
+  pieLayout: any = pie()
+  spaceBetweenPieAndLegend: number = 25
 
   @Element() private chartElement: HTMLElement
 
@@ -53,11 +69,21 @@ export class StvPieChart {
   @Prop() chartId: string = ''
   @Prop() colorScheme: string = 'category10'
   @Prop() innerRadius: number = 0
+  @Prop() inverse: boolean = false
   @Prop() legend: boolean = false
   @Prop() legendFontSize: number = 12
   @Prop() legendMetric: string = 'label'
   @Prop() legendWidth: number = 125
+  @Prop({reflectToAttr: true}) marginBottom: number = 0
+  @Prop({reflectToAttr: true}) marginLeft: number = 0
+  @Prop({reflectToAttr: true}) marginRight: number = 0
+  @Prop({reflectToAttr: true}) marginTop: number = 0
   @Prop() responsive: boolean = false
+  @Prop() stroke: string = 'transparent'
+  @Prop() strokeWidth: number = 1
+  @Prop() tooltips: boolean = false
+  @Prop() valueFormat: string = 'raw'
+  @Prop() valueMetric: string = 'value'
 
   @Event({
     eventName: 'stv-pie-chart-loaded',
@@ -122,132 +148,205 @@ export class StvPieChart {
   ////////////////////////////////////////
   // CLASS METHODS
   ////////////////////////////////////////
+  calculateDrawableHeight(): number {
+    return this.canvasHeight - this.marginTop - this.marginBottom
+  }
+
+  calculateDrawableWidth(): number {
+    let w = this.canvasWidth - this.marginLeft - this.marginRight
+    if (this.legend) {
+      w = w - this.legendWidth - this.spaceBetweenPieAndLegend
+    }
+    return w
+  }
+
   draw(): void {
     this.setColorScale()
+    this.handlePie()
+    this.handleLegend()
+  }
 
-    this.gCanvas.attr('transform', () => {
-      return `translate(${this.canvasWidth/2}, ${this.canvasHeight/2})`
+  /**
+   * @function
+   * Show/hide the legend
+   */
+  handleLegend(): void {
+    const lineIncrement = 25
+
+    // transform "gLegend" grouping
+    this.gLegend.attr('transform', () => {
+      const x = this.canvasWidth - this.legendWidth
+      const y = lineIncrement
+
+      return `translate(${x}, ${y})`
     })
 
+    if (this.legend) {
+      //////////////////////////////
+      // legend lines
+      //////////////////////////////
+      const lineSel = this.gLegend.selectAll('line.legend-line')
+        .data(this.chartData)
 
-    const arcObject = arc()
+      lineSel.exit().remove()
+
+      lineSel.enter()
+        .append('line')
+        .attr('class', 'legend-line')
+        .attr('x', 0)
+        .attr('x2', 10)
+        .style('opacity', 0)
+        .style('stroke-width', 3)
+        .merge(lineSel)
+        .transition(t50)
+        .attr('y1', (_d, i) => {
+          return i * lineIncrement
+        })
+        .attr('y2', (_d, i) => {
+          return i * lineIncrement
+        })
+        .style('stroke', (d, i) => {
+          return d.color || this.colorScale(i)
+        })
+        .transition(t25)
+        .style('opacity', this.defaultLineOpacity)
+
+      //////////////////////////////
+      // legend text
+      //////////////////////////////
+      const textSel = this.gLegend.selectAll('text.legend-label')
+        .data(this.chartData)
+
+      textSel.exit().remove()
+
+      textSel.enter()
+        .append('text')
+        .style('opacity', 0)
+        .on('mouseover', (_d, i) => {
+          this.gCanvas.selectAll('path.wedge')
+            .filter((_e, j) => {
+              return i === j
+            })
+            .style('opacity', 1)
+            .style('stroke-width', this.strokeWidth + 2)
+        })
+        .on('mouseout', (_d, i) => {
+          this.gCanvas.selectAll('path.wedge')
+            .filter((_e, j) => {
+              return i === j
+            })
+            .style('opacity', this.defaultArcOpacity)
+            .style('stroke-width', this.strokeWidth)
+        })
+        .merge(textSel)
+        .attr('class', calculateLegendLabelClass(this.inverse))
+        .style('font-size', `${this.legendFontSize}px`)
+        .text((d) => {
+          return d[this.legendMetric] || ''
+        })
+        .attr('x', 15)
+        .attr('y', (_d, i) => {
+          return i * lineIncrement + 4
+        })
+        .transition(t50)
+        .style('opacity')
+    } else {
+      this.gLegend.selectAll('line.legend-line').remove()
+      this.gLegend.selectAll('text').remove()
+    }
+  }
+
+
+  /**
+   * @function
+   * Handle the arcs and paths
+   */
+  handlePie(): void {
+    // translate gCanvas
+    this.gCanvas.attr('transform', () => {
+      const w = this.calculateDrawableWidth()/2 + (this.marginLeft + this.marginRight)/2
+      const h = this.calculateDrawableHeight()/2 + (this.marginTop + this.marginBottom)/2
+      return `translate(${w}, ${h})`
+    })
+
+    // set the arc object
+    this.arcObject = arc()
       .outerRadius(() => {
-        return Math.min(this.canvasHeight, this.canvasWidth)/2
+        return Math.min(this.calculateDrawableWidth()/2, this.calculateDrawableHeight()/2)
       })
       .innerRadius(() => {
-        return Math.min(Math.min(this.canvasHeight, this.canvasWidth)/2, this.innerRadius)
+        return Math.min(this.calculateDrawableWidth()/2, this.calculateDrawableHeight()/2) * this.innerRadius
       })
 
-    this.pieFn.value((d) => {
-      return d.value
-    })
+    // configure pieLayout generator
+    this.pieLayout.value((d) => {
+      return d[this.valueMetric]
+    }).sort(null)
 
+    ////////////////////////////////////////
+    // JRAT
+    ////////////////////////////////////////
+    // join new arcs with old arcs
     const arcSelection = this.gPie.selectAll('g.arc')
-      .data(this.pieFn(this.chartData))
+      .data(this.pieLayout(this.chartData))
 
-    arcSelection.exit().remove()
+    // remove old arcs gracefully
+    arcSelection.exit()
+      .transition(t100)
+      .style('opacity', 0)
+      .remove()
 
+    // add new arcs
     const newArcs = arcSelection.enter()
-      .append('g')
+      .append('svg:g')
       .attr('class', 'arc')
 
+    // append path to each new arc
     newArcs.append('path')
-      .attr('d', arc().outerRadius(150).innerRadius(0)); // overidden later
+      .attr('class', 'wedge')
+      .style('opacity', 0)
+      .style('fill', 'transparent')
+      .style('stroke-width', this.strokeWidth)
+      .attr('d', arc().outerRadius(0).innerRadius(0))  // overidden later
+      .on('mouseover', (d) => {
+        this.tooltipDiv
+          .style('left', () => {
+            return `${event.pageX}px`
+          })
+          .style('top', () => {
+            return `${event.pageY + 15}px`
+          })
+          .style('opacity', () => {
+            return this.tooltips ? 0.9 : 0
+          })
+          .html(() => {
+            return '<div class="key">'
+              + d.data[this.legendMetric]
+              + '</div><div class="value">'
+              + TickFormat(d.data[this.valueMetric])
+              + '</div>'
+          })
+      })
+      .on('mouseout', () => {
+        this.tooltipDiv.style('opacity', 0).html('')
+      })
+      .on('mousemove', () => {
+        this.tooltipDiv
+          .style('left', `${event.pageX}px`)
+          .style('top', `${event.pageY + 15}px`)
+      })
 
-    this.gPie.selectAll('.arc path')
-      .data(this.pieFn(this.chartData))
+    // bind data and transition paths
+    this.gPie.selectAll('g.arc path')
+      .data(this.pieLayout(this.chartData))
+      .attr('d', this.arcObject)
+      .transition(t500)
+      .style('stroke', this.stroke)
+      .style('stroke-width', this.strokeWidth)
       .style('fill', (d, i) => {
-        console.log(i)
         return d.color || this.colorScale(i)
       })
-      .attr('d', arcObject)
-      .style('stroke', '#fff')
-
-
-      /**
-    
-    //////////////////////////////////////////////////
-    // append new arcs
-    //////////////////////////////////////////////////
-    var newArcs = arcSelection.enter()
-      .append('g')
-      .attr('class', 'arc')
-      .on('mouseover', function(d, i) {
-        me.handleMouseEvent(this, 'arc', 'mouseover', d, i);
-      })
-      .on('mouseout', function(d, i) {
-        me.handleMouseEvent(this, 'arc', 'mouseout', d, i);
-      });
-    
-    //////////////////////////////////////////////////
-    // append paths to new arcs
-    //////////////////////////////////////////////////
-    newArcs.append('path')
-      .style('opacity', me.opacities.arc.default)
-      .style('fill', '#FFFFFF')
-      .attr('d', d3.svg.arc().outerRadius(0).innerRadius(0)); // overidden later
-    
-    //////////////////////////////////////////////////
-    // bind data and transition paths
-    //////////////////////////////////////////////////
-    me.gPie.selectAll('.arc path')
-      .data(me.pieLayout(me.graphData))
-      .transition()
-      .duration(250)
-      .style('fill', function(d, i) {
-        if(hashedColorScale != null) {
-          return hashedColorScale[d.data[hashedColorIndex]];
-        } else if(indexedColorScale.length > 0) {
-          return indexedColorScale[i];
-        } else {
-          return colorScale(i);
-        }
-      })
-      .attr('d', me.arcObject);
-    
-    //////////////////////////////////////////////////
-    // call / recall the tooltip function
-    //////////////////////////////////////////////////
-    me.gPie.selectAll('.arc').call(d3.helper.tooltip().text(me.tooltipFunction));*/
-
-    
-
-    // const dataReady = this.pieFn(this.chartData)
-
-    // this.gCanvas.selectAll('.fap')
-
-    // this.gCanvas.selectAll('whatever')
-    //   .data(dataReady)
-    //   .enter()
-    //   .append('path')
-    //   .attr('d', arc().innerRadius(0).outerRadius(150))
-    //   .attr('fill', '#badcdc')
-    //   .attr("stroke", "black")
-    //   .style("stroke-width", '2')
-    //   .style("opacity", 0.7)
-
-
-
-    
-
-
-
-
-    // configurePie
-    // handleArcs
-    // handleLegend
-
-
-    /*
-    this.setScales()
-    this.callAxes()
-    this.setColorScale()
-    this.handleGridlines()
-    this.handlePaths()
-    this.handleAxisLabels()
-    this.handleVertices()
-    this.handleLegend()
-    */
+      .style('opacity', this.defaultArcOpacity)
   }
 
   /**

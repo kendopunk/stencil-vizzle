@@ -98,11 +98,21 @@ export namespace Components {
     'chartId': string;
     'colorScheme': string;
     'innerRadius': number;
+    'inverse': boolean;
     'legend': boolean;
     'legendFontSize': number;
     'legendMetric': string;
     'legendWidth': number;
+    'marginBottom': number;
+    'marginLeft': number;
+    'marginRight': number;
+    'marginTop': number;
     'responsive': boolean;
+    'stroke': string;
+    'strokeWidth': number;
+    'tooltips': boolean;
+    'valueFormat': string;
+    'valueMetric': string;
   }
   interface StvStackedBarChart {
     'axisLabelFontSize': number;
@@ -262,12 +272,22 @@ declare namespace LocalJSX {
     'chartId'?: string;
     'colorScheme'?: string;
     'innerRadius'?: number;
+    'inverse'?: boolean;
     'legend'?: boolean;
     'legendFontSize'?: number;
     'legendMetric'?: string;
     'legendWidth'?: number;
+    'marginBottom'?: number;
+    'marginLeft'?: number;
+    'marginRight'?: number;
+    'marginTop'?: number;
     'onStv-pie-chart-loaded'?: (event: CustomEvent<any>) => void;
     'responsive'?: boolean;
+    'stroke'?: string;
+    'strokeWidth'?: number;
+    'tooltips'?: boolean;
+    'valueFormat'?: string;
+    'valueMetric'?: string;
   }
   interface StvStackedBarChart {
     'axisLabelFontSize'?: number;
