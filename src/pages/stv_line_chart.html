@@ -285,6 +285,26 @@
           y-tick-format="localestring"
         ></stv-line-chart>
       </div>
+
+      <pre class="code">
+        &lt;stv-line-chart
+          chart-id="myStvLineChart"
+          margin-left="50"
+          margin-right="50"
+          responsive
+          vertices
+          x-label="Date"
+          x-tick-format="M/D/YY"
+          y-label="Score"
+          y-tick-format="localestring"
+        &gt;&lt;/stv-line-chart&gt;
+
+        ...
+
+        document.addEventListener('stv-line-chart-loaded', function() {
+          document.querySelector('stv-line-chart').chartData = [...your data...]
+        })
+      </pre>
     </div>
   </div>
 

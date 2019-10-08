@@ -308,7 +308,10 @@ export class StvPieChart {
       .style('fill', 'transparent')
       .style('stroke-width', this.strokeWidth)
       .attr('d', arc().outerRadius(0).innerRadius(0))  // overidden later
-      .on('mouseover', (d) => {
+      .on('mouseover', (d, i, a) => {
+        select(a[i]).style('opacity', 1)
+          .style('stroke-width', this.strokeWidth + 2)
+
         this.tooltipDiv
           .style('left', () => {
             return `${event.pageX}px`
@@ -327,7 +330,10 @@ export class StvPieChart {
               + '</div>'
           })
       })
-      .on('mouseout', () => {
+      .on('mouseout', (_d, i, a) => {
+        select(a[i]).style('opacity', this.defaultArcOpacity)
+          .style('stroke-width', this.strokeWidth)
+
         this.tooltipDiv.style('opacity', 0).html('')
       })
       .on('mousemove', () => {

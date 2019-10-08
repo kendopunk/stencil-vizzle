@@ -9,6 +9,7 @@
 var gridlines = false;
 var inverse = false;
 var showLegend = false;
+var showPieLegend = true;
 var vertices = true;
 
 /****************************************
@@ -136,6 +137,11 @@ function toggleInverse(selector) {
 }
 
 function toggleLegend(selector) {
+  if (selector === 'stv-pie-chart') {
+    showPieLegend = !showPieLegend;
+    getChartEl(selector).legend = showPieLegend;
+    return
+  }
   showLegend = !showLegend;
   getChartEl(selector).legend = showLegend;
 }

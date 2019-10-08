@@ -52,6 +52,7 @@
 
       <div class="control-item">
         <input type="checkbox"
+          checked
           name="show-legend"
           id="showLegend"
           onClick="toggleLegend('stv-pie-chart')">
@@ -154,7 +155,7 @@
     <div id="chart-container">
       <div class="page-title">&lt;stv-pie-chart&gt;</div>
 
-      <p>Top selling musical artists of all time, million units solds. <a href="https://www.businessinsider.com/best-selling-music-artists-of-all-time-2016-9" target="_blank">(source)</a>.  Check out some reasons why you might <a href="https://www.data-to-viz.com/caveat/pie.html" target="_blank">not want to use a pie chart</a>.</p>
+      <p>Top selling musical artists of all time, million units solds. <a href="https://www.businessinsider.com/best-selling-music-artists-of-all-time-2016-9" target="_blank">(source)</a>.  Check out some reasons why you <a href="https://www.data-to-viz.com/caveat/pie.html" target="_blank">might not want to use a pie chart</a>.</p>
 
       <div class="hoz-group">
         <div class="btn-item">
@@ -170,6 +171,7 @@
 
       <div class="chart">
         <stv-pie-chart
+          legend
           legend-width="125"
           legend-metric="artist"
           responsive
@@ -178,6 +180,24 @@
           value-metric="units"
         ></stv-pie-chart>
       </div>
+
+      <pre class="code">
+        &lt;stv-pie-chart
+          legend
+          legend-width="125"
+          legend-metric="artist"
+          responsive
+          stroke="#ffffff"
+          tooltips
+          value-metric="units"
+        &gt;&lt;/stv-pie-chart&gt;
+
+        ...
+
+        document.addEventListener('stv-pie-chart-loaded', function() {
+          document.querySelector('stv-pie-chart').chartData = [...your data...]
+        })
+      </pre>
     </div>
   </div>
 
