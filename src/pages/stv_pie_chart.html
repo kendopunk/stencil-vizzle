@@ -3,16 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-  <title>Stencil Vizzle: &lt;stv-line-chart&gt;</title>
+  <title>Stencil Vizzle: &lt;stv-pie-chart&gt;</title>
   <link rel="stylesheet" type="text/css" href="../css/main.css">
   <script type="module" src="/build/stencil-vizzle.esm.js"></script>
   <script nomodule src="/build/stencil-vizzle.esm.js"></script>
   <script src="../js/shared.js"></script>
-  <script src="../js/xAxis.js"></script>
-  <script src="../js/yAxis.js"></script>
-  <script src="../js/_lineChart.js"></script>
+  <script src="../js/_pieChart.js"></script>
 </head>
-<body onLoad="addListeners()">
+<body>
 
   <!-- header -->
   <div id="header">
@@ -45,26 +43,26 @@
     <!-- interaction controls -->
     <div id="control-container">
 
-      <!-- X axis -->
+      <!--
       <div class="control-category">X-axis</div>
       <div class="control-item">
         <input type="checkbox" name="x-label" id="xLabel" checked
-          onClick="toggleShowHideXLabel('stv-line-chart')">
+          onClick="toggleShowHideXLabel('stv-pie-chart')">
           <label for="xLabel">Show Label</label>
       </div>
       <div class="control-item">
         <input type="checkbox" name="x-ticks" id="xTicks" checked
-          onClick="toggleShowHideXTicks('stv-line-chart')">
+          onClick="toggleShowHideXTicks('stv-pie-chart')">
           <label for="xTicks">Show Tick Values</label>
       </div>
       <div class="control-item">
         <input type="checkbox" name="hide-x" id="hideX"
-          onClick="toggleShowHideXAxis('stv-line-chart')">
+          onClick="toggleShowHideXAxis('stv-pie-chart')">
           <label for="hideX">Hide Entire X-axis</label>
       </div>
       <div class="control-item">
         <label for="xTickSize" class="select">Tick Size / Length</label>
-        <select name="x-tick-size" id="xTickSize" onChange="selectXTickSize('stv-line-chart')">
+        <select name="x-tick-size" id="xTickSize" onChange="selectXTickSize('stv-pie-chart')">
           <option value="2" selected>2</option>
           <option value="4">4</option>
           <option value="10">10</option>
@@ -77,26 +75,26 @@
         <input type="text" placeholder="Enter text" id="xLabelInput" />
       </div>
 
-      <!-- Y axis -->
+
       <div class="control-category">Y-axis</div>
       <div class="control-item">
         <input type="checkbox" name="y-label" id="yLabel" checked
-          onClick="toggleShowHideYLabel('stv-line-chart')">
+          onClick="toggleShowHideYLabel('stv-pie-chart')">
           <label for="yLabel">Show Label</label>
       </div>
       <div class="control-item">
         <input type="checkbox" name="y-ticks" id="yTicks" checked
-          onClick="toggleShowHideYTicks('stv-line-chart')">
+          onClick="toggleShowHideYTicks('stv-pie-chart')">
           <label for="yTicks">Show Tick Values</label>
       </div>
       <div class="control-item">
         <input type="checkbox" name="hide-y" id="hideY"
-          onClick="toggleShowHideYAxis('stv-line-chart')">
+          onClick="toggleShowHideYAxis('stv-pie-chart')">
           <label for="hideY">Hide Entire Y-axis</label>
       </div>
       <div class="control-item">
         <label for="yTickSize" class="select">Tick Size / Length</label>
-        <select name="y-tick-size" id="yTickSize" onChange="selectYTickSize('stv-line-chart')">
+        <select name="y-tick-size" id="yTickSize" onChange="selectYTickSize('stv-pie-chart')">
           <option value="2" selected>2</option>
           <option value="4">4</option>
           <option value="10">10</option>
@@ -109,17 +107,16 @@
         <input type="text" placeholder="Enter text" id="yLabelInput" />
       </div>
 
-      <!-- miscellaneous options -->
       <div class="control-category">Options</div>
 
       <div class="control-item">
         <input type="checkbox" name="show-gridlines" id="showGridlines"
-          onClick="toggleGridlines('stv-line-chart')">
+          onClick="toggleGridlines('stv-pie-chart')">
           <label for="showGridlines">Gridlines</label>
       </div>
 
       <div class="control-item">
-        <input type="checkbox" name="inverse" id="inverse" onClick="toggleInverse('stv-line-chart')">
+        <input type="checkbox" name="inverse" id="inverse" onClick="toggleInverse('stv-pie-chart')">
         <label for="inverse">Inverse</label>
       </div>
 
@@ -127,20 +124,19 @@
         <input type="checkbox"
           name="show-legend"
           id="showLegend"
-          onClick="toggleLegend('stv-line-chart')">
+          onClick="toggleLegend('stv-pie-chart')">
           <label for="showLegend">Legend</label>
       </div>
 
       <div class="control-item">
         <input type="checkbox" name="show-vertices" id="showVertices" checked
-          onClick="toggleVertices('stv-line-chart')">
+          onClick="toggleVertices('stv-pie-chart')">
           <label for="showVertices">Vertices</label>
       </div>
 
-      <!-- axis stuff -->
       <div class="control-item">
         <label for="axisLabelFontSize" class="select">Axis Label Font Size</label>
-        <select name="axis-label-font-size" id="axisLabelFontSize" onChange="selectAxisLabelFontSize('stv-line-chart')">
+        <select name="axis-label-font-size" id="axisLabelFontSize" onChange="selectAxisLabelFontSize('stv-pie-chart')">
            <option value="9">9px</option>
            <option value="12">12px</option>
            <option value="14" selected>14px</option>
@@ -151,7 +147,7 @@
 
       <div class="control-item">
         <label for="axisTickFontFamily" class="select">Axis Tick Font Family</label>
-        <select name="axis-tick-font-family" id="axisTickFontFamily" onChange="selectAxisTickFontFamily('stv-line-chart')">
+        <select name="axis-tick-font-family" id="axisTickFontFamily" onChange="selectAxisTickFontFamily('stv-pie-chart')">
           <option value="sans" selected>sans-serif</option>
           <option value="serif">serif</option>
           <option value="monospace">monospace</option>
@@ -160,7 +156,7 @@
 
       <div class="control-item">
         <label for="axisTickFontSize" class="select">Axis Tick Font Size</label>
-        <select name="axis-tick-font-size" id="axisTickFontSize" onChange="selectAxisTickFontSize('stv-line-chart')">
+        <select name="axis-tick-font-size" id="axisTickFontSize" onChange="selectAxisTickFontSize('stv-pie-chart')">
           <option value="8">8px</option>
           <option value="9">9px</option>
           <option value="10" selected>10px</option>
@@ -168,10 +164,9 @@
         </select>
       </div>
 
-      <!-- color scheme --->
       <div class="control-item">
         <label for="colorScheme" class="select">Color Scheme</label>
-        <select name="color-scheme" id="colorScheme" onChange="selectColorScheme('stv-line-chart')">
+        <select name="color-scheme" id="colorScheme" onChange="selectColorScheme('stv-pie-chart')">
           <option value="category10" selected>Category 10</option>
           <option value="accent">Accent</option>
           <option value="paired">Paired</option>
@@ -185,7 +180,7 @@
 
       <div class="control-item">
         <label for="legendFontSize" class="select">Legend Font Size</label>
-        <select name="legend_font_size" id="legendFontSize" onChange="selectLegendFontSize('stv-line-chart')">
+        <select name="legend_font_size" id="legendFontSize" onChange="selectLegendFontSize('stv-pie-chart')">
           <option value="10">10px</option>
           <option value="12" selected>12px</option>
           <option value="14">14px</option>
@@ -194,7 +189,7 @@
 
       <div class="control-item">
         <label for="interpolation" class="select">Line Interpolation</label>
-        <select name="interp" id="interpolation" onChange="selectInterpolation('stv-line-chart')">
+        <select name="interp" id="interpolation" onChange="selectInterpolation('stv-pie-chart')">
           <option value="linear" selected>linear</option>
           <option value="basis">basis</option>
           <option value="monotone">monotone</option>
@@ -206,17 +201,16 @@
 
       <div class="control-item">
         <label for="lineStroke" class="select">Line Stroke</label>
-        <select name="line_stroke" id="lineStroke" onChange="selectLineStroke('stv-line-chart')">
+        <select name="line_stroke" id="lineStroke" onChange="selectLineStroke('stv-pie-chart')">
           <option value="1" selected>1</option>
           <option value="2">2</option>
           <option value="3">3</option>
         </select>
       </div>
 
-      <!-- top, right, bottom, left margins -->
       <div class="control-item">
         <label for="marginBottom" class="select">Margin Bottom</label>
-        <select name="margin-bottom" id="marginBottom" onChange="selectMargin('marginBottom', 'stv-line-chart')">
+        <select name="margin-bottom" id="marginBottom" onChange="selectMargin('marginBottom', 'stv-pie-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
@@ -225,7 +219,7 @@
 
       <div class="control-item">
         <label for="marginLeft" class="select">Margin Left</label>
-        <select name="margin_left" id="marginLeft" onChange="selectMargin('marginLeft', 'stv-line-chart')">
+        <select name="margin_left" id="marginLeft" onChange="selectMargin('marginLeft', 'stv-pie-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
@@ -234,7 +228,7 @@
 
       <div class="control-item">
         <label for="marginRight" class="select">Margin Right</label>
-        <select name="margin_right" id="marginRight" onChange="selectMargin('marginRight', 'stv-line-chart')">
+        <select name="margin_right" id="marginRight" onChange="selectMargin('marginRight', 'stv-pie-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
@@ -243,47 +237,24 @@
 
       <div class="control-item">
         <label for="marginTop" class="select">Margin Top</label>
-        <select name="margin_top" id="marginTop" onChange="selectMargin('marginTop', 'stv-line-chart')">
+        <select name="margin_top" id="marginTop" onChange="selectMargin('marginTop', 'stv-pie-chart')">
           <option value="25" selected>25px</option>
           <option value="50">50px</option>
           <option value="75">75px</option>
         </select>
       </div>
+    -->
     </div>
 
     <!-- chart container -->
     <div id="chart-container">
-      <div class="page-title">&lt;stv-line-chart&gt;</div>
-
-      <div class="hoz-group">
-        <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumLines(1)">1 Line</button>
-        </div>
-        <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumLines(2)">2 Lines</button>
-        </div>
-        <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumLines(3)">3 Lines</button>
-        </div>
-        <div class="btn-item">
-          <button type="button" class="action" onClick="selectNumLines(4)">4 Lines</button>
-        </div>
-        <div class="btn-item">
-          <button type="button" class="action" onClick="generateRandomData()">Random</button>
-        </div>
-      </div>
+      <div class="page-title">&lt;stv-pie-chart&gt;</div>
 
       <div class="chart">
-        <stv-line-chart chart-id="myStvLineChart"
-          margin-left="50"
-          margin-right="50"
+        <stv-pie-chart
+          color-scheme="paired"
           responsive
-          vertices
-          x-label="Date"
-          x-tick-format="M/D/YY"
-          y-label="Score"
-          y-tick-format="localestring"
-        ></stv-line-chart>
+        ></stv-pie-chart>
       </div>
     </div>
   </div>
@@ -291,22 +262,8 @@
 </body>
 
 <script>
-  document.addEventListener('stv-line-chart-loaded', function(evt) {
-    document.querySelector('stv-line-chart').chartData = generateLineChartData(3)
+  document.addEventListener('stv-pie-chart-loaded', function(evt) {
+    document.querySelector('stv-pie-chart').chartData = generatePieChartData(7)
   })
-
-  function addListeners() {
-    document.getElementById('xLabelInput').addEventListener('keyup', function(evt) {
-      if(evt.keyCode === 13) {
-        changeXLabel('stv-line-chart', evt.target.value)
-      }
-    })
-
-    document.getElementById('yLabelInput').addEventListener('keyup', function(evt) {
-      if(evt.keyCode === 13) {
-        changeYLabel('stv-line-chart', evt.target.value)
-      }
-    })
-  }
 </script>
 </html>

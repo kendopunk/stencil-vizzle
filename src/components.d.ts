@@ -91,6 +91,19 @@ export namespace Components {
     'yTickFormat': string;
     'yTickSize': number;
   }
+  interface StvPieChart {
+    'canvasHeight': number;
+    'canvasWidth': number;
+    'chartData': any;
+    'chartId': string;
+    'colorScheme': string;
+    'innerRadius': number;
+    'legend': boolean;
+    'legendFontSize': number;
+    'legendMetric': string;
+    'legendWidth': number;
+    'responsive': boolean;
+  }
   interface StvStackedBarChart {
     'axisLabelFontSize': number;
     'axisTickFontFamily': string;
@@ -146,6 +159,12 @@ declare global {
     new (): HTMLStvLineChartElement;
   };
 
+  interface HTMLStvPieChartElement extends Components.StvPieChart, HTMLStencilElement {}
+  var HTMLStvPieChartElement: {
+    prototype: HTMLStvPieChartElement;
+    new (): HTMLStvPieChartElement;
+  };
+
   interface HTMLStvStackedBarChartElement extends Components.StvStackedBarChart, HTMLStencilElement {}
   var HTMLStvStackedBarChartElement: {
     prototype: HTMLStvStackedBarChartElement;
@@ -154,6 +173,7 @@ declare global {
   interface HTMLElementTagNameMap {
     'stv-bar-chart': HTMLStvBarChartElement;
     'stv-line-chart': HTMLStvLineChartElement;
+    'stv-pie-chart': HTMLStvPieChartElement;
     'stv-stacked-bar-chart': HTMLStvStackedBarChartElement;
   }
 }
@@ -235,6 +255,20 @@ declare namespace LocalJSX {
     'yTickFormat'?: string;
     'yTickSize'?: number;
   }
+  interface StvPieChart {
+    'canvasHeight'?: number;
+    'canvasWidth'?: number;
+    'chartData'?: any;
+    'chartId'?: string;
+    'colorScheme'?: string;
+    'innerRadius'?: number;
+    'legend'?: boolean;
+    'legendFontSize'?: number;
+    'legendMetric'?: string;
+    'legendWidth'?: number;
+    'onStv-pie-chart-loaded'?: (event: CustomEvent<any>) => void;
+    'responsive'?: boolean;
+  }
   interface StvStackedBarChart {
     'axisLabelFontSize'?: number;
     'axisTickFontFamily'?: string;
@@ -278,6 +312,7 @@ declare namespace LocalJSX {
   interface IntrinsicElements {
     'stv-bar-chart': StvBarChart;
     'stv-line-chart': StvLineChart;
+    'stv-pie-chart': StvPieChart;
     'stv-stacked-bar-chart': StvStackedBarChart;
   }
 }
@@ -290,6 +325,7 @@ declare module "@stencil/core" {
     interface IntrinsicElements {
       'stv-bar-chart': LocalJSX.StvBarChart & JSXBase.HTMLAttributes<HTMLStvBarChartElement>;
       'stv-line-chart': LocalJSX.StvLineChart & JSXBase.HTMLAttributes<HTMLStvLineChartElement>;
+      'stv-pie-chart': LocalJSX.StvPieChart & JSXBase.HTMLAttributes<HTMLStvPieChartElement>;
       'stv-stacked-bar-chart': LocalJSX.StvStackedBarChart & JSXBase.HTMLAttributes<HTMLStvStackedBarChartElement>;
     }
   }
