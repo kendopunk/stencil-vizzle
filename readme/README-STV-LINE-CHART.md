@@ -14,9 +14,16 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG line
 - Configurable margins
 - Configurable tick sizes
 - Configurable axis font family
+- `inverse` attribute for darker backgrounds
 - Built in tooltips
 
 ### Examples
+
+![](../img/stv-line-chart-example1.png)
+
+![](../img/stv-line-chart-example2.png)
+
+![](../img/stv-line-chart-example3.png)
 
 ### Properties / Attributes
 
@@ -29,7 +36,7 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG line
 | canvas-width | number | 500 | Width of SVG drawing canvas |
 | [chart-data](#chartdata) | array | [] | Array of objects used to populate the visualization |
 | chart-id | string | "" | Optional id for custom element |
-| [color-scheme](#color-schemes) | string | "category10" | Color palette to use for lines |
+| color-scheme | string | "category10" | Color palette to use for lines.  See [Color Schemes](#color-schemes) below  |
 | gridlines | bool | false | Display X/Y grid lines for value reference |
 | hide-x-axis | bool | false | Hide both the X axis line and tick values |
 | hide-x-ticks | bool | false | Hide only the X axis tick values |
@@ -51,11 +58,11 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG line
 | vertices | bool | false | Show connector points between lines (svg:circle) |
 | x-label | string | "" | X axis label or title |
 | x-metric | string | "x" | The property in ```chartData.data``` denoting the X data domain |
-| [x-tick-format](README-TICK-FORMAT.md) | string | "raw" | How to format the X axis tick values |
+| x-tick-format | string | "raw" | How to format the X axis tick values.  See the [tick formatting README](README-TICK-FORMAT.md). |
 | x-tick-size | number | 2 | The length of the X axis tick lines |
 | y-label | string | "" | Y axis label or title |
 | y-metric | string | "y" | The property in ```chartData.data``` denoting the Y data domain |
-| [y-tick-format](README-TICK-FORMAT.md) | string | "raw" | How to format the Y axis tick values |
+| y-tick-format | string | "raw" | How to format the Y axis tick values.  See the [tick formatting README](README-TICK-FORMAT.md). |
 | y-tick-size | number | 2 | The length of the Y axis tick lines |
 
 ### Events
@@ -82,14 +89,15 @@ export interface IfcStvLineChart {
 
 // e.g.
 myChartData = [
-  IfcStvLineChart,
-  IfcStvLineChart,
+  IfcStvLineChart object type,
+  IfcStvLineChart object type,
   ...etc.
 ]
 ```
+
 `label` and `color` are optional properties.  If you desire user-defined colors for each line in the line chart, you will need to transform your data to add the `color` property accordingly.  Otherwise, use one of the built-in color palette identifiers.  See the [Color Schemes](#color-schemes) section of this README or [https://github.com/d3/d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic).
 
-The `data` property is a subjective array of objects. Each object in this array MUST have discernable X and Y properties with numeric values, but they do not necessarily have to be named "x" and "y".  If they are not named "x" and "y", set the `xMetric` and `yMetric` attributes accordingly.
+The `data` property is a subjective array of objects. Each object in this array MUST have discernable X and Y properties with numeric values, but they do not necessarily have to be named "x" and "y".  If they are not named "x" and "y", set the `x-metric` and `y-metric` attributes accordingly.
 
 #### Default Example
 This JSON object will work "out of the box" because it has both the correct structure and all property names adhere to default conventions.
@@ -100,7 +108,7 @@ var defaultData = [
     label: 'User 1',
     color: '#0000ff',
     data: [
-      {x: 1, y: 200}.
+      {x: 1, y: 200},
       {x: 2, y: 75},
       {x: 3, y: 130}
     ]
@@ -109,12 +117,29 @@ var defaultData = [
     label: 'User 2',
     color: '#ff0000',
     data: [
-      {x: 1, y: 30}.
+      {x: 1, y: 30},
       {x: 2, y: 175},
       {x: 3, y: 88}
     ]
   }
 ]
+```
+With this ready-to-go `chartData` object, your HTML code might look something like:
+
+```html
+...
+<stv-line-chart
+  canvas-height="400"
+  canvas-width="600"
+  ...other attributes
+></stv-line-chart>
+
+<script>
+  document.addEventListener('stv-line-chart-loaded', function() {
+    document.querySelector('stv-line-chart').chartData = defaultData
+  })
+</script>
+...
 ```
 
 #### Custom Example
@@ -123,7 +148,7 @@ var customData = [
   {
     person: 'User 1',
     data: [
-      {weekNumber: 1, score: 200}.
+      {weekNumber: 1, score: 200},
       {weekNumber: 2, score: 75},
       {weekNumber: 3, score: 130}
     ]
@@ -131,7 +156,7 @@ var customData = [
   {
     person : 'User 2',
     data: [
-      {weekNumber: 1, score: 30}.
+      {weekNumber: 1, score: 30},
       {weekNumber: 2, score: 175},
       {weekNumber: 3, score: 88}
     ]
@@ -146,7 +171,7 @@ In the custom case, you'll need to use attributes to help your chart understand 
 - `x-metric` = "weekNumber"
 - `y-metric` = "score"
 
-...and your custom element would look something like this:
+...and your HTML might look something like this:
 
 ```html
 <stv-line-chart
@@ -155,13 +180,14 @@ In the custom case, you'll need to use attributes to help your chart understand 
   legend-metric="person"
   x-metric="weekNumber"
   y-metric="score"
-  ...other attributes
 ></stv-line-chart>
+
+<script>
+  document.addEventListener('stv-line-chart-loaded', function() {
+    document.querySelector('stv-line-chart').chartData = customData
+  })
+</script>
 ```
-
-
-
-
 
 ### Color Schemes
 
@@ -175,13 +201,3 @@ Each object in the `chartData.data` property may have a `color` property with he
 - `set3`: schemeSet3
 - `black`: All lines/paths will be #000000
 - `gray`: All lines/paths will be #888888
-
-
-
-
-
-
-
-
-
-

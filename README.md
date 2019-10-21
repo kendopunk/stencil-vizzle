@@ -19,7 +19,7 @@ $> npm start
 # browser should open to localhost:3333
 ```
 
-### Available Chart Components
+### Chart Components
 
 All components are highly configurable, via attributes, to offer the most flexibility in terms of conveying as much or as little information as you wish.
 
