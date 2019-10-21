@@ -5,7 +5,10 @@
 import {
   Component,
   h,
+  Prop,
   Element,
+  Event,
+  EventEmitter,
   Listen
 } from '@stencil/core'
 import { event } from 'd3'
@@ -22,6 +25,7 @@ import { select } from 'd3-selection'
 import { arc, pie } from 'd3-shape'
 
 // utilities
+import { IfcStvPieChart } from '../../interfaces/IfcStvPieChart'
 import { calculateLegendLabelClass } from '../../utils/css_utils'
 import TickFormat from '../../utils/tickformat'
 import {
@@ -52,8 +56,17 @@ export class StvPieChart {
   }
   defaultArcOpacity: number = 0.8
   defaultLineOpacity: number = 0.7
+
+  // <g>
+  gCanvas: Selection<Element, any, HTMLElement, any>
+  gLegend: Selection<Element, any, HTMLElement, any>
+  gPie: Selection<Element, any, HTMLElement, any>
+  // end </g>
+
   pieLayout: any = pie()
   spaceBetweenPieAndLegend: number = 25
+  svg: Selection<Element, any, HTMLElement, any>
+  tooltipDiv: Selection<Element, any, HTMLElement, any>
 
   @Element() private chartElement: HTMLElement
 
@@ -65,7 +78,7 @@ export class StvPieChart {
     reflectToAttr: true,
     mutable: true
   }) canvasWidth: number = 450
-  @Prop() chartData: any = []
+  @Prop() chartData: IfcStvPieChart[] = []
   @Prop() chartId: string = ''
   @Prop() colorScheme: string = 'category10'
   @Prop() innerRadius: number = 0
@@ -360,7 +373,9 @@ export class StvPieChart {
    * Determine if chartData is valid format
    */
   isValidChartData(): boolean {
-    return this.chartData.length > 0
+    return this.chartData.length > 0 &&
+      this.chartData[0].hasOwnProperty(this.legendMetric) &&
+      this.chartData[0].hasOwnProperty(this.valueMetric)
   }
 
   /**
