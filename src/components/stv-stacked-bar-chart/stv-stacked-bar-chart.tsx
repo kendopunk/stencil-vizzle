@@ -97,7 +97,7 @@ export class StvStackedBarChart {
     reflectToAttr: true,
     mutable: true
   }) canvasWidth: number = 500
-  @Prop() chartData: IfcStvStackedBarChart[] = []
+  @Prop() chartData: IfcStvPieChart[] = []
   @Prop() chartId: string = ''
   @Prop() colorScheme: string = 'category10'
   @Prop() gridlines: boolean = false

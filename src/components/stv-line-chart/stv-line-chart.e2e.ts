@@ -21,8 +21,7 @@ describe('<stv-line-chart> e2e test', () => {
   const tagName: string = 'stv-line-chart'
 
   beforeEach(async() => {
-
-    let content = '<div><stv-line-chart '
+    let content = `<div><${tagName} `
     for (const [key, value] of Object.entries(props)) {
       if(value !== false) {
         if (value === true) {
@@ -34,7 +33,7 @@ describe('<stv-line-chart> e2e test', () => {
         }
       }
     }
-    content = content + '></stv-line-chart></div>'
+    content = content + `></${tagName}></div>`
 
     page = await newE2EPage()
     await page.setContent(content)

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-  <title>stv: &lt;stv-stacked-bar-chart&gt;</title>
+  <title>Stencil Vizzle: &lt;stv-stacked-bar-chart&gt;</title>
   <link rel="stylesheet" type="text/css" href="../css/main.css">
   <script type="module" src="/build/stencil-vizzle.esm.js"></script>
   <script nomodule src="/build/stencil-vizzle.esm.js"></script>
@@ -34,6 +34,9 @@
       </div>
       <div class="header-link">
         <a href="/pages/stv_stacked_bar_chart.html">&lt;stv-stacked-bar-chart&gt;</a>
+      </div>
+      <div class="header-link">
+        <a href="/pages/stv_pie_chart.html">&lt;stv-pie-chart&gt;</a>
       </div>
     </div>
   </div>
@@ -340,6 +343,26 @@
           y-label="Production"
         ></stv-stacked-bar-chart>
       </div>
+
+      <pre class="code">
+        &lt;stv-stacked-bar-chart
+          chart-id="myStvStackedBarChart"
+          linear-metric="produced"
+          linear-tick-format="localestring"
+          margin-left="50"
+          ordinal-metric="year"
+          responsive
+          series-metric="combatant"
+          x-label="Year"
+          y-label="Production"
+        &gt;&lt;stv-stacked-bar-chart&gt;
+
+        ...
+
+        document.addEventListener('stv-stacked-bar-chart-loaded', function() {
+          document.querySelector('stv-stacked-bar-chart').chartData = [...your data...]
+        })
+      </pre>
 
     </div>
   </div>

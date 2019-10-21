@@ -9,6 +9,7 @@
 var gridlines = false;
 var inverse = false;
 var showLegend = false;
+var showPieLegend = true;
 var vertices = true;
 
 /****************************************
@@ -30,6 +31,11 @@ function getChartEl(id) {
 
 function randomizer() {
   return Math.floor(Math.random() * 500) - 250;
+}
+
+function selectArcStroke(selector) {
+  var val = document.querySelector('#arcStroke').value
+  getChartEl(selector).stroke = val;
 }
 
 function selectAxisLabelFontSize(selector) {
@@ -60,6 +66,11 @@ function selectBarStrokeWidth(selector) {
 function selectColorScheme(selector) {
   var val = document.querySelector('#colorScheme').value;
   getChartEl(selector).colorScheme = val;
+}
+
+function selectInnerRadius(selector) {
+  var val = document.querySelector('#innerRadius').value;
+  getChartEl(selector).innerRadius = val;
 }
 
 function selectInterpolation(selector) {
@@ -126,6 +137,11 @@ function toggleInverse(selector) {
 }
 
 function toggleLegend(selector) {
+  if (selector === 'stv-pie-chart') {
+    showPieLegend = !showPieLegend;
+    getChartEl(selector).legend = showPieLegend;
+    return
+  }
   showLegend = !showLegend;
   getChartEl(selector).legend = showLegend;
 }

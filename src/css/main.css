@@ -38,6 +38,16 @@ a:hover {
   text-decoration: none;
 }
 
+pre.code {
+  white-space: pre-wrap;
+  background: hsl(30,80%,90%);
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  border: solid 1px #ccc;
+  color: #333;
+}
+
 /*********************************************
  * IDs
  *********************************************/

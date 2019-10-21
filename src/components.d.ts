@@ -13,8 +13,8 @@ import {
   IfcStvLineChart,
 } from './interfaces/IfcStvLineChart';
 import {
-  IfcStvStackedBarChart,
-} from './interfaces/IfcStvStackedBarChart';
+  IfcStvPieChart,
+} from './interfaces/IfcStvPieChart';
 
 export namespace Components {
   interface StvBarChart {
@@ -91,6 +91,29 @@ export namespace Components {
     'yTickFormat': string;
     'yTickSize': number;
   }
+  interface StvPieChart {
+    'canvasHeight': number;
+    'canvasWidth': number;
+    'chartData': IfcStvPieChart[];
+    'chartId': string;
+    'colorScheme': string;
+    'innerRadius': number;
+    'inverse': boolean;
+    'legend': boolean;
+    'legendFontSize': number;
+    'legendMetric': string;
+    'legendWidth': number;
+    'marginBottom': number;
+    'marginLeft': number;
+    'marginRight': number;
+    'marginTop': number;
+    'responsive': boolean;
+    'stroke': string;
+    'strokeWidth': number;
+    'tooltips': boolean;
+    'valueFormat': string;
+    'valueMetric': string;
+  }
   interface StvStackedBarChart {
     'axisLabelFontSize': number;
     'axisTickFontFamily': string;
@@ -99,7 +122,7 @@ export namespace Components {
     'barStrokeWidth': number;
     'canvasHeight': number;
     'canvasWidth': number;
-    'chartData': IfcStvStackedBarChart[];
+    'chartData': IfcStvPieChart[];
     'chartId': string;
     'colorScheme': string;
     'gridlines': boolean;
@@ -146,6 +169,12 @@ declare global {
     new (): HTMLStvLineChartElement;
   };
 
+  interface HTMLStvPieChartElement extends Components.StvPieChart, HTMLStencilElement {}
+  var HTMLStvPieChartElement: {
+    prototype: HTMLStvPieChartElement;
+    new (): HTMLStvPieChartElement;
+  };
+
   interface HTMLStvStackedBarChartElement extends Components.StvStackedBarChart, HTMLStencilElement {}
   var HTMLStvStackedBarChartElement: {
     prototype: HTMLStvStackedBarChartElement;
@@ -154,6 +183,7 @@ declare global {
   interface HTMLElementTagNameMap {
     'stv-bar-chart': HTMLStvBarChartElement;
     'stv-line-chart': HTMLStvLineChartElement;
+    'stv-pie-chart': HTMLStvPieChartElement;
     'stv-stacked-bar-chart': HTMLStvStackedBarChartElement;
   }
 }
@@ -235,6 +265,30 @@ declare namespace LocalJSX {
     'yTickFormat'?: string;
     'yTickSize'?: number;
   }
+  interface StvPieChart {
+    'canvasHeight'?: number;
+    'canvasWidth'?: number;
+    'chartData'?: IfcStvPieChart[];
+    'chartId'?: string;
+    'colorScheme'?: string;
+    'innerRadius'?: number;
+    'inverse'?: boolean;
+    'legend'?: boolean;
+    'legendFontSize'?: number;
+    'legendMetric'?: string;
+    'legendWidth'?: number;
+    'marginBottom'?: number;
+    'marginLeft'?: number;
+    'marginRight'?: number;
+    'marginTop'?: number;
+    'onStv-pie-chart-loaded'?: (event: CustomEvent<any>) => void;
+    'responsive'?: boolean;
+    'stroke'?: string;
+    'strokeWidth'?: number;
+    'tooltips'?: boolean;
+    'valueFormat'?: string;
+    'valueMetric'?: string;
+  }
   interface StvStackedBarChart {
     'axisLabelFontSize'?: number;
     'axisTickFontFamily'?: string;
@@ -243,7 +297,7 @@ declare namespace LocalJSX {
     'barStrokeWidth'?: number;
     'canvasHeight'?: number;
     'canvasWidth'?: number;
-    'chartData'?: IfcStvStackedBarChart[];
+    'chartData'?: IfcStvPieChart[];
     'chartId'?: string;
     'colorScheme'?: string;
     'gridlines'?: boolean;
@@ -278,6 +332,7 @@ declare namespace LocalJSX {
   interface IntrinsicElements {
     'stv-bar-chart': StvBarChart;
     'stv-line-chart': StvLineChart;
+    'stv-pie-chart': StvPieChart;
     'stv-stacked-bar-chart': StvStackedBarChart;
   }
 }
@@ -290,6 +345,7 @@ declare module "@stencil/core" {
     interface IntrinsicElements {
       'stv-bar-chart': LocalJSX.StvBarChart & JSXBase.HTMLAttributes<HTMLStvBarChartElement>;
       'stv-line-chart': LocalJSX.StvLineChart & JSXBase.HTMLAttributes<HTMLStvLineChartElement>;
+      'stv-pie-chart': LocalJSX.StvPieChart & JSXBase.HTMLAttributes<HTMLStvPieChartElement>;
       'stv-stacked-bar-chart': LocalJSX.StvStackedBarChart & JSXBase.HTMLAttributes<HTMLStvStackedBarChartElement>;
     }
   }

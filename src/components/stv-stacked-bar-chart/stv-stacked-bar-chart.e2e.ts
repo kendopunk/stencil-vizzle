@@ -20,7 +20,7 @@ describe('<stv-stacked-bar-chart> e2e test', () => {
   const tagName: string = 'stv-stacked-bar-chart'
 
   beforeEach(async() => {
-    let content = '<div><stv-stacked-bar-chart '
+    let content = `<div><${tagName} `
     for (const [key, value] of Object.entries(props)) {
       if(value !== false) {
         if (value === true) {
@@ -32,7 +32,7 @@ describe('<stv-stacked-bar-chart> e2e test', () => {
         }
       }
     }
-    content = content + '></stv-stacked-bar-chart></div>'
+    content = content + `></${tagName}></div>`
 
     page = await newE2EPage()
     await page.setContent(content)
