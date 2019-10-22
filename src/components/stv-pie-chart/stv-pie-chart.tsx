@@ -363,7 +363,7 @@ export class StvPieChart {
       .style('stroke', this.stroke)
       .style('stroke-width', this.strokeWidth)
       .style('fill', (d, i) => {
-        return d.color || this.colorScale(i)
+        return d.data.color || this.colorScale(i)
       })
       .style('opacity', this.defaultArcOpacity)
   }

@@ -9,6 +9,7 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG bar 
 - Show or hide the X and/or Y axes
 - Show or hide the X and/or Y axis tick values
 - Show or hide the X and/or Y axis labels
+- Show or hide a legend
 - Vertical (default) or horizontal orientation
 - Configurable margins
 - Configurable tick sizes
@@ -26,7 +27,7 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG bar 
 
 ### Properties / Attributes
 
-| Attribute | Type | Default Value | Description |
+| Attribute &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   | Type | Default Value | Description |
 | --------- | ---- | ------------- | ----------- |
 | axis-label-font-size | number | 14 | Font size of optional X/Y axis labels |
 | axis-tick-font-family | string | "sans" | "sans", "serif" or "monospace" |
@@ -35,9 +36,9 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG bar 
 | bar-stroke-width | number | 1 | Stroke width of bars |
 | canvas-height | number | 300 | Height of SVG drawing canvas |
 | canvas-width | number | 500 | Width of SVG drawing canvas |
-| [chart-data](#chartdata) | array | [] | Array of objects used to populate the visualization |
+| [chart-data](#chart-data) | array | [] | Array of objects used to populate the visualization |
 | chart-id | string | "" | Optional id for custom element |
-| color-scheme | string | "category10" | Color palette to use for lines.  See [Color Schemes](#color-schemes) below  |
+| color-scheme | string | "category10" | Color palette to use for bars.  See [Color Schemes](#color-schemes) below  |
 | gridlines | bool | false | Display X/Y grid lines for value reference |
 | hide-x-axis | bool | false | Hide both the X axis line and tick values |
 | hide-x-ticks | bool | false | Hide only the X axis tick values |
@@ -48,14 +49,14 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG bar 
 | legend-font-size | number | 12 | Font size of legend text elements |
 | legend-metric | string | "label" | Name of ```chartData.data``` property to display in the legend |
 | legend-width | number | 125 | Width, in pixels, the legend will occupy in the drawing canvas. |
-| linear-metric | string | "value" | Property in `chartData` to map to the linear scale calculation |
+| linear-metric | string | "value" | Property in `chart-data` to map to the linear scale calculation |
 | linear-tick-format | string | "raw" | How to format the linear axis tick values.  See the [tick formatting README](README-TICK-FORMAT.md).
 | margin-bottom | number | 25 | Bottom padding |
 | margin-left | number | 25 | Left padding |
 | margin-right | number | 25 | Right padding |
 | margin-top | number | 25 | Top padding |
 | max-bar-width | number | 75 | Maximum width for each bar (or height if oriented horizontally).  Set to a large number for bars to "fill" all space |
-| ordinal-metric | string | "label" | Property in `chartData` to map to the ordinal scale calculation |
+| ordinal-metric | string | "label" | Property in `chart-data` to map to the ordinal scale calculation |
 | orientation | string | "vertical" | Options = "vertical" or "horizontal" |
 | responsive | bool | false | Set to true to listen to window.resize() events and re-render the chart with new calculated dimensions |
 | tooltips | bool | true | Must be used with vertices = true.  Vertex hover event will display tooltip |
@@ -70,9 +71,9 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG bar 
 | ---- | ---- | ----------- | ------- |
 | CustomEvent | stv-bar-chart-loaded | Fired when component renders | `{component: 'stv-bar-chart', chartId: String }` |
 
-The rich ```chartData``` property cannot, and should not, be set inline in the custom element with JSON.stringify().  Instead, listen for the `stv-line-chart-loaded` event and then use DOM selection tools to set the `chartData` property, e.g. after an asynchronous API call.
+The rich ```chart-data``` property cannot, and should not, be set inline in the custom element with JSON.stringify().  Instead, listen for the `stv-bar-chart-loaded` event and then use DOM selection tools to set the `chart-data` property, e.g. after an asynchronous API call.
 
-### chartData
+### chart-data
 
 Many visualization libraries enforce certain structure conventions on the data required to render a visualization and this enforcement is often overly-rigid.  In these cases, the transformations required of data coming directly from an API, for example, can be cumbersome at best.  `stencil-vizzle` components have been designed to offer some degree of flexibility in terms of mapping properties to chart values in the hopes of requiring little to no tranformation between data retrieval and assignment to the custom element.
 
@@ -87,15 +88,17 @@ interface StvBarChartDataItem {
   [propName: string]: any
 }
 
+export interface IfcStvBarChart extends Array<StvBarChartDataItem>{}
+
 // e.g.
 myChartData = [
-  IfcStvBarChart object type,
-  IfcStvBarChart object type,
+  StvBarChartDataItem,
+  StvBarChartDataItem,
   ...etc.
 ]
-````
+```
 
-`label`, `value`, and `color` are optional properties.  If you desire user-defined colors for each bar in the chart, you will need to transform your data to add the `color` property accordingly.  Otherwise, use one of the built-in color palette identifiers.  See the [Color Schemes](#color-schemes) section of this README or [https://github.com/d3/d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic).
+`label`, `value`, and `color` are all optional properties.  If you desire user-defined colors for each bar in the chart, you will need to transform your data to add the `color` property accordingly.  Otherwise, use one of the built-in color palette identifiers.  See the [Color Schemes](#color-schemes) section of this README or [https://github.com/d3/d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic).
 
 Each object in this array MUST have discernable linear and ordinal properties with numeric and string values, respectively.  If they are not named "label" and "value", then set the `linear-metric` (numeric) and `ordinal-metric` (string) attributes accordingly.
 
@@ -122,7 +125,7 @@ var defaultData = [
 ]
 ```
 
-With this ready-to-go `chartData` object, your HTML code might look something like:
+With this ready-to-go `chart-data` object, your HTML code might look something like:
 
 ```html
 ...
@@ -135,6 +138,7 @@ With this ready-to-go `chartData` object, your HTML code might look something li
 <script>
   document.addEventListener('stv-bar-chart-loaded', function() {
     document.querySelector('stv-bar-chart').chartData = defaultData
+    // When setting attributes with Javascript, use camelCase...chart-data = chartData
   })
 </script>
 ...
@@ -172,6 +176,7 @@ In the custom case, you'll need to use attributes to help your chart understand 
   canvas-width="600"
   linear-metric="mileage"
   ordinal-metric="car"
+  linear-tick-format="localestring"
 ></stv-bar-chart>
 
 <script>
@@ -183,7 +188,7 @@ In the custom case, you'll need to use attributes to help your chart understand 
 
 ### Color Schemes
 
-Each object in the `chartData.data` property may have a `color` property with hex value to force a certain color on a line, otherwise set the `color-scheme` attribute to one of the built-in values below which correspond to popular [color palettes](https://github.com/d3/d3-scale-chromatic) provided by the D3.js library.
+Each object in the `chartData.data` property may have a `color` property with hex value to force a certain color on a bar, otherwise set the `color-scheme` attribute to one of the built-in values below which correspond to popular [color palettes](https://github.com/d3/d3-scale-chromatic) provided by the D3.js library.
 
 - `category10`: schemeCategory10
 - `accent`: schemeAccent
@@ -191,5 +196,11 @@ Each object in the `chartData.data` property may have a `color` property with he
 - `set1`: schemeSet1
 - `set2`: schemeSet2
 - `set3`: schemeSet3
-- `black`: All lines/paths will be #000000
-- `gray`: All lines/paths will be #888888
+- `black`: All bars will be #000000
+- `gray`: All bars will be #888888
+
+### Best Practices
+
+- Set `chart-data` after render, not inline.
+- Use boolean attributes as-is, e.g. `responsive` instead of `responsive="true"`
+- When `responsive` is true, the `canvas-width` and `canvas-height` values are ignored and the dimensions of the parent container, most like a `<div>` are used to calculate the canvas dimensions.

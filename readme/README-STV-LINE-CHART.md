@@ -9,6 +9,7 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG line
 - Show or hide the X and/or Y axes
 - Show or hide the X and/or Y axis tick values
 - Show or hide the X and/or Y axis labels
+- Show or hide a legend
 - Show or hide path vertices
 - Support for positive and negative values in the Y domain
 - Configurable margins
@@ -25,16 +26,18 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG line
 
 ![](../img/stv-line-chart-example3.png)
 
+![](../img/stv-line-chart-example4.png)
+
 ### Properties / Attributes
 
-| Attribute | Type | Default Value | Description |
+| Attribute &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  | Type | Default Value | Description |
 | --------- | ---- | ------------- | ----------- |
 | axis-label-font-size | number | 14 | Font size of optional X/Y axis labels |
 | axis-tick-font-family | string | "sans" | "sans", "serif" or "monospace" |
 | axis-tick-font-size | number | 10 | Font size of axis tick values |
 | canvas-height | number | 300 | Height of SVG drawing canvas |
 | canvas-width | number | 500 | Width of SVG drawing canvas |
-| [chart-data](#chartdata) | array | [] | Array of objects used to populate the visualization |
+| [chart-data](#chart-data) | array | [] | Array of objects used to populate the visualization |
 | chart-id | string | "" | Optional id for custom element |
 | color-scheme | string | "category10" | Color palette to use for lines.  See [Color Schemes](#color-schemes) below  |
 | gridlines | bool | false | Display X/Y grid lines for value reference |
@@ -71,9 +74,9 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG line
 | ---- | ---- | ----------- | ------- |
 | CustomEvent | stv-line-chart-loaded | Fired when component renders | `{component: 'stv-line-chart', chartId: String }` |
 
-The rich ```chartData``` property cannot, and should not, be set inline in the custom element with JSON.stringify().  Instead, listen for the `stv-line-chart-loaded` event and then use DOM selection tools to set the `chartData` property, e.g. after an asynchronous API call.
+The rich ```chart-data``` property cannot, and should not, be set inline in the custom element with JSON.stringify().  Instead, listen for the `stv-line-chart-loaded` event and then use DOM selection tools to set the `chart-data` property, e.g. after an asynchronous API call.
 
-### chartData
+### chart-data
 
 Many visualization libraries enforce certain structure conventions on the data required to render a visualization and this enforcement is often overly-rigid.  In these cases, the transformations required of data coming directly from an API, for example, can be cumbersome at best.  `stencil-vizzle` components have been designed to offer some degree of flexibility in terms of mapping properties to chart values in the hopes of requiring little to no tranformation between data retrieval and assignment to the custom element.
 
@@ -81,21 +84,24 @@ Many visualization libraries enforce certain structure conventions on the data r
 
 ```js
 // src/interfaces/IfcStvLineChart.ts
-export interface IfcStvLineChart {
+interface StvLineChartItem {
   label?: string,
   color?: string,
-  data: any[]
+  data: any[],
+  [propName: string]: any
 }
+
+export interface IfcStvLineChart extends Array<StvLineChartItem>{}
 
 // e.g.
 myChartData = [
-  IfcStvLineChart object type,
-  IfcStvLineChart object type,
+  IfcStvLineChartItem,
+  IfcStvLineChartItem,
   ...etc.
 ]
 ```
 
-`label` and `color` are optional properties.  If you desire user-defined colors for each line in the line chart, you will need to transform your data to add the `color` property accordingly.  Otherwise, use one of the built-in color palette identifiers.  See the [Color Schemes](#color-schemes) section of this README or [https://github.com/d3/d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic).
+`label`, `color`, and other user-defined properties are optional.  `data` is a required array.  If you desire user-defined colors for each line in the line chart, you will need to transform your data to add the `color` property accordingly.  Otherwise, use one of the built-in color palette identifiers.  See the [Color Schemes](#color-schemes) section of this README or [https://github.com/d3/d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic).
 
 The `data` property is a subjective array of objects. Each object in this array MUST have discernable X and Y properties with numeric values, but they do not necessarily have to be named "x" and "y".  If they are not named "x" and "y", set the `x-metric` and `y-metric` attributes accordingly.
 
@@ -137,6 +143,7 @@ With this ready-to-go `chartData` object, your HTML code might look something li
 <script>
   document.addEventListener('stv-line-chart-loaded', function() {
     document.querySelector('stv-line-chart').chartData = defaultData
+    // When setting attributes with Javascript, use camelCase...chart-data = chartData
   })
 </script>
 ...
@@ -186,7 +193,7 @@ In the custom case, you'll need to use attributes to help your chart understand 
   document.addEventListener('stv-line-chart-loaded', function() {
     document.querySelector('stv-line-chart').chartData = customData
   })
-</script>
+</script>`
 ```
 
 ### Color Schemes
@@ -201,3 +208,11 @@ Each object in the `chartData.data` property may have a `color` property with he
 - `set3`: schemeSet3
 - `black`: All lines/paths will be #000000
 - `gray`: All lines/paths will be #888888
+
+### Best Practices
+
+- Set `chart-data` after render, not inline.
+- Use boolean attributes as-is, e.g. `responsive` instead of `responsive="true"`
+- When `responsive` is true, the `canvas-width` and `canvas-height` values are ignored and the dimensions of the parent container, most like a `<div>` are used to calculate the canvas dimensions.
+
+
