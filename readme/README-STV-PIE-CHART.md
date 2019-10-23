@@ -48,9 +48,9 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG pie 
 
 | Type | Name | Description | CustomEvent.detail |
 | ---- | ---- | ----------- | ------- |
-| CustomEvent | stv-pie-chart-loaded | Fired when component renders | `{component: 'stv-pie-chart', chartId: String }` |
+| CustomEvent | stv-pie-chart-loaded | Fired when component renders and can accept `chart-data` assignment | `{component: 'stv-pie-chart', chartId: String }` |
 
-The rich ```chart-data``` property cannot, and should not, be set inline in the custom element with JSON.stringify().  Instead, listen for the `stv-pie-chart-loaded` event and then use DOM selection tools to set the `chart-data` property, e.g. after an asynchronous API call.
+The rich ```chart-data``` attribute cannot, and should not, be set inline in the custom element with JSON.stringify().  Instead, listen for the `stv-pie-chart-loaded` event and then use DOM selection tools to set the `chart-data` property, e.g. after an asynchronous API call.
 
 ### chart-data
 
@@ -111,8 +111,12 @@ With this ready-to-go `chartData` object, your HTML code might look something li
 <stv-pie-chart
   canvas-height="400"
   canvas-width="600"
-  ...other attributes
+  legend
+  stroke="#ffffff"
+  stroke-width="2"
 ></stv-pie-chart>
+
+...
 
 <script>
   document.addEventListener('stv-pie-chart-loaded', function() {
@@ -122,6 +126,9 @@ With this ready-to-go `chartData` object, your HTML code might look something li
 </script>
 ...
 ```
+...and the result should look very similar to this:
+
+![](../img/stv-pie-chart-default-data.png)
 
 #### Custom Example
 ```js
@@ -150,19 +157,25 @@ In the custom case, you'll need to use attributes to help your chart understand 
 ...and your HTML might look something like this:
 
 ```html
+...
 <stv-pie-chart
   canvas-height="400"
   canvas-width="600"
+  legend
   legend-metric="person"
+  stroke="#ffffff"
+  stroke-width="2"
   value-metric="score"
-  color-scheme="set1"
 ></stv-pie-chart>
+
+...
 
 <script>
   document.addEventListener('stv-pie-chart-loaded', function() {
     document.querySelector('stv-pie-chart').chartData = customData
   })
-</script>`
+</script>
+...
 ```
 
 ### Color Schemes
@@ -180,6 +193,6 @@ Each object in the `chartData.data` property may have a `color` property with he
 
 ### Best Practices
 
-- Set `chart-data` after render, not inline.
-- Use boolean attributes as-is, e.g. `responsive` instead of `responsive="true"`
-- When `responsive` is true, the `canvas-width` and `canvas-height` values are ignored and the dimensions of the parent container, most like a `<div>` are used to calculate the canvas dimensions.
+- Set `chart-data` after render, not inline in the custom element tag.
+- Use boolean attributes as-is, e.g. `responsive` instead of `responsive="true"`.
+- When `responsive` is true, the `canvas-width` and `canvas-height` values are ignored and the dimensions of the parent container, most likely a `<div>`, are used to calculate the canvas dimensions.

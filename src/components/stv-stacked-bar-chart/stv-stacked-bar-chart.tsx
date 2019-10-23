@@ -120,7 +120,7 @@ export class StvStackedBarChart {
   @Prop() ordinalMetric: string = 'label'
   @Prop() orientation: string = 'vertical'
   @Prop() responsive: boolean = false
-  @Prop() seriesMetric: string = 'label'
+  @Prop() seriesMetric: string = 'category'
   @Prop() tooltips: boolean = true
   @Prop() xLabel: string = ''
   @Prop() xTickSize: number = 2

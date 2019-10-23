@@ -72,9 +72,9 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG line
 
 | Type | Name | Description | CustomEvent.detail |
 | ---- | ---- | ----------- | ------- |
-| CustomEvent | stv-line-chart-loaded | Fired when component renders | `{component: 'stv-line-chart', chartId: String }` |
+| CustomEvent | stv-line-chart-loaded | Fired when component renders and can accept `chart-data` assignment | `{component: 'stv-line-chart', chartId: String }` |
 
-The rich ```chart-data``` property cannot, and should not, be set inline in the custom element with JSON.stringify().  Instead, listen for the `stv-line-chart-loaded` event and then use DOM selection tools to set the `chart-data` property, e.g. after an asynchronous API call.
+The rich ```chart-data``` attribute cannot, and should not, be set inline in the custom element with JSON.stringify().  Instead, listen for the `stv-line-chart-loaded` event and then use DOM selection tools to set the `chart-data` property, e.g. after an asynchronous API call.
 
 ### chart-data
 
@@ -137,17 +137,24 @@ With this ready-to-go `chartData` object, your HTML code might look something li
 <stv-line-chart
   canvas-height="400"
   canvas-width="600"
-  ...other attributes
+  legend
+  vertices
 ></stv-line-chart>
+
+...
 
 <script>
   document.addEventListener('stv-line-chart-loaded', function() {
     document.querySelector('stv-line-chart').chartData = defaultData
-    // When setting attributes with Javascript, use camelCase...chart-data = chartData
+    // When setting attributes with Javascript, use camelCase, i.e. chart-data = chartData
   })
 </script>
 ...
 ```
+
+...and the result should look very similar to this:
+
+![](../img/stv-line-chart-default-data.png)
 
 #### Custom Example
 ```js
@@ -181,19 +188,25 @@ In the custom case, you'll need to use attributes to help your chart understand 
 ...and your HTML might look something like this:
 
 ```html
+...
 <stv-line-chart
   canvas-height="400"
   canvas-width="600"
+  legend
   legend-metric="person"
+  vertices
   x-metric="weekNumber"
   y-metric="score"
 ></stv-line-chart>
+
+...
 
 <script>
   document.addEventListener('stv-line-chart-loaded', function() {
     document.querySelector('stv-line-chart').chartData = customData
   })
-</script>`
+</script>
+...
 ```
 
 ### Color Schemes
@@ -211,8 +224,8 @@ Each object in the `chartData.data` property may have a `color` property with he
 
 ### Best Practices
 
-- Set `chart-data` after render, not inline.
-- Use boolean attributes as-is, e.g. `responsive` instead of `responsive="true"`
-- When `responsive` is true, the `canvas-width` and `canvas-height` values are ignored and the dimensions of the parent container, most like a `<div>` are used to calculate the canvas dimensions.
+- Set `chart-data` after render, not inline in the custom element tag.
+- Use boolean attributes as-is, e.g. `responsive` instead of `responsive="true"`.
+- When `responsive` is true, the `canvas-width` and `canvas-height` values are ignored and the dimensions of the parent container, most likely a `<div>`, are used to calculate the canvas dimensions.
 
 

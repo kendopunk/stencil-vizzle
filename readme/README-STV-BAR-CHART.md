@@ -69,9 +69,9 @@ A highly configurable, W3C-compliant web component for generating D3.js SVG bar 
 
 | Type | Name | Description | CustomEvent.detail |
 | ---- | ---- | ----------- | ------- |
-| CustomEvent | stv-bar-chart-loaded | Fired when component renders | `{component: 'stv-bar-chart', chartId: String }` |
+| CustomEvent | stv-bar-chart-loaded | Fired when component renders and can accept `chart-data` assignment | `{component: 'stv-bar-chart', chartId: String }` |
 
-The rich ```chart-data``` property cannot, and should not, be set inline in the custom element with JSON.stringify().  Instead, listen for the `stv-bar-chart-loaded` event and then use DOM selection tools to set the `chart-data` property, e.g. after an asynchronous API call.
+The rich ```chart-data``` attribute cannot, and should not, be set inline in the custom element with JSON.stringify().  Instead, listen for the `stv-bar-chart-loaded` event and then use DOM selection tools to set the `chart-data` property, e.g. after an asynchronous API call.
 
 ### chart-data
 
@@ -98,7 +98,7 @@ myChartData = [
 ]
 ```
 
-`label`, `value`, and `color` are all optional properties.  If you desire user-defined colors for each bar in the chart, you will need to transform your data to add the `color` property accordingly.  Otherwise, use one of the built-in color palette identifiers.  See the [Color Schemes](#color-schemes) section of this README or [https://github.com/d3/d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic).
+`label` and `value` are optional property names.  `color` is not required.  If you desire user-defined colors for each bar in the chart, you will need to transform your data to add the `color` property to each object in the array accordingly.  Otherwise, use one of the built-in color palette identifiers.  See the [Color Schemes](#color-schemes) section of this README or [https://github.com/d3/d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic).
 
 Each object in this array MUST have discernable linear and ordinal properties with numeric and string values, respectively.  If they are not named "label" and "value", then set the `linear-metric` (numeric) and `ordinal-metric` (string) attributes accordingly.
 
@@ -132,8 +132,12 @@ With this ready-to-go `chart-data` object, your HTML code might look something l
 <stv-bar-chart
   canvas-height="400"
   canvas-width="600"
-  ...other attributes
+  legend
+  x-label="User"
+  y-label="Score"
 ></stv-bar-chart>
+
+...
 
 <script>
   document.addEventListener('stv-bar-chart-loaded', function() {
@@ -143,6 +147,10 @@ With this ready-to-go `chart-data` object, your HTML code might look something l
 </script>
 ...
 ```
+
+...and the result should look very similar to this:
+
+![](../img/stv-bar-chart-default-data.png)
 
 #### Custom Example
 ```js
@@ -171,13 +179,19 @@ In the custom case, you'll need to use attributes to help your chart understand 
 ...and your HTML might look something like this:
 
 ```html
+...
 <stv-bar-chart
   canvas-height="400"
   canvas-width="600"
+  legend
   linear-metric="mileage"
-  ordinal-metric="car"
   linear-tick-format="localestring"
+  ordinal-metric="car"
+  x-label="User"
+  y-label="Score"
 ></stv-bar-chart>
+
+...
 
 <script>
   document.addEventListener('stv-bar-chart-loaded', function() {
@@ -201,6 +215,6 @@ Each object in the `chartData.data` property may have a `color` property with he
 
 ### Best Practices
 
-- Set `chart-data` after render, not inline.
-- Use boolean attributes as-is, e.g. `responsive` instead of `responsive="true"`
-- When `responsive` is true, the `canvas-width` and `canvas-height` values are ignored and the dimensions of the parent container, most like a `<div>` are used to calculate the canvas dimensions.
+- Set `chart-data` after render, not inline in the custom element tag.
+- Use boolean attributes as-is, e.g. `responsive` instead of `responsive="true"`.
+- When `responsive` is true, the `canvas-width` and `canvas-height` values are ignored and the dimensions of the parent container, most likely a `<div>`, are used to calculate the canvas dimensions.
