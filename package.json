@@ -1,7 +1,19 @@
 {
   "name": "stencil-vizzle",
   "version": "0.0.1",
-  "description": "D3.js-based visualization web components",
+  "description": "Visualization web components built with Stencil.js and D3.",
+  "author": "Mark Fehrenbacher <kendopunk@hotmail.com>",
+  "keywords": [
+    "Stencil.js",
+    "D3.js",
+    "web components",
+    "data visualization",
+    "charts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kendopunk/stencil-vizzle.git"
+  },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "es2015": "dist/esm/index.mjs",

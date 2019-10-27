@@ -1,6 +1,5 @@
 # stencil-vizzle
 
-<!--
 Reusable, easy-to-use visualization web components built with Stencil and D3.js
 
 ### Motivation
@@ -12,16 +11,26 @@ As the Custom Elements specification has matured and browser support has improve
 
 ### Inspiration
 
-`stencil-vizzle` takes its cue from the core tenet of `D3.js`, e.g. *Data-Driven Documents* and is influenced by frameworks like [RAW/RAWGraphs](https://rawgraphs.io) i.e., ad-hoc mapping of data properties to attributes in a custom element.
+`stencil-vizzle` takes its cue from the core tenet of `D3.js`, e.g. *Data-Driven Documents* and is influenced by frameworks like [RAW/RAWGraphs](https://rawgraphs.io) i.e., ad-hoc mapping of data properties to attributes in your custom element.
+
+### Features  
+- Framework agnostic
+- No third party libaries required
+- In general, requires little to no transformation of your data prior to use.
+- Highly customizable
+- show or hide chart features like axes, legend, gridlines, and/or axis labels.
+- Adjustable margins, stroke, stroke width and font sizes
+- `inverse` support for use on darker backgrounds.
+
 
 ### TL/DR Quickstart
 
-**Running locally**  
+**Run Demo Application**  
 ```sh
 # checkout project
 $> npm i
-$> npm start
-# browser should open to localhost:3333
+$> npm run demo
+# browser should open to localhost:5150
 ```
 
 ### Chart Components
@@ -54,6 +63,14 @@ All components are highly configurable via their supported attributes to offer t
 
 ### Developer Section
 
+**Dev Server**  
+```sh
+# checkout project
+$> npm i
+$> npm start
+# browser should open to localhost:3333
+```
+
 **Testing**  
 ```sh
 # unit tests, single run
@@ -80,4 +97,3 @@ $> npm run lint:stencil
 # lint only the *.scss files
 $> npm run lint:scss
 ```
--->
