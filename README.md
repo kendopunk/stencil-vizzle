@@ -18,9 +18,66 @@ As the Custom Elements specification has matured and browser support has improve
 - No third party libaries required
 - In general, requires little to no transformation of your data prior to use.
 - Highly customizable
-- show or hide chart features like axes, legend, gridlines, and/or axis labels.
+- Show or hide chart features like axes, legend, gridlines, and/or axis labels.
 - Adjustable margins, stroke, stroke width and font sizes
 - `inverse` support for use on darker backgrounds.
+
+###  Quick Example w/ Unpkg ```<script>``` Tag
+
+A simple, customizable bar chart using user-specified property -> attribute mappings.  See the individual READMEs for information on available attributes and how to use them.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>stencil-vizzle</title>
+  <script type="module" src="https://unpkg.com/stencil-vizzle@0.0.1/dist/stencil-vizzle/stencil-vizzle.esm.js"></script>
+  <script nomodule="" src="https://unpkg.com/stencil-vizzle@0.0.1/dist/stencil-vizzle/stencil-vizzle.js"></script>
+  <style type="text/css">
+    body {
+      padding: 20px;
+      font-family: "Arial", "Helvetica", sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <stv-bar-chart
+    axis-label-font-size="12"
+    bar-stroke="#990066"
+    chart-id="myStvBarChart"
+    canvas-width="600"
+    canvas-height="400"
+    gridlines
+    legend
+    legend-metric="name"
+    margin-left="35"
+    ordinal-metric="contestant"
+    linear-metric="score"
+    linear-tick-format="localestring"
+    tooltips
+    x-label="Contestant"
+    y-label="Total Score">
+  </stv-bar-chart>
+</body>
+
+<script>
+  document.addEventListener('stv-bar-chart-loaded', function() {
+    var data = [
+      {contestant: 'A', name: 'Mark', score: 1000},
+      {contestant: 'B', name: 'Fred', score: 750},
+      {contestant: 'C', name: 'Walter', score: 1250}
+    ]
+    document.querySelector('stv-bar-chart').chartData = data
+  })
+</script>
+</html>
+```
+
+...and you should see something like this:
+
+![](img/ootb-example.png)
 
 
 ### TL/DR Quickstart
