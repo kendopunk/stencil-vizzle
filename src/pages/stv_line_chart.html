@@ -6,7 +6,7 @@
   <title>Stencil Vizzle: &lt;stv-line-chart&gt;</title>
   <link rel="stylesheet" type="text/css" href="../css/main.css">
   <script type="module" src="/build/stencil-vizzle.esm.js"></script>
-  <script nomodule src="/build/stencil-vizzle.esm.js"></script>
+  <script nomodule src="/build/stencil-vizzle.js"></script>
   <script src="../js/shared.js"></script>
   <script src="../js/xAxis.js"></script>
   <script src="../js/yAxis.js"></script>
@@ -22,7 +22,7 @@
       </div>
       <div id="stv">stencil-vizzle</div>
     </div>
-    <div id="header-links">
+    <div id="header-subnav">
       <div class="header-link">
         <a href="/index.html">Home</a>
       </div>
@@ -287,16 +287,13 @@
       </div>
 
       <pre class="code">
+        Usage:
+        
         &lt;stv-line-chart
           chart-id="myStvLineChart"
-          margin-left="50"
-          margin-right="50"
-          responsive
-          vertices
-          x-label="Date"
-          x-tick-format="M/D/YY"
-          y-label="Score"
-          y-tick-format="localestring"
+          ...attribute
+          ...attribute
+          ...etc.
         &gt;&lt;/stv-line-chart&gt;
 
         ...

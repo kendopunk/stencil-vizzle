@@ -78,10 +78,14 @@ pre.code {
   position: fixed;
 }
 
-#header-links {
+#header-subnav {
   display: flex;
   align-items: center;
   margin-top: 10px;
+}
+
+#header-subnav span.message {
+  color: #fc3;
 }
 
 #header-main {
@@ -95,7 +99,7 @@ pre.code {
 }
 
 #logo img {
-  height: 25px;
+  height: 20px;
 }
 
 #stv {
@@ -107,20 +111,40 @@ pre.code {
 
 #toc {
   margin-top: 6.5em;
-}
-
-#toc > .toc-link-container {
+  display: flex;
   padding-left: 20px;
+  padding-right: 20px;
 }
 
-#toc > .toc-link-container p {
-  margin: 10px 0px;
+#toc > div.intro {
+  flex: 0 0 20em;
+  margin-right: 30px;
+  min-height: 400px;
 }
 
-#toc > .toc-link-container p a {
+#toc > div.intro > div.intro-logo {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#toc > div.intro > div.intro-logo img {
+  height: 30px;
+}
+
+#toc > div.intro > div.intro-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+#toc > div.menu {
+  flex: 1;
+}
+
+#toc > div.menu > div.menuLink {
   font-size: 20px;
+  margin-bottom: 15px;
 }
-
 
 #wrapper {
   width: 100%;

@@ -1,7 +1,11 @@
 /**
  * src/interfaces/IfcStvPieChart.ts
  */
-export interface IfcStvPieChart {
+interface StvPieChartItem {
   label?: string,
-  value?: number
+  value?: number,
+  color?: string,
+  [propName: string]: any
 }
+
+export interface IfcStvPieChart extends Array<StvPieChartItem>{}

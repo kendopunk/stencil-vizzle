@@ -6,7 +6,7 @@
   <title>Stencil Vizzle: &lt;stv-bar-chart&gt;</title>
   <link rel="stylesheet" type="text/css" href="../css/main.css">
   <script type="module" src="/build/stencil-vizzle.esm.js"></script>
-  <script nomodule src="/build/stencil-vizzle.esm.js"></script>
+  <script nomodule src="/build/stencil-vizzle.js"></script>
   <script src="../js/shared.js"></script>
   <script src="../js/xAxis.js"></script>
   <script src="../js/yAxis.js"></script>
@@ -22,7 +22,7 @@
       </div>
       <div id="stv">stencil-vizzle</div>
     </div>
-    <div id="header-links">
+    <div id="header-subnav">
       <div class="header-link">
         <a href="/index.html">Home</a>
       </div>
@@ -301,17 +301,13 @@
       </div>
 
       <pre class="code">
+        Usage:
+        
         &lt;stv-bar-chart
           chart-id="myStvBarChart"
-          legend-metric="name"
-          linear-metric="value"
-          linear-tick-format="USD"
-          margin-left="35"
-          ordinal-metric="ticker"
-          responsive
-          tooltips
-          x-label="Ticker Symbol"
-          y-label="Price"
+          ...attribute
+          ...attribute
+          ...etc.
         &gt;&lt;/stv-bar-chart&gt;
 
         ...
@@ -327,7 +323,7 @@
 </body>
 
 <script>
-  document.addEventListener('stv-bar-chart-loaded', function(evt) {
+  document.addEventListener('stv-bar-chart-loaded', function() {
     selectNumBars(3);
   })
 

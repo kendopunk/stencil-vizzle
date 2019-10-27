@@ -3,6 +3,7 @@
  * <stv-line-chart> helper functions
  */
 function generateLineChartData(numLines) {
+
   var dt = new Date('2019-01-01 00:00:00');
   var msd = 86400000;
 
@@ -50,9 +51,10 @@ function generateLineChartData(numLines) {
       {x: dt.getTime() + (msd * 50), y: 208},
       {x: dt.getTime() + (msd * 60), y: 470}
     ]
-   }];
+  }];
 
-   return data.slice(0, numLines);
+  return data.slice(0, numLines);
+  
 }
 
 function generateRandomLineChartData() {

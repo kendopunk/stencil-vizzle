@@ -1,8 +1,11 @@
 /**
  * src/interfaces/IfcStvLineChart.ts
  */
-export interface IfcStvLineChart {
+interface StvLineChartItem {
   label?: string,
   color?: string,
-  data: any[]
+  data: any[],
+  [propName: string]: any
 }
+
+export interface IfcStvLineChart extends Array<StvLineChartItem>{}
