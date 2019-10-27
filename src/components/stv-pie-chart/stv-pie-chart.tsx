@@ -21,7 +21,7 @@ import {
   schemeSet2,
   schemeSet3
 } from 'd3-scale-chromatic'
-import { select } from 'd3-selection'
+import { Selection, select } from 'd3-selection'
 import { arc, pie } from 'd3-shape'
 
 // utilities
@@ -78,7 +78,7 @@ export class StvPieChart {
     reflectToAttr: true,
     mutable: true
   }) canvasWidth: number = 450
-  @Prop() chartData: IfcStvPieChart[] = []
+  @Prop() chartData: IfcStvPieChart = []
   @Prop() chartId: string = ''
   @Prop() colorScheme: string = 'category10'
   @Prop() innerRadius: number = 0

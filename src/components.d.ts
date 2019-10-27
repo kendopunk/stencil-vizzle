@@ -15,6 +15,9 @@ import {
 import {
   IfcStvPieChart,
 } from './interfaces/IfcStvPieChart';
+import {
+  IfcStvStackedBarChart,
+} from './interfaces/IfcStvStackedBarChart';
 
 export namespace Components {
   interface StvBarChart {
@@ -60,7 +63,7 @@ export namespace Components {
     'axisTickFontSize': number;
     'canvasHeight': number;
     'canvasWidth': number;
-    'chartData': IfcStvLineChart[];
+    'chartData': IfcStvLineChart;
     'chartId': string;
     'colorScheme': string;
     'gridlines': boolean;
@@ -94,7 +97,7 @@ export namespace Components {
   interface StvPieChart {
     'canvasHeight': number;
     'canvasWidth': number;
-    'chartData': IfcStvPieChart[];
+    'chartData': IfcStvPieChart;
     'chartId': string;
     'colorScheme': string;
     'innerRadius': number;
@@ -122,7 +125,7 @@ export namespace Components {
     'barStrokeWidth': number;
     'canvasHeight': number;
     'canvasWidth': number;
-    'chartData': IfcStvPieChart[];
+    'chartData': IfcStvStackedBarChart;
     'chartId': string;
     'colorScheme': string;
     'gridlines': boolean;
@@ -233,7 +236,7 @@ declare namespace LocalJSX {
     'axisTickFontSize'?: number;
     'canvasHeight'?: number;
     'canvasWidth'?: number;
-    'chartData'?: IfcStvLineChart[];
+    'chartData'?: IfcStvLineChart;
     'chartId'?: string;
     'colorScheme'?: string;
     'gridlines'?: boolean;
@@ -268,7 +271,7 @@ declare namespace LocalJSX {
   interface StvPieChart {
     'canvasHeight'?: number;
     'canvasWidth'?: number;
-    'chartData'?: IfcStvPieChart[];
+    'chartData'?: IfcStvPieChart;
     'chartId'?: string;
     'colorScheme'?: string;
     'innerRadius'?: number;
@@ -297,7 +300,7 @@ declare namespace LocalJSX {
     'barStrokeWidth'?: number;
     'canvasHeight'?: number;
     'canvasWidth'?: number;
-    'chartData'?: IfcStvPieChart[];
+    'chartData'?: IfcStvStackedBarChart;
     'chartId'?: string;
     'colorScheme'?: string;
     'gridlines'?: boolean;

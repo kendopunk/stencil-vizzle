@@ -1,6 +1,7 @@
 # stencil-vizzle
 
-Reusable visualization web components built with Stencil and D3.js
+<!--
+Reusable, easy-to-use visualization web components built with Stencil and D3.js
 
 ### Motivation
 I've been using D3.js since 2012 &mdash; almost as long as it's been out &mdash; and have built highly configurable, reusable charting functions/classes within a variety of frameworks, namely ExtJS, AngularJS, and React.
@@ -8,6 +9,10 @@ I've been using D3.js since 2012 &mdash; almost as long as it's been out &mdash;
 As much as I tried to make the charts "universal" in terms of porting across frameworks, there have always been library idiosyncrasies standing in the way, most notably in terms of DOM manipulation, data binding and render lifecycles.
 
 As the Custom Elements specification has matured and browser support has improved, I felt I finally had the opportunity to create true "write once, run anywhere" visualization web components and so here we are.
+
+### Inspiration
+
+`stencil-vizzle` takes its cue from the core tenet of `D3.js`, e.g. *Data-Driven Documents* and is influenced by frameworks like [RAW/RAWGraphs](https://rawgraphs.io) i.e., ad-hoc mapping of data properties to attributes in a custom element.
 
 ### TL/DR Quickstart
 
@@ -21,7 +26,7 @@ $> npm start
 
 ### Chart Components
 
-All components are highly configurable, via attributes, to offer the most flexibility in terms of conveying as much or as little information as you wish.
+All components are highly configurable via their supported attributes to offer the most flexibility in terms of tailoring your visualization to convey as much or as little information as you wish.
 
 #### &lt;stv-line-chart&gt;  
 
@@ -75,6 +80,4 @@ $> npm run lint:stencil
 # lint only the *.scss files
 $> npm run lint:scss
 ```
-
-
-
+-->

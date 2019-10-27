@@ -100,7 +100,7 @@ export class StvLineChart {
     reflectToAttr: true,
     mutable: true
   }) canvasWidth: number = 500
-  @Prop() chartData: IfcStvLineChart[] = [{data: []}]
+  @Prop() chartData: IfcStvLineChart = []
   @Prop() chartId: string = ''
   @Prop() colorScheme: string = 'category10'
   @Prop() gridlines: boolean = false
