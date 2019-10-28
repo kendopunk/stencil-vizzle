@@ -645,7 +645,6 @@ export class StvLineChart {
    * Calculate X/Y scales
    */
   setScales(): void {
-
     const xMetricValues = this.chartData.map((m) => {
       return m.data.map((m2) => {
         return m2[this.xMetric]

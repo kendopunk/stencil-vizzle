@@ -1,6 +1,6 @@
 {
   "name": "stencil-vizzle",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Visualization web components built with Stencil.js and D3.",
   "author": "Mark Fehrenbacher <kendopunk@hotmail.com>",
   "keywords": [
