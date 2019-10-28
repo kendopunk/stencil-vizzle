@@ -339,7 +339,7 @@ export class StvPieChart {
             return '<div class="key">'
               + d.data[this.legendMetric]
               + '</div><div class="value">'
-              + TickFormat(d.data[this.valueMetric])
+              + TickFormat(d.data[this.valueMetric], this.valueFormat)
               + '</div>'
           })
       })

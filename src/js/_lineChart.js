@@ -4,7 +4,7 @@
  */
 function generateLineChartData(numLines) {
 
-  var dt = new Date('2019-01-01 00:00:00');
+  var dt = new Date(1546318800000);
   var msd = 86400000;
 
   var data = [{
@@ -54,11 +54,10 @@ function generateLineChartData(numLines) {
   }];
 
   return data.slice(0, numLines);
-  
 }
 
 function generateRandomLineChartData() {
-  var dt = new Date('2019-01-01 00:00:00');
+  var dt = new Date(1546318800000);
   var msd = 86400000;
   var iterations = Math.floor(Math.random() * 6) + 1;
   var data = []

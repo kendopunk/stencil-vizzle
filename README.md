@@ -24,7 +24,7 @@ As the Custom Elements specification has matured and browser support has improve
 
 ###  Quick Example w/ Unpkg ```<script>``` Tag
 
-A simple, customizable bar chart using user-specified property -> attribute mappings.  See the individual READMEs for information on available attributes and how to use them.
+A simple, customizable bar chart using user-specified property -> attribute mappings.  See the individual READMEs for information on available attributes and how to use them.  Additional ready-to-use examples can be found in the [examples folder](./examples).
 
 ```html
 <!DOCTYPE html>
@@ -33,8 +33,8 @@ A simple, customizable bar chart using user-specified property -> attribute mapp
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
   <title>stencil-vizzle</title>
-  <script type="module" src="https://unpkg.com/stencil-vizzle@0.0.1/dist/stencil-vizzle/stencil-vizzle.esm.js"></script>
-  <script nomodule="" src="https://unpkg.com/stencil-vizzle@0.0.1/dist/stencil-vizzle/stencil-vizzle.js"></script>
+  <script type="module" src="https://unpkg.com/stencil-vizzle@0.0.2/dist/stencil-vizzle/stencil-vizzle.esm.js"></script>
+  <script nomodule="" src="https://unpkg.com/stencil-vizzle@0.0.2/dist/stencil-vizzle/stencil-vizzle.js"></script>
   <style type="text/css">
     body {
       padding: 20px;

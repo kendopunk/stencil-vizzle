@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>&lt;stv-stacked-bar-chart&gt; Default Example</title>
+  <script type="module" src="https://unpkg.com/stencil-vizzle@0.0.2/dist/stencil-vizzle/stencil-vizzle.esm.js"></script>
+  <script nomodule="" src="https://unpkg.com/stencil-vizzle@0.0.2/dist/stencil-vizzle/stencil-vizzle.js"></script>
+  <style type="text/css">
+    body {
+      padding: 20px;
+      font-family: "Arial", "Helvetica", sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h3>&lt;stv-stacked-bar-chart&gt; w/ default data properties.</h3>
+  <stv-stacked-bar-chart
+    canvas-height="500"
+    canvas-width="800"
+    chart-id="myStvStackedBarChart"
+    legend
+    linear-tick-format="localestring"
+    margin-left="50"
+    x-label="Auto Type"
+    y-label="Units"
+  ></stv-stacked-bar-chart>
+</body>
+<script>
+  document.addEventListener('stv-stacked-bar-chart-loaded', function() {
+    var data = [
+      {category: 'Ford', label: 'Truck', value: 1000},
+      {category: 'Ford', label: 'Sedan', value: 2000},
+      {category: 'Ford', label: 'Compact', value: 3000},
+      {category: 'Chevy', label: 'Truck', value: 1200},
+      {category: 'Chevy', label: 'Sedan', value: 2200},
+      {category: 'Chevy', label: 'Compact', value: 800},
+      {category: 'Toyota', label: 'Truck', value: 1500},
+      {category: 'Toyota', label: 'Sedan', value: 2500},
+      {category: 'Toyota', label: 'Compact', value: 3500}
+    ]
+
+    document.querySelector('stv-stacked-bar-chart').chartData = data;
+  })
+</script>
+</html>
